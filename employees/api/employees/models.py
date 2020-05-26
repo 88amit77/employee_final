@@ -25,7 +25,7 @@ class Employee(models.Model):
     current_country = models.CharField(max_length=15)
     current_state = models.CharField(max_length=10)
     current_pincode = models.CharField(max_length=15)
-    current_house_type = models.CharField(max_length=15)
+    current_house_type = models.CharField(max_length=30)
     Current_staying_since = models.DateField()
     Current_city = models.CharField(max_length=25)
     Permanent_address_line1 = models.CharField(max_length=50)
