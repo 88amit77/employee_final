@@ -57,11 +57,11 @@ class Documents(models.Model):
                                   blank=True)
     document_id = models.AutoField(primary_key=True, )
     pan_number = models.CharField(max_length=20)
-    pan_card = models.FileField()
-    address_proof = models.FileField()
-    permanent_proof = models.FileField()
+    pan_card = models.FileField(blank=True, null=True)
+    address_proof = models.FileField(blank=True, null=True)
+    permanent_proof = models.FileField(blank=True, null=True)
     aadharcard_number = models.CharField(max_length=20)
-    aadharcard = models.FileField()
+    aadharcard = models.FileField(blank=True, null=True)
 
 
 class Education(models.Model):
