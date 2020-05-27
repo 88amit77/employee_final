@@ -177,21 +177,57 @@ class EmployeeSearchViewSet(viewsets.ModelViewSet):
     def get_queryset(self, *args, **kwargs):
         qs = Employee.objects.all()
         query = self.request.GET.get("keyword")
+
         if query:
-            qs = qs.filter(Q(name__contains=query) | Q(emp_id__contains=query) | Q(official_email__contains=query))
+            qs = qs.filter(Q(name__contains=query) | Q(emp_id__contains=query) | Q(official_email__contains=query)
+                           | Q(Permanent_address_line1__contains=query) | Q(designation__contains=query)
+                           | Q(gender__contains=query) | Q(official_email__contains=query) | Q(date_of_joining__contains=query)
+                           | Q(department__contains=query) | Q(official_number__contains=query)
+                           | Q(dob__contains=query) | Q(work_location_add__contains=query))
         query = self.request.GET.get("emp_id")
         if query:
             emp_id = query.split(',')
             qs = qs.filter(emp_id__in=emp_id)
-
         query = self.request.GET.get("name")
         if query:
             name = query.split(',')
             qs = qs.filter(name__in=name)
+        query = self.request.GET.get("Permanent_address_line1")
+        if query:
+            Permanent_address_line1 = query.split(',')
+            qs = qs.filter(Permanent_address_line1__in=Permanent_address_line1)
+        query = self.request.GET.get("designation")
+        if query:
+            designation = query.split(',')
+            qs = qs.filter(designation__in=designation)
+        query = self.request.GET.get("gender")
+        if query:
+            gender = query.split(',')
+            qs = qs.filter(gender__in=gender)
         query = self.request.GET.get("official_email")
         if query:
             official_email = query.split(',')
             qs = qs.filter(official_email__in=official_email)
+        query = self.request.GET.get("date_of_joining")
+        if query:
+            date_of_joining = query.split(',')
+            qs = qs.filter(date_of_joining__in=date_of_joining)
+        query = self.request.GET.get("department")
+        if query:
+            department = query.split(',')
+            qs = qs.filter(department__in=department)
+        query = self.request.GET.get("official_number")
+        if query:
+            official_number = query.split(',')
+            qs = qs.filter(official_number__in=official_number)
+        query = self.request.GET.get("dob")
+        if query:
+            dob = query.split(',')
+            qs = qs.filter(dob__in=dob)
+        query = self.request.GET.get("work_location_add")
+        if query:
+            work_location_add = query.split(',')
+            qs = qs.filter(work_location_add__in=work_location_add)
         query = self.request.GET.get("sort_by")
         if query:
             sort_key = query
@@ -205,89 +241,9 @@ class EmployeeSearchViewSet(viewsets.ModelViewSet):
 
         return qs
 
-    # def get_queryset(self, *args, **kwargs):
-    #     qs = Employee.objects.all()
-    #     query = self.request.GET.get("keyword")
-    #     if query:
-    #         qs = qs.filter(Q(name__contains=query) | Q(
-    #             emp_id__contains=query) | Q(
-    #             Permanent_address_line1__contains=query) | Q(
-    #             designation__contains=query) | Q(
-    #             gender__contains=query) | Q(
-    #             official_email__contains=query) | Q(
-    #             date_of_joining__contains=query) | Q(
-    #             department__contains=query) | Q(
-    #             official_number__contains=query) | Q(
-    #             dob=query) | Q(
-    #             work_location_add__contains=query))
-    #
-    #     query = self.request.GET.get("emp_id")
-    #     if query:
-    #         emp_id = query.split(',')
-    #         qs = qs.filter(emp_id__in=emp_id)
-    #
-    #     query = self.request.GET.get("name")
-    #     if query:
-    #         name = query.split(',')
-    #         qs = qs.filter(name__in=name)
-    #
-    #     query = self.request.GET.get("Permanent_address_line1")
-    #     if query:
-    #         Permanent_address_line1 = query.split(',')
-    #         qs = qs.filter(Permanent_address_line1__in=Permanent_address_line1)
-    #
-    #     query = self.request.GET.get("designation")
-    #     if query:
-    #         designation = query.split(',')
-    #         qs = qs.filter(designation__in=designation)
-    #
-    #     query = self.request.GET.get("gender")
-    #     if query:
-    #         gender = query.split(',')
-    #         qs = qs.filter(gender__in=gender)
-    #
-    #     query = self.request.GET.get("official_email")
-    #     if query:
-    #         official_email = query.split(',')
-    #         qs = qs.filter(official_email__in=official_email)
-    #
-    #     query = self.request.GET.get("date_of_joining")
-    #     if query:
-    #         date_of_joining = query.split(',')
-    #         qs = qs.filter(date_of_joining__in=date_of_joining)
-    #
-    #     query = self.request.GET.get("department")
-    #     if query:
-    #         department = query.split(',')
-    #         qs = qs.filter(department__in=department)
-    #
-    #     query = self.request.GET.get("official_number")
-    #     if query:
-    #         official_number = query.split(',')
-    #         qs = qs.filter(official_number__in=official_number)
-    #
-    #     query = self.request.GET.get("dob")
-    #     if query:
-    #         dob = query.split(',')
-    #         qs = qs.filter(dob__in=dob)
-    #
-    #     query = self.request.GET.get("work_location_add")
-    #     if query:
-    #         work_location_add = query.split(',')
-    #         qs = qs.filter(work_location_add__in=work_location_add)
-    #
-    #     query = self.request.GET.get("sort_by")
-    #     if query:
-    #         sort_key = query
-    #         if sort_key == 'emp_id':
-    #             sort_key = 'emp_id'
-    #         sort_by = ''
-    #         if 'sort_order' in self.request.data and self.request.data['sort_order'] == 'desc':
-    #             sort_by = '-'
-    #         sort_by += sort_key
-    #         qs = qs.order_by(sort_by)
-    #
-    #     return qs
+
+
+
 
 
 class EmployeeColumnViewSet(viewsets.ModelViewSet):
