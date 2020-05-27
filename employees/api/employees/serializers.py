@@ -45,7 +45,7 @@ class EmployeeSerializer(serializers.Serializer):
     instagram = serializers.CharField(validators=[UniqueValidator(queryset=Employee.objects.all(),message='False')])
     linkedin = serializers.CharField(validators=[UniqueValidator(queryset=Employee.objects.all(),message='False')])
     twitter = serializers.CharField(validators=[UniqueValidator(queryset=Employee.objects.all(),message='False')])
-    leave_approval_user_id = serializers.IntegerField()
+   # leave_approval_user_id = serializers.IntegerField()
     date_of_joining = serializers.DateField()
     probation_period = serializers.IntegerField()
     Current_address_line1 = serializers.CharField(max_length=50)
