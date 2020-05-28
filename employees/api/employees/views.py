@@ -105,8 +105,12 @@ class CustomLeaveRulesPagination(PageNumberPagination):
                 'header': {
                               'emp_id': 'Employee Id',
                               'name': 'Employee Name',
-                              "official_email": 'Official Email',
-                              'leave': 'Leave'
+                              "designation": 'Designation',
+                              'date_of_joining': 'Date Of Joining',
+                              "Employee_type": 'Employee Type',
+                              'work_location_add': 'Work Location Add',
+                              'leave': 'Leave',
+
                            },
                 'sortable': [
                               'emp_id',

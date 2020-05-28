@@ -303,18 +303,19 @@ class LeaveRulesSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Employee
 #         fields = ('emp_id', 'name', 'official_email', 'leave')
+class Employee1Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmpLeaveId
+        fields = '__all__'
 
 
 class ListEmployee1Serializer(serializers.Serializer):
+    employee11 = Employee1Serializer(many=True)
 
-    emp_id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(max_length=30)
-    designation = serializers.CharField(max_length=20)
-    department = serializers.CharField(max_length=20)
-    date_of_joining = serializers.DateField()
-    Employee_type = serializers.CharField(max_length=15)
-    work_location_add = serializers.CharField(max_length=20)
-    leave = serializers.CharField(max_length=100)
+    class Meta:
+        model = Employee
+        fields = ('employee11', 'emp_id', 'name', 'designation', 'department', 'date_of_joining', 'Employee_type',
+                  'work_location_add')
 
 
 class EmpLeaveAppliedSerializer(serializers.ModelSerializer):
