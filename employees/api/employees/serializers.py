@@ -310,11 +310,11 @@ class Employee1Serializer(serializers.ModelSerializer):
 
 
 class ListEmployee1Serializer(serializers.Serializer):
-    employee11 = Employee1Serializer(many=True)
+    empleaves = Employee1Serializer(many=True)
 
     class Meta:
         model = Employee
-        fields = ('employee11', 'emp_id', 'name', 'designation', 'department', 'date_of_joining', 'Employee_type',
+        fields = ('empleaves', 'emp_id', 'name', 'designation', 'department', 'date_of_joining', 'Employee_type',
                   'work_location_add')
 
 
@@ -329,10 +329,10 @@ class EmpLeaveAppliedNewSerializer(serializers.ModelSerializer):
         model = EmpLeaveApplied
         fields = '__all__'
 
-class Employee1Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = EmpLeaveId
-        fields = '__all__'
+# class Employee1Serializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = EmpLeaveId
+#         fields = '__all__'
 
 
 #for logs page

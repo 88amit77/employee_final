@@ -112,7 +112,7 @@ class LeaveRules(models.Model):
 
 class EmpLeaveId(models.Model):
     emp_leave_id = models.AutoField(primary_key=True)
-    emp_id = models.ForeignKey(Employee, related_name='employee11', on_delete=models.CASCADE, default=None, unique=False)
+    emp_id = models.ForeignKey(Employee, related_name='empleaves', on_delete=models.CASCADE, default=None, unique=False)
     leave_id = models.ManyToManyField(LeaveRules)
 
 
