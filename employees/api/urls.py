@@ -39,7 +39,7 @@ router.register('enter_attendance', views.EnterAttendanceViewSet, basename="ente
 router.register('create_payroll', views.CreateMonthlyEmpSalaryViewSet, basename="create_payroll")
 router.register('list_payroll', views.ListMonthlyEmpSalaryViewSet, basename="list_payroll")
 router.register('payroll_search', views.MonthlyEmpSalarySearchViewSet, basename="payroll_search")
-
+router.register('payroll_column', views.MonthlyEmpSalaryColumnViewSet, basename="payroll_column")
 
 schema_view = get_swagger_view(title='Micromerce API')
 

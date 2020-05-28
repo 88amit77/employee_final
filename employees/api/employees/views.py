@@ -34,6 +34,7 @@ ListAttendanceLogSerializer,
 CreateMonthlyEmpSalarySerializer,
 ListMonthlyEmpSalarySerializer,
 EmployeePayrollSerializer,
+DynamicFieldsMonthlyEmpSalaryModelSerializer
 )
 
 DEFAULT_PAGE = 1
@@ -634,3 +635,16 @@ class MonthlyEmpSalarySearchViewSet(viewsets.ModelViewSet):
             qs = qs.order_by(sort_by)
 
         return qs
+
+class MonthlyEmpSalaryColumnViewSet(viewsets.ModelViewSet):
+    # queryset = Employee.objects.all()
+    serializer_class = DynamicFieldsMonthlyEmpSalaryModelSerializer
+    pagination_class = CustomPayrollPagination
+
+    def get_queryset(self, *args, **kwargs):
+        qs = MonthlyEmpSalary.objects.all()
+        query = self.request.GET.get("fields")
+        if query:
+            return qs
+        else:
+            return qs
