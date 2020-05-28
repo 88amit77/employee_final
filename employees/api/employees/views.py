@@ -8,7 +8,7 @@ import requests
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from .models import (Employee, Education, Documents, FamilyMembers, WorkHistory, LeaveRules, EmpLeaveApplied, EmpLeaveId,
-                     Attendance, AttendenceLeaveid,Attendence_rules,MonthlyEmpSalary)
+                     Attendance, AttendenceLeaveid, Attendence_rules, MonthlyEmpSalary)
 from .serializers import (
       EmployeeSerializer,
       ListEmployeeSerializer,
