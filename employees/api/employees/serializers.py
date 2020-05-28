@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import (Employee, Documents, Education, WorkHistory, FamilyMembers, LeaveRules, EmpLeaveApplied, EmpLeaveId)
+from .models import (Employee, Documents, Education, WorkHistory, FamilyMembers, LeaveRules, EmpLeaveApplied, EmpLeaveId,
+                     Attendance,AttendenceLeaveid, Attendence_rules,MonthlyEmpSalary)
 from rest_framework.validators import UniqueValidator
 from datetime import datetime
 
@@ -379,3 +380,98 @@ class EmpLeaveDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmpLeaveId
         fields = ('status1', 'emp_id', 'leave_id')
+
+class AttendaceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Attendance
+        fields = '__all__'
+
+class AttendaceLeaveidSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AttendenceLeaveid
+        fields = '__all__'
+
+class AttendaceRulesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Attendence_rules
+        fields = '__all__'
+
+class EnterAttendanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attendance
+        fields = ('emp_id', 'login', "logout")
+
+# class EnterAttendanceSerializer(serializers.Serializer):
+#
+#     emp_id = serializers.IntegerField(read_only=True)
+#     attendances = AttendaceSerializer(many=True)
+#
+#     def create(self, validated_data):
+#
+#         attendances_data = validated_data.pop('attendances')
+#         employee = Employee.objects.create(**validated_data)
+#         for attendance_data in attendances_data:
+#             Attendance.objects.create(emp_id=employee, **attendance_data)
+#         return employee
+#     def update(self, instance, validated_data):
+#         attendances_data = validated_data.pop('attendances')
+#         emp_id = (instance.emp_id).all()
+#         emp_id = list(emp_id)
+#         instance.save()
+#         for attendancess_data in attendances_data:
+#             emp = emp_id.pop(0)
+#             emp.login = attendancess_data.get('login', emp.login)
+#             emp.logout = attendancess_data.get('logout', emp.logout)
+#             emp.save()
+#         return instance
+class ListAttendanceLogSerializer(serializers.ModelSerializer):
+
+    attendances = AttendaceSerializer(many=True)
+
+    class Meta:
+        model = Employee
+        fields = ('attendances', 'emp_id', 'name','department', 'work_location_add')
+
+
+class UpdateAttendanceLogSerializer(serializers.Serializer):
+
+    emp_id = serializers.IntegerField(read_only=True)
+    attendances = AttendaceSerializer(many=True)
+
+
+    def update(self, instance, validated_data):
+        attendances_data = validated_data.pop('attendances')
+        emp_id = (instance.emp_id).all()
+        emp_id = list(emp_id)
+        instance.save()
+        for attendancess_data in attendances_data:
+            emp = emp_id.pop(0)
+            emp.login = attendancess_data.get('login', emp.login)
+            emp.logout = attendancess_data.get('logout', emp.logout)
+            emp.save()
+        return instance
+
+
+
+#payroll
+class CreateMonthlyEmpSalarySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MonthlyEmpSalary
+        fields = '__all__'
+
+class ListMonthlyEmpSalarySerializer(serializers.ModelSerializer):
+    monthlyempsalary = CreateMonthlyEmpSalarySerializer(many=True)
+
+    class Meta:
+        model = Employee
+        fields = ('monthlyempsalary', 'emp_id', 'name')
+
+class EmployeePayrollSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = ('emp_id', 'name')
+

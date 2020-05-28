@@ -135,3 +135,63 @@ class EmpLeaveApplied(models.Model):
     def __str__(self):
         return self.reason
 
+#attendance
+from .validators import validate_file_extension
+
+
+class Attendance(models.Model):
+    attendance_id = models.AutoField(primary_key=True)
+    emp_id = models.ForeignKey(Employee, related_name='attendances', on_delete=models.CASCADE, default=None, unique=False)
+    Work_date = models.DateField(null=True, blank=True)
+    login = models.TimeField(default="00:00:00")
+    Login_image = models.FileField(upload_to="uploads/%Y/%m/%d", validators=[validate_file_extension])
+    Logout_image = models.FileField(upload_to="uploads/%Y/%m/%d", validators=[validate_file_extension])
+    logout = models.TimeField(default="00:00:00")
+    annomaly = models.BooleanField(default=False)
+    IP_address = models.CharField(max_length=30, null=True, blank=True)
+    IP_location = models.CharField(max_length=30, null=True, blank=True)
+
+
+class Attendence_rules(models.Model):
+
+     ar_id = models.AutoField(primary_key=True)
+     ar_name = models.CharField(max_length=30)
+     ar_description = models.CharField(max_length=50)
+     in_time = models.TimeField(default="00:00:00")
+     in_grace_mins = models.PositiveIntegerField
+     out_time = models.TimeField(default="00:00:00")
+     out_grace_mins = models.PositiveIntegerField
+     work_duration = models.FloatField()
+     random_weekly_off = models.BooleanField(default=False)
+     sunday_off = models.BooleanField(default=False)
+     saturday_sunday_off = models.BooleanField(default=False)
+
+     def __str__(self):
+        return self.ar_name
+#for assign_attendance_rules page
+
+class AttendenceLeaveid(models.Model):
+      attendance_leave_id = models.AutoField(primary_key=True)
+      emp_id = models.ForeignKey(Employee, related_name='attenadance_leaveids', on_delete=models.CASCADE, default=None, unique=False)
+      ar_id = models.OneToOneField(Attendence_rules,on_delete=models.CASCADE, default=None, unique=False)
+
+
+#for pay roll
+class MonthlyEmpSalary(models.Model):
+     emp_id = models.ForeignKey(Employee, related_name='monthlyempsalary', on_delete=models.CASCADE, default=None, unique=False)
+     month = models.CharField(max_length=20)
+     lop = models.PositiveIntegerField()
+     No_of_days = models.PositiveIntegerField()
+     ctc = models.FloatField()
+     basic = models.FloatField()
+     hra = models.FloatField()
+     conveyance_allowances = models.FloatField()
+     medical_allowance = models.FloatField()
+     cca_allowance = models.FloatField()
+     pf_employer = models.FloatField()
+     pf_employee = models.FloatField()
+     pt = models.FloatField()
+     esi_employer = models.FloatField()
+     esi_employee = models.FloatField()
+     net_employee_payable = models.FloatField()
+     due_date = models.DateField()

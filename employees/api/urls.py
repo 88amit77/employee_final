@@ -29,6 +29,18 @@ router.register('employee_log', views.EmployeeLogView, basename="employee_log")
 router.register('list_leave_logs', views.ListLeaveLogsViewSet, basename="list_leave_logs")
 router.register('leave_logs_search', views.LeaveLogsSearchViewSet, basename="leave_logs_search")
 
+router.register('attendance', views.AttendanceViewSet, basename="attendance")
+router.register('list_attendance_log', views.ListAttendanceLogViewSet, basename="list_attendance_log")
+router.register('update_attendance_log', views.UpdateAttendanceLogViewSet, basename="update_attendance_log")
+router.register('create_attendance_rules', views.AttendenceRulesViewSet, basename="create_attendance_rules")
+router.register('assign_attendance_rules', views.AttendanceLeaveidViewSet, basename="assign_attendance_rules")
+router.register('enter_attendance', views.EnterAttendanceViewSet, basename="enter_attendance")
+
+router.register('create_payroll', views.CreateMonthlyEmpSalaryViewSet, basename="create_payroll")
+router.register('list_payroll', views.ListMonthlyEmpSalaryViewSet, basename="list_payroll")
+router.register('payroll_search', views.MonthlyEmpSalarySearchViewSet, basename="payroll_search")
+
+
 schema_view = get_swagger_view(title='Micromerce API')
 
 urlpatterns = [

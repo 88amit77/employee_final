@@ -7,7 +7,8 @@ from rest_framework import status
 import requests
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
-from .models import (Employee, Education, Documents, FamilyMembers, WorkHistory, LeaveRules, EmpLeaveApplied, EmpLeaveId)
+from .models import (Employee, Education, Documents, FamilyMembers, WorkHistory, LeaveRules, EmpLeaveApplied, EmpLeaveId,
+                     Attendance, AttendenceLeaveid,Attendence_rules,MonthlyEmpSalary)
 from .serializers import (
       EmployeeSerializer,
       ListEmployeeSerializer,
@@ -24,6 +25,15 @@ from .serializers import (
       EmpLogSerializer,
       EmployeenewSerializer,
       Employee2Serializer,
+AttendaceSerializer,
+    AttendaceLeaveidSerializer,
+EnterAttendanceSerializer,
+AttendaceRulesSerializer,
+UpdateAttendanceLogSerializer,
+ListAttendanceLogSerializer,
+CreateMonthlyEmpSalarySerializer,
+ListMonthlyEmpSalarySerializer,
+EmployeePayrollSerializer,
 )
 
 DEFAULT_PAGE = 1
@@ -148,7 +158,94 @@ class CustomLeaveLogsPagination(PageNumberPagination):
             'results': data
         })
 
+class CustomAttendanceLogPagination(PageNumberPagination):
+    page = DEFAULT_PAGE
+    page_size = 20
+    page_size_query_param = 'page_size'
 
+    def get_paginated_response(self, data):
+        return Response({
+            'links': {
+                'next': self.get_next_link(),
+                'previous': self.get_previous_link()
+            },
+            'total': self.page.paginator.count,
+            'page': int(self.request.GET.get('page', DEFAULT_PAGE)),
+            'page_size': int(self.request.GET.get('page_size', self.page_size)),
+            'UI_data': {
+                'sticky_headers': [
+                               'emp_id',
+                               'name',
+                                         ],
+                'header': {
+                              'emp_id': 'Employee Id',
+                              'name': 'Employee Name',
+                              "department": 'Department',
+                              "work_location_add": 'Location',
+                              "annomaly": 'Outstanding Anomalies',
+                              "status": 'Status',
+                              "login": 'In Time',
+                              "logout": 'Out Time',
+
+
+                           },
+                'sortable': [
+                              'emp_id',
+                           ],
+
+            },
+            'results': data
+        })
+
+class CustomPayrollPagination(PageNumberPagination):
+    page = DEFAULT_PAGE
+    page_size = 20
+    page_size_query_param = 'page_size'
+
+    def get_paginated_response(self, data):
+        return Response({
+            'links': {
+                'next': self.get_next_link(),
+                'previous': self.get_previous_link()
+            },
+            'total': self.page.paginator.count,
+            'page': int(self.request.GET.get('page', DEFAULT_PAGE)),
+            'page_size': int(self.request.GET.get('page_size', self.page_size)),
+            'UI_data': {
+                'sticky_headers': [
+                               'emp_id',
+                               'name',
+                                         ],
+                'header': {
+                              'name': 'Employee Name',
+                              "month": 'Department',
+                              "lop": 'Lop',
+                              "No_of_days": 'No Of Days',
+                              "ctc": 'CTC',
+                              "basic": 'Basic',
+                              "hra": 'HRA',
+                    "conveyance_allowances": 'Conveyance Allowances',
+                    "medical_allowance": 'Medical Allowance',
+                    "cca_allowance": 'CCA Allowance',
+                    "pf_employer": 'PF Employer',
+                    "pf_employee": 'PF Employee',
+                    "pt": 'PT',
+                    "esi_employer": 'ESI Employer',
+                    "esi_employee": 'ESI Employee',
+                    "net_employee_payable": 'Net Employee Payable',
+                    "due_date": 'Due Date',
+
+                           },
+                'sortable': [
+                              'emp_id',
+                           ],
+                'date_filters': [
+                    'due_date'
+                ]
+
+            },
+            'results': data
+        })
 class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
@@ -438,6 +535,93 @@ class LeaveLogsSearchViewSet(viewsets.ModelViewSet):
         if query:
             department = query.split(',')
             qs = qs.filter(department__in=department)
+        query = self.request.GET.get("sort_by")
+        if query:
+            sort_key = query
+            if sort_key == 'emp_id':
+                sort_key = 'emp_id'
+            sort_by = ''
+            if 'sort_order' in self.request.data and self.request.data['sort_order'] == 'desc':
+                sort_by = '-'
+            sort_by += sort_key
+            qs = qs.order_by(sort_by)
+
+        return qs
+
+#attendance
+class AttendanceViewSet(viewsets.ModelViewSet):
+    queryset = Attendance.objects.all()
+    serializer_class = AttendaceSerializer
+
+class AttendanceLeaveidViewSet(viewsets.ModelViewSet):
+    queryset = AttendenceLeaveid.objects.all()
+    serializer_class = AttendaceLeaveidSerializer
+
+class AttendenceRulesViewSet(viewsets.ModelViewSet):
+    queryset = Attendence_rules.objects.all()
+    serializer_class = AttendaceRulesSerializer
+
+class EnterAttendanceViewSet(viewsets.ModelViewSet):
+    queryset = Attendance.objects.all()
+    serializer_class = EnterAttendanceSerializer
+
+class UpdateAttendanceLogViewSet(viewsets.ModelViewSet):
+    queryset = Employee.objects.all()
+    serializer_class = UpdateAttendanceLogSerializer
+
+class ListAttendanceLogViewSet(viewsets.ViewSet):
+    def create(self, request):
+        queryset = Employee.objects.all()
+        serializer = ListAttendanceLogSerializer(queryset, many=True)
+        if len(queryset) > 0:
+            paginator = CustomAttendanceLogPagination()
+            result_page = paginator.paginate_queryset(queryset, request)
+            serializer = ListAttendanceLogSerializer(result_page, many=True)
+            return paginator.get_paginated_response(serializer.data)
+        else:
+            paginator = CustomAttendanceLogPagination()
+            result_page = paginator.paginate_queryset(queryset, request)
+            return paginator.get_paginated_response(result_page)
+
+
+#payroll page
+class CreateMonthlyEmpSalaryViewSet(viewsets.ModelViewSet):
+    queryset = MonthlyEmpSalary.objects.all()
+    serializer_class = CreateMonthlyEmpSalarySerializer
+
+class ListMonthlyEmpSalaryViewSet(viewsets.ViewSet):
+    def create(self, request):
+        queryset = Employee.objects.all()
+        serializer = ListMonthlyEmpSalarySerializer(queryset, many=True)
+        if len(queryset) > 0:
+            paginator = CustomPayrollPagination()
+            result_page = paginator.paginate_queryset(queryset, request)
+            serializer = ListMonthlyEmpSalarySerializer(result_page, many=True)
+            return paginator.get_paginated_response(serializer.data)
+        else:
+            paginator = CustomPayrollPagination()
+            result_page = paginator.paginate_queryset(queryset, request)
+            return paginator.get_paginated_response(result_page)
+
+class MonthlyEmpSalarySearchViewSet(viewsets.ModelViewSet):
+
+    serializer_class = EmployeePayrollSerializer
+    pagination_class = CustomPayrollPagination
+
+    def get_queryset(self, *args, **kwargs):
+        qs = Employee.objects.all()
+        query = self.request.GET.get("keyword")
+        if query:
+            qs = qs.filter(Q(name__contains=query) | Q(emp_id__contains=query))
+        query = self.request.GET.get("emp_id")
+        if query:
+            emp_id = query.split(',')
+            qs = qs.filter(emp_id__in=emp_id)
+
+        query = self.request.GET.get("name")
+        if query:
+            name = query.split(',')
+            qs = qs.filter(name__in=name)
         query = self.request.GET.get("sort_by")
         if query:
             sort_key = query
