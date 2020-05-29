@@ -1,6 +1,7 @@
 from django.urls import path, include
 from rest_framework_swagger.views import get_swagger_view
 from rest_framework.routers import DefaultRouter
+from django.conf.urls import url
 
 router = DefaultRouter()
 from .employees import views
@@ -48,6 +49,7 @@ urlpatterns = [
     path("employees/docs/", schema_view),
     path('employee_csv/', views.ExportEmp, name='employee_csv'),
     path('employee_leave_log_csv/', views.ExportEmpLeaveLog, name='employee_leave_log_csv'),
+    url('payrollrun', views.PayrollrunList.as_view()),
 
 ]
 

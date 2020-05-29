@@ -652,3 +652,28 @@ class MonthlyEmpSalaryColumnViewSet(viewsets.ModelViewSet):
             return qs
         else:
             return qs
+
+
+from dateutil.parser import parse
+from rest_framework import generics
+
+
+class PayrollrunList(generics.ListAPIView):
+    serializer_class = CreateMonthlyEmpSalarySerializer
+
+    def get_queryset(self):
+        filter = {}
+        """
+        Optionally restricts the returned data to a given date,
+        by filtering against a `start_date` query parameter in the URL(?start_date=01-01-2021).
+        """
+        queryset = MonthlyEmpSalary.objects.all()
+        start_date = self.request.query_params.get('start_date', None)
+        # end_date = self.request.query_params.get('end_date', None)
+        if start_date is not None:
+            filter['month__gte'] = parse(start_date)
+        # if end_date is not None:
+        #     filter['month__lte'] = parse(end_date)
+
+        queryset = queryset.filter(**filter)
+        return queryset
