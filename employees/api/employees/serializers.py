@@ -497,3 +497,10 @@ class EmployeePayrollSerializer(serializers.ModelSerializer):
         model = Employee
         fields = ('emp_id', 'name')
 
+class SearchMonthlyEmpSalarySerializer(serializers.Serializer):
+
+    emp_id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(max_length=30)
+    monthlyempsalary = CreateMonthlyEmpSalarySerializer(many=True)
+
+

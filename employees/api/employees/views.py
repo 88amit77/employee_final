@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 import csv
+from rest_framework import filters
 from django.views.generic import View
 from django.http import HttpResponse
 from django.db.models import Q
@@ -34,7 +35,8 @@ ListAttendanceLogSerializer,
 CreateMonthlyEmpSalarySerializer,
 ListMonthlyEmpSalarySerializer,
 EmployeePayrollSerializer,
-DynamicFieldsMonthlyEmpSalaryModelSerializer
+DynamicFieldsMonthlyEmpSalaryModelSerializer,
+SearchMonthlyEmpSalarySerializer,
 )
 
 DEFAULT_PAGE = 1
@@ -608,37 +610,6 @@ class ListMonthlyEmpSalaryViewSet(viewsets.ViewSet):
             result_page = paginator.paginate_queryset(queryset, request)
             return paginator.get_paginated_response(result_page)
 
-class MonthlyEmpSalarySearchViewSet(viewsets.ModelViewSet):
-
-    serializer_class = EmployeePayrollSerializer
-    pagination_class = CustomPayrollPagination
-
-    def get_queryset(self, *args, **kwargs):
-        qs = Employee.objects.all()
-        query = self.request.GET.get("keyword")
-        if query:
-            qs = qs.filter(Q(name__contains=query) | Q(emp_id__contains=query))
-        query = self.request.GET.get("emp_id")
-        if query:
-            emp_id = query.split(',')
-            qs = qs.filter(emp_id__in=emp_id)
-
-        query = self.request.GET.get("name")
-        if query:
-            name = query.split(',')
-            qs = qs.filter(name__in=name)
-        query = self.request.GET.get("sort_by")
-        if query:
-            sort_key = query
-            if sort_key == 'emp_id':
-                sort_key = 'emp_id'
-            sort_by = ''
-            if 'sort_order' in self.request.data and self.request.data['sort_order'] == 'desc':
-                sort_by = '-'
-            sort_by += sort_key
-            qs = qs.order_by(sort_by)
-
-        return qs
 
 class MonthlyEmpSalaryColumnViewSet(viewsets.ModelViewSet):
     # queryset = Employee.objects.all()
@@ -679,3 +650,8 @@ class PayrollrunList(generics.ListAPIView):
         return queryset
 
 
+class PayrollSearchAPIView(generics.ListCreateAPIView):
+    search_fields = ['name','emp_id']
+    filter_backends = (filters.SearchFilter,)
+    queryset = Employee.objects.all()
+    serializer_class = SearchMonthlyEmpSalarySerializer

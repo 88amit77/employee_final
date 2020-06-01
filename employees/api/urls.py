@@ -39,7 +39,6 @@ router.register('enter_attendance', views.EnterAttendanceViewSet, basename="ente
 
 router.register('create_payroll', views.CreateMonthlyEmpSalaryViewSet, basename="create_payroll")
 router.register('list_payroll', views.ListMonthlyEmpSalaryViewSet, basename="list_payroll")
-router.register('payroll_search', views.MonthlyEmpSalarySearchViewSet, basename="payroll_search")
 router.register('payroll_column', views.MonthlyEmpSalaryColumnViewSet, basename="payroll_column")
 
 schema_view = get_swagger_view(title='Micromerce API')
@@ -50,6 +49,7 @@ urlpatterns = [
     path('employee_csv/', views.ExportEmp, name='employee_csv'),
     path('employee_leave_log_csv/', views.ExportEmpLeaveLog, name='employee_leave_log_csv'),
     url('payrollrun', views.PayrollrunList.as_view()),
+    path('payroll_search/', views.PayrollSearchAPIView.as_view())
 
 ]
 
