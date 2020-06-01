@@ -466,7 +466,7 @@ class DynamicFieldsMonthlyEmpSalaryModelSerializer(serializers.ModelSerializer):
         fields = str_fields.split(',') if str_fields else None
 
         # Instantiate the superclass normally
-        super(DynamicFieldsModelSerializer, self).__init__(*args, **kwargs)
+        super(DynamicFieldsMonthlyEmpSalaryModelSerializer, self).__init__(*args, **kwargs)
 
         if fields is not None:
             # Drop any fields that are not specified in the `fields` argument.
