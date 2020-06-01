@@ -400,6 +400,16 @@ class AttendaceRulesSerializer(serializers.ModelSerializer):
         model = Attendence_rules
         fields = '__all__'
 
+#for attendance search
+class SearchAttendanceLogSerializer(serializers.Serializer):
+
+    emp_id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(max_length=30)
+    department = serializers.CharField(max_length=30)
+    work_location_add = serializers.CharField(max_length=30)
+    attendances = AttendaceSerializer(many=True)
+
+
 class EnterAttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance

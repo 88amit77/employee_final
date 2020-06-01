@@ -48,6 +48,7 @@ urlpatterns = [
     path("employees/docs/", schema_view),
     path('employee_csv/', views.ExportEmp, name='employee_csv'),
     path('employee_leave_log_csv/', views.ExportEmpLeaveLog, name='employee_leave_log_csv'),
+    path('attendance_search/', views.SearchAttendanceLogAPIView.as_view()),
     url('payrollrun', views.PayrollrunList.as_view()),
     path('payroll_search/', views.PayrollSearchAPIView.as_view())
 

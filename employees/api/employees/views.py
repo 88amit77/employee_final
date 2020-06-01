@@ -37,6 +37,7 @@ ListMonthlyEmpSalarySerializer,
 EmployeePayrollSerializer,
 DynamicFieldsMonthlyEmpSalaryModelSerializer,
 SearchMonthlyEmpSalarySerializer,
+SearchAttendanceLogSerializer,
 )
 
 DEFAULT_PAGE = 1
@@ -559,22 +560,34 @@ class LeaveLogsSearchViewSet(viewsets.ModelViewSet):
 class AttendanceViewSet(viewsets.ModelViewSet):
     queryset = Attendance.objects.all()
     serializer_class = AttendaceSerializer
+    pagination_class = CustomAttendanceLogPagination
+
 
 class AttendanceLeaveidViewSet(viewsets.ModelViewSet):
     queryset = AttendenceLeaveid.objects.all()
     serializer_class = AttendaceLeaveidSerializer
-
+    pagination_class = CustomAttendanceLogPagination
 class AttendenceRulesViewSet(viewsets.ModelViewSet):
     queryset = Attendence_rules.objects.all()
     serializer_class = AttendaceRulesSerializer
+    pagination_class = CustomAttendanceLogPagination
 
 class EnterAttendanceViewSet(viewsets.ModelViewSet):
     queryset = Attendance.objects.all()
     serializer_class = EnterAttendanceSerializer
+    pagination_class = CustomAttendanceLogPagination
+
+class SearchAttendanceLogAPIView(viewsets.generics.ListCreateAPIView):
+    search_fields = ['name','emp_id','department','work_location_add']
+    filter_backends = (filters.SearchFilter,)
+    queryset = Employee.objects.all()
+    serializer_class = SearchAttendanceLogSerializer
+    pagination_class = CustomAttendanceLogPagination
 
 class UpdateAttendanceLogViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = UpdateAttendanceLogSerializer
+    pagination_class = CustomAttendanceLogPagination
 
 class ListAttendanceLogViewSet(viewsets.ViewSet):
     def create(self, request):
@@ -595,6 +608,7 @@ class ListAttendanceLogViewSet(viewsets.ViewSet):
 class CreateMonthlyEmpSalaryViewSet(viewsets.ModelViewSet):
     queryset = MonthlyEmpSalary.objects.all()
     serializer_class = CreateMonthlyEmpSalarySerializer
+    pagination_class = CustomPayrollPagination
 
 class ListMonthlyEmpSalaryViewSet(viewsets.ViewSet):
     def create(self, request):
@@ -631,6 +645,7 @@ from rest_framework import generics
 
 class PayrollrunList(generics.ListAPIView):
     serializer_class = CreateMonthlyEmpSalarySerializer
+    pagination_class = CustomPayrollPagination
 
     def get_queryset(self):
         filter = {}
@@ -655,3 +670,4 @@ class PayrollSearchAPIView(generics.ListCreateAPIView):
     filter_backends = (filters.SearchFilter,)
     queryset = Employee.objects.all()
     serializer_class = SearchMonthlyEmpSalarySerializer
+    pagination_class = CustomPayrollPagination
