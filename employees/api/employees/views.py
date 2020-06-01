@@ -671,7 +671,7 @@ class PayrollrunList(generics.ListAPIView):
         start_date = self.request.query_params.get('start_date', None)
         # end_date = self.request.query_params.get('end_date', None)
         if start_date is not None:
-            filter['month__gte'] = parse(start_date)
+            filter['due_date__gte'] = parse(start_date)
         # if end_date is not None:
         #     filter['month__lte'] = parse(end_date)
 
