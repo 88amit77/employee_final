@@ -6,3 +6,5 @@ requests
 django-rest-swagger
 django-cors-headers
 pillow
+python-dateutil
+
