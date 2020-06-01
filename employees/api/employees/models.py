@@ -179,7 +179,7 @@ class AttendenceLeaveid(models.Model):
 #for pay roll
 class MonthlyEmpSalary(models.Model):
      emp_id = models.ForeignKey(Employee, related_name='monthlyempsalary', on_delete=models.CASCADE, default=None, unique=False)
-     month = models.DateField()
+     month = models.CharField(max_length=20)
      lop = models.PositiveIntegerField()
      No_of_days = models.PositiveIntegerField()
      ctc = models.FloatField()
