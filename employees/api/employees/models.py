@@ -158,9 +158,9 @@ class Attendence_rules(models.Model):
      ar_name = models.CharField(max_length=30)
      ar_description = models.CharField(max_length=50)
      in_time = models.TimeField(default="00:00:00")
-     in_grace_mins = models.PositiveIntegerField
+     in_grace_mins = models.PositiveIntegerField()
      out_time = models.TimeField(default="00:00:00")
-     out_grace_mins = models.PositiveIntegerField
+     out_grace_mins = models.PositiveIntegerField()
      work_duration = models.FloatField()
      random_weekly_off = models.BooleanField(default=False)
      sunday_off = models.BooleanField(default=False)
