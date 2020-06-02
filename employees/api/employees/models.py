@@ -20,22 +20,22 @@ class Employee(models.Model):
     twitter = models.CharField(max_length=50)
     date_of_joining = models.DateField()
     probation_period = models.IntegerField()
-    Current_address_line1 = models.CharField(max_length=50)
-    Current_address_line2 = models.CharField(max_length=50)
+    current_address_line1 = models.CharField(max_length=50)
+    current_address_line2 = models.CharField(max_length=50)
     current_country = models.CharField(max_length=15)
     current_state = models.CharField(max_length=10)
     current_pincode = models.CharField(max_length=15)
     current_house_type = models.CharField(max_length=50)
-    Current_staying_since = models.DateField()
-    Current_city = models.CharField(max_length=25)
-    Permanent_address_line1 = models.CharField(max_length=50)
-    Permanentt_address_line2 = models.CharField(max_length=50)
-    Permanent_country = models.CharField(max_length=15)
-    Permanent_state = models.CharField(max_length=15)
-    Permanent_pincode = models.CharField(max_length=15)
-    Employee_type = models.CharField(max_length=15)
-    Employee_Status = models.BooleanField(default=False)
-    Job_title = models.CharField(max_length=30)
+    current_staying_since = models.DateField()
+    current_city = models.CharField(max_length=25)
+    permanent_address_line1 = models.CharField(max_length=50)
+    permanentt_address_line2 = models.CharField(max_length=50)
+    permanent_country = models.CharField(max_length=15)
+    permanent_state = models.CharField(max_length=15)
+    permanent_pincode = models.CharField(max_length=15)
+    employee_type = models.CharField(max_length=15)
+    employee_status = models.BooleanField(default=False)
+    job_title = models.CharField(max_length=30)
     termination_date = models.DateField()
     work_location_add = models.CharField(max_length=20)
     designation = models.CharField(max_length=20)
@@ -53,8 +53,7 @@ class Employee(models.Model):
 
 
 class Documents(models.Model):
-    documents = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='documents_emp', null=True,
-                                  blank=True)
+    documents = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='documents_emp', null=True,blank=True)
     document_id = models.AutoField(primary_key=True, )
     pan_number = models.CharField(max_length=20)
     pan_card = models.FileField(blank=True, null=True)
@@ -70,7 +69,7 @@ class Education(models.Model):
     education_id = models.AutoField(primary_key=True)
     institute_name = models.CharField(max_length=50)
     course_type = models.CharField(max_length=30)
-    Stream = models.CharField(max_length=30)
+    stream = models.CharField(max_length=30)
     start_date = models.DateField()
     end_date = models.DateField()
     average_marks = models.FloatField()
@@ -78,17 +77,15 @@ class Education(models.Model):
 
 
 class FamilyMembers(models.Model):
-    family_members = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='family_members_emp', null=True,
-                                       blank=True)
+    family_members = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='family_members_emp', null=True, blank=True)
     family_member_id = models.AutoField(primary_key=True)
-    family_Member_name = models.CharField(max_length=20)
+    family_member_name = models.CharField(max_length=20)
     relation = models.CharField(max_length=20)
     contact_number = models.CharField(max_length=10)
 
 
 class WorkHistory(models.Model):
-    work_historys = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='work_historys_emp', null=True,
-                                      blank=True)
+    work_historys = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='work_historys_emp', null=True, blank=True)
     work_history_id = models.AutoField(primary_key=True)
     company_name = models.CharField(max_length=30)
     period_from = models.DateField()
@@ -142,14 +139,14 @@ from .validators import validate_file_extension
 class Attendance(models.Model):
     attendance_id = models.AutoField(primary_key=True)
     emp_id = models.ForeignKey(Employee, related_name='attendances', on_delete=models.CASCADE, default=None, unique=False)
-    Work_date = models.DateField(null=True, blank=True)
+    work_date = models.DateField(null=True, blank=True)
     login = models.TimeField(default="00:00:00")
-    Login_image = models.FileField(upload_to="uploads/%Y/%m/%d", validators=[validate_file_extension])
-    Logout_image = models.FileField(upload_to="uploads/%Y/%m/%d", validators=[validate_file_extension])
+    login_image = models.FileField(upload_to="uploads/%Y/%m/%d", validators=[validate_file_extension])
+    logout_image = models.FileField(upload_to="uploads/%Y/%m/%d", validators=[validate_file_extension])
     logout = models.TimeField(default="00:00:00")
     annomaly = models.BooleanField(default=False)
-    IP_address = models.CharField(max_length=30, null=True, blank=True)
-    IP_location = models.CharField(max_length=30, null=True, blank=True)
+    ip_address = models.CharField(max_length=30, null=True, blank=True)
+    ip_location = models.CharField(max_length=30, null=True, blank=True)
 
 
 class Attendence_rules(models.Model):
@@ -181,7 +178,7 @@ class MonthlyEmpSalary(models.Model):
      emp_id = models.ForeignKey(Employee, related_name='monthlyempsalary', on_delete=models.CASCADE, default=None, unique=False)
      month = models.CharField(max_length=20)
      lop = models.PositiveIntegerField()
-     No_of_days = models.PositiveIntegerField()
+     no_of_days = models.PositiveIntegerField()
      ctc = models.FloatField()
      basic = models.FloatField()
      hra = models.FloatField()
