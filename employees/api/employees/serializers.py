@@ -466,6 +466,7 @@ class UpdateAttendanceLogSerializer(serializers.Serializer):
         return instance
 
 
+
 #payroll
 class DynamicFieldsMonthlyEmpSalaryModelSerializer(serializers.ModelSerializer):
 
