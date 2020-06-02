@@ -578,8 +578,9 @@ class EnterAttendanceViewSet(viewsets.ModelViewSet):
     pagination_class = CustomAttendanceLogPagination
 
 class SearchAttendanceLogAPIView(viewsets.generics.ListCreateAPIView):
-    search_fields = ['name','emp_id','department','work_location_add']
-    filter_backends = (filters.SearchFilter,)
+    search_fields = ['name', 'emp_id', 'department', 'work_location_add']
+    ordering_fields = ['emp_id']
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     queryset = Employee.objects.all()
     serializer_class = SearchAttendanceLogSerializer
     pagination_class = CustomAttendanceLogPagination
@@ -667,7 +668,8 @@ class PayrollrunList(generics.ListAPIView):
 
 class PayrollSearchAPIView(generics.ListCreateAPIView):
     search_fields = ['name','emp_id']
-    filter_backends = (filters.SearchFilter,)
+    ordering_fields = ['emp_id']
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     queryset = Employee.objects.all()
     serializer_class = SearchMonthlyEmpSalarySerializer
     pagination_class = CustomPayrollPagination
