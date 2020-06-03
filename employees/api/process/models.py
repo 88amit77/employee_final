@@ -20,7 +20,7 @@ class Process(models.Model):
 	process_id = models.AutoField(primary_key=True)
 	process_name = models.CharField(max_length=50)
 	process_description = models.CharField(max_length=50)
-	process_training = models.FileField(upload_to='/dropbox/videos', max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
+	process_training = models.FileField(upload_to='dropbox/videos', max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
 	process_department = models.PositiveSmallIntegerField() # Fk dept id from employee models
 	process_time_allocated = models.TimeField(blank=True)
 	
@@ -47,7 +47,7 @@ class ProcessMainid(models.Model):
 	main_name = models.CharField(max_length=50)
 	offsetx = models.FloatField()
 	offsety = models.FloatField()
-	main_attachment = models.FileField(upload_to='/dropbox/videos_main', max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'mp4', 'png', 'jpeg', 'jpg'])])
+	main_attachment = models.FileField(upload_to='dropbox/videos_main', max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'mp4', 'png', 'jpeg', 'jpg'])])
 	main_description = models.TextField(max_length=200, editable=True, blank=True)
 	main_department = models.SmallIntegerField()  # Fk dept id from employee models
 
@@ -68,7 +68,7 @@ class ProcessSubpoint(models.Model):
 	process_subpointid = models.AutoField(primary_key=True)
 	pmain_id = models.ForeignKey("ProcessMainid", related_name='mainprocess', on_delete=models.CASCADE)
 	subpoint_name = models.CharField(max_length=50)
-	subpoint_attachment = models.FileField(upload_to='/dropbox/videos_subprocess', max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'mp4', 'png', 'jpeg', 'jpg'])])
+	subpoint_attachment = models.FileField(upload_to='dropbox/videos_subprocess', max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'mp4', 'png', 'jpeg', 'jpg'])])
 	subpoint_description = models.TextField(max_length=100, editable=True, blank=True)
 
 	def __str__(self):
