@@ -56,9 +56,9 @@ class Documents(models.Model):
     documents = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='documents_emp', null=True,blank=True)
     document_id = models.AutoField(primary_key=True, )
     pan_number = models.CharField(max_length=20)
-    pan_card = models.FileField(blank=True, null=True)
-    address_proof = models.FileField(blank=True, null=True)
-    permanent_proof = models.FileField(blank=True, null=True)
+    pan_card = models.FileField(upload_to='uploads/employee_docs/', blank=True, null=True)
+    address_proof = models.FileField(upload_to='uploads/employee_docs/', blank=True, null=True)
+    permanent_proof = models.FileField(upload_to='uploads/employee_docs/', blank=True, null=True)
     aadharcard_number = models.CharField(max_length=20)
     aadharcard = models.FileField(blank=True, null=True)
 
@@ -141,8 +141,8 @@ class Attendance(models.Model):
     emp_id = models.ForeignKey(Employee, related_name='attendances', on_delete=models.CASCADE, default=None, unique=False)
     work_date = models.DateField(null=True, blank=True)
     login = models.TimeField(default="00:00:00")
-    login_image = models.FileField(upload_to="uploads/%Y/%m/%d", validators=[validate_file_extension])
-    logout_image = models.FileField(upload_to="uploads/%Y/%m/%d", validators=[validate_file_extension])
+    login_image = models.FileField(upload_to='uploads/employee_docs/', validators=[validate_file_extension],blank=True, null=True)
+    logout_image = models.FileField(upload_to='uploads/employee_docs/',  validators=[validate_file_extension],blank=True, null=True)
     logout = models.TimeField(default="00:00:00")
     annomaly = models.BooleanField(default=False)
     ip_address = models.CharField(max_length=30, null=True, blank=True)
@@ -155,9 +155,9 @@ class Attendence_rules(models.Model):
      ar_name = models.CharField(max_length=30)
      ar_description = models.CharField(max_length=50)
      in_time = models.TimeField(default="00:00:00")
-     in_grace_mins = models.PositiveIntegerField
+     in_grace_mins = models.PositiveIntegerField()
      out_time = models.TimeField(default="00:00:00")
-     out_grace_mins = models.PositiveIntegerField
+     out_grace_mins = models.PositiveIntegerField()
      work_duration = models.FloatField()
      random_weekly_off = models.BooleanField(default=False)
      sunday_off = models.BooleanField(default=False)
@@ -176,7 +176,7 @@ class AttendenceLeaveid(models.Model):
 #for pay roll
 class MonthlyEmpSalary(models.Model):
      emp_id = models.ForeignKey(Employee, related_name='monthlyempsalary', on_delete=models.CASCADE, default=None, unique=False)
-     month = models.CharField(max_length=20)
+     month = models.DateField()
      lop = models.PositiveIntegerField()
      no_of_days = models.PositiveIntegerField()
      ctc = models.FloatField()

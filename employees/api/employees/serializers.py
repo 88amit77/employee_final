@@ -49,22 +49,22 @@ class EmployeeSerializer(serializers.Serializer):
    # leave_approval_user_id = serializers.IntegerField()
     date_of_joining = serializers.DateField()
     probation_period = serializers.IntegerField()
-    Current_address_line1 = serializers.CharField(max_length=50)
-    Current_address_line2 = serializers.CharField(max_length=50)
+    current_address_line1 = serializers.CharField(max_length=50)
+    current_address_line2 = serializers.CharField(max_length=50)
     current_country = serializers.CharField(max_length=15)
     current_state = serializers.CharField(max_length=10)
     current_pincode = serializers.CharField(max_length=15)
     current_house_type = serializers.CharField(max_length=50)
-    Current_staying_since = serializers.DateField()
-    Current_city = serializers.CharField(max_length=20)
-    Permanent_address_line1 = serializers.CharField(max_length=50)
-    Permanentt_address_line2 = serializers.CharField(max_length=50)
-    Permanent_country = serializers.CharField(max_length=15)
-    Permanent_state = serializers.CharField(max_length=15)
-    Permanent_pincode = serializers.CharField(max_length=15)
-    Employee_type = serializers.CharField(max_length=15)
-    Employee_Status = serializers.BooleanField(default=False)
-    Job_title = serializers.CharField(max_length=30)
+    current_staying_since = serializers.DateField()
+    current_city = serializers.CharField(max_length=20)
+    permanent_address_line1 = serializers.CharField(max_length=50)
+    permanentt_address_line2 = serializers.CharField(max_length=50)
+    permanent_country = serializers.CharField(max_length=15)
+    permanent_state = serializers.CharField(max_length=15)
+    permanent_pincode = serializers.CharField(max_length=15)
+    employee_type = serializers.CharField(max_length=15)
+    employee_status = serializers.BooleanField(default=False)
+    job_title = serializers.CharField(max_length=30)
     termination_date = serializers.DateField()
     work_location_add = serializers.CharField(max_length=20)
     designation = serializers.CharField(max_length=20)
@@ -127,24 +127,24 @@ class EmployeeSerializer(serializers.Serializer):
         instance.twitter = validated_data.get('twitter', instance.twitter)
         instance.date_of_joining = validated_data.get('date_of_joining', instance.date_of_joining)
         instance.probation_period = validated_data.get('probation_period', instance.probation_period)
-        instance.Current_address_line1 = validated_data.get('Current_address_line1', instance.Current_address_line1)
-        instance.Current_address_line2 = validated_data.get('Current_address_line2', instance.Current_address_line2)
+        instance.current_address_line1 = validated_data.get('current_address_line1', instance.Current_address_line1)
+        instance.current_address_line2 = validated_data.get('current_address_line2', instance.Current_address_line2)
         instance.current_country = validated_data.get('current_country', instance.current_country)
         instance.current_state = validated_data.get('current_state', instance.current_state)
         instance.current_pincode = validated_data.get('current_pincode', instance.current_pincode)
         instance.current_house_type = validated_data.get('current_house_type', instance.current_house_type)
-        instance.Current_staying_since = validated_data.get('Current_staying_since', instance.Current_staying_since)
-        instance.Current_city = validated_data.get('Current_city', instance.Current_city)
-        instance.Permanent_address_line1 = validated_data.get('Permanent_address_line1',
+        instance.current_staying_since = validated_data.get('current_staying_since', instance.Current_staying_since)
+        instance.current_city = validated_data.get('current_city', instance.Current_city)
+        instance.permanent_address_line1 = validated_data.get('permanent_address_line1',
                                                               instance.Permanent_address_line1)
-        instance.Permanent_address_line2 = validated_data.get('Permanent_address_line2',
+        instance.permanent_address_line2 = validated_data.get('permanent_address_line2',
                                                               instance.Permanent_address_line2)
-        instance.Permanent_country = validated_data.get('Permanent_country', instance.Permanent_country)
-        instance.Permanent_state = validated_data.get('Permanent_state', instance.Permanent_state)
-        instance.Permanent_pincode = validated_data.get('Permanent_pincode', instance.Permanent_pincode)
-        instance.Employee_type = validated_data.get('Employee_type', instance.Employee_type)
-        instance.Employee_Status = validated_data.get('Employee_Status', instance.Employee_Status)
-        instance.Job_title = validated_data.get('Job_title', instance.Job_title)
+        instance.permanent_country = validated_data.get('permanent_country', instance.Permanent_country)
+        instance.permanent_state = validated_data.get('permanent_state', instance.Permanent_state)
+        instance.permanent_pincode = validated_data.get('permanent_pincode', instance.Permanent_pincode)
+        instance.employee_type = validated_data.get('employee_type', instance.Employee_type)
+        instance.employee_Status = validated_data.get('employee_status', instance.Employee_Status)
+        instance.job_title = validated_data.get('job_title', instance.Job_title)
         instance.termination_date = validated_data.get('termination_date', instance.termination_date)
         instance.work_location_add = validated_data.get('work_location_add', instance.work_location_add)
         instance.designation = validated_data.get('designation', instance.designation)
@@ -180,7 +180,7 @@ class EmployeeSerializer(serializers.Serializer):
 
         for family_member_data in family_members_data:
             family_member = family_members.pop(0)
-            family_member.family_Member_name = family_member_data.get('family_Member_name', family_member.family_Member_name)
+            family_member.family_Member_name = family_member_data.get('family_member_name', family_member.family_Member_name)
             family_member.relation = family_member_data.get('relation', family_member.relation)
             family_member.contact_number = family_member_data.get('contact_number', family_member.contact_number)
             family_member.save()
@@ -189,7 +189,7 @@ class EmployeeSerializer(serializers.Serializer):
             education = educations.pop(0)
             education.institute_name = education_data.get('institute_name', education.institute_name)
             education.course_type = education_data.get('course_type', education.course_type)
-            education.Stream = education_data.get('Stream', education.Stream)
+            education.Stream = education_data.get('stream', education.Stream)
             education.start_date = education_data.get('start_date', education.start_date)
             education.end_date = education_data.get('end_date', education.end_date)
             education.average_marks = education_data.get('average_marks', education.average_marks)
@@ -217,22 +217,22 @@ class ListEmployeeSerializer(serializers.Serializer):
     #leave_approval_user_id = serializers.IntegerField()
     date_of_joining = serializers.DateField()
     probation_period = serializers.IntegerField()
-    Current_address_line1 = serializers.CharField(max_length=50)
-    Current_address_line2 = serializers.CharField(max_length=50)
+    current_address_line1 = serializers.CharField(max_length=50)
+    current_address_line2 = serializers.CharField(max_length=50)
     current_country = serializers.CharField(max_length=15)
     current_state = serializers.CharField(max_length=10)
     current_pincode = serializers.CharField(max_length=15)
     current_house_type = serializers.CharField(max_length=15)
-    Current_staying_since = serializers.DateField()
-    Current_city = serializers.CharField(max_length=20)
-    Permanent_address_line1 = serializers.CharField(max_length=50)
-    Permanentt_address_line2 = serializers.CharField(max_length=50)
-    Permanent_country = serializers.CharField(max_length=15)
-    Permanent_state = serializers.CharField(max_length=15)
-    Permanent_pincode = serializers.CharField(max_length=15)
-    Employee_type = serializers.CharField(max_length=15)
-    Employee_Status = serializers.BooleanField(default=False)
-    Job_title = serializers.CharField(max_length=30)
+    current_staying_since = serializers.DateField()
+    current_city = serializers.CharField(max_length=20)
+    permanent_address_line1 = serializers.CharField(max_length=50)
+    permanentt_address_line2 = serializers.CharField(max_length=50)
+    permanent_country = serializers.CharField(max_length=15)
+    permanent_state = serializers.CharField(max_length=15)
+    permanent_pincode = serializers.CharField(max_length=15)
+    employee_type = serializers.CharField(max_length=15)
+    employee_status = serializers.BooleanField(default=False)
+    job_title = serializers.CharField(max_length=30)
     termination_date = serializers.DateField()
     work_location_add = serializers.CharField(max_length=20)
     designation = serializers.CharField(max_length=20)
@@ -314,7 +314,7 @@ class ListEmployee1Serializer(serializers.Serializer):
 
     class Meta:
         model = Employee
-        fields = ('empleaves', 'emp_id', 'name', 'designation', 'department', 'date_of_joining', 'Employee_type',
+        fields = ('empleaves', 'emp_id', 'name', 'designation', 'department', 'date_of_joining', 'employee_type',
                   'work_location_add')
 
 
@@ -400,6 +400,16 @@ class AttendaceRulesSerializer(serializers.ModelSerializer):
         model = Attendence_rules
         fields = '__all__'
 
+#for attendance search
+class SearchAttendanceLogSerializer(serializers.Serializer):
+
+    emp_id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(max_length=30)
+    department = serializers.CharField(max_length=30)
+    work_location_add = serializers.CharField(max_length=30)
+    attendances = AttendaceSerializer(many=True)
+
+
 class EnterAttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
@@ -456,6 +466,7 @@ class UpdateAttendanceLogSerializer(serializers.Serializer):
         return instance
 
 
+
 #payroll
 class DynamicFieldsMonthlyEmpSalaryModelSerializer(serializers.ModelSerializer):
 
@@ -496,4 +507,11 @@ class EmployeePayrollSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
         fields = ('emp_id', 'name')
+
+class SearchMonthlyEmpSalarySerializer(serializers.Serializer):
+
+    emp_id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(max_length=30)
+    monthlyempsalary = CreateMonthlyEmpSalarySerializer(many=True)
+
 

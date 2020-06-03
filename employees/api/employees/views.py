@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 import csv
+from rest_framework import filters
 from django.views.generic import View
 from django.http import HttpResponse
 from django.db.models import Q
@@ -34,7 +35,9 @@ ListAttendanceLogSerializer,
 CreateMonthlyEmpSalarySerializer,
 ListMonthlyEmpSalarySerializer,
 EmployeePayrollSerializer,
-DynamicFieldsMonthlyEmpSalaryModelSerializer
+DynamicFieldsMonthlyEmpSalaryModelSerializer,
+SearchMonthlyEmpSalarySerializer,
+SearchAttendanceLogSerializer,
 )
 
 DEFAULT_PAGE = 1
@@ -62,7 +65,7 @@ class CustomPagination(PageNumberPagination):
                 'header': {
                              'emp_id': 'Employee Id',
                              'name': 'Employee Name',
-                             'Permanent_address_line1': "Address",
+                             'permanent_address_line1': "Address",
                              "designation": 'Designation',
                              "gender": "Gender",
                              "official_email": 'Official Email',
@@ -107,7 +110,7 @@ class CustomLeaveRulesPagination(PageNumberPagination):
                               'name': 'Employee Name',
                               "designation": 'Designation',
                               'date_of_joining': 'Date Of Joining',
-                              "Employee_type": 'Employee Type',
+                              "employee_type": 'Employee Type',
                               'work_location_add': 'Work Location Add',
                               'leave': 'Leave',
 
@@ -225,7 +228,7 @@ class CustomPayrollPagination(PageNumberPagination):
                               'name': 'Employee Name',
                               "month": 'Department',
                               "lop": 'Lop',
-                              "No_of_days": 'No Of Days',
+                              "no_of_days": 'No Of Days',
                               "ctc": 'CTC',
                               "basic": 'Basic',
                               "hra": 'HRA',
@@ -282,7 +285,7 @@ class EmployeeSearchViewSet(viewsets.ModelViewSet):
 
         if query:
             qs = qs.filter(Q(name__contains=query) | Q(emp_id__contains=query) | Q(official_email__contains=query)
-                           | Q(Permanent_address_line1__contains=query) | Q(designation__contains=query)
+                           | Q(permanent_address_line1__contains=query) | Q(designation__contains=query)
                            | Q(gender__contains=query) | Q(official_email__contains=query) | Q(date_of_joining__contains=query)
                            | Q(department__contains=query) | Q(official_number__contains=query)
                            | Q(dob__contains=query) | Q(work_location_add__contains=query))
@@ -294,7 +297,7 @@ class EmployeeSearchViewSet(viewsets.ModelViewSet):
         if query:
             name = query.split(',')
             qs = qs.filter(name__in=name)
-        query = self.request.GET.get("Permanent_address_line1")
+        query = self.request.GET.get("permanent_address_line1")
         if query:
             Permanent_address_line1 = query.split(',')
             qs = qs.filter(Permanent_address_line1__in=Permanent_address_line1)
@@ -391,7 +394,7 @@ def ExportEmp(request):
     write = csv.writer(response)
     write.writerow(['Employee Id', 'Employee Name', 'Date of Birth', 'Gender', 'Official Email', 'Phone', 'Date of Joining',
                     'Address', 'Work Location', 'Designation', 'Department'])
-    for employee in Employee.objects.all().values('emp_id', 'name', 'dob', 'gender', 'official_email', 'official_number', 'date_of_joining', 'Permanent_address_line1', 'work_location_add', 'designation', 'department'):
+    for employee in Employee.objects.all().values('emp_id', 'name', 'dob', 'gender', 'official_email', 'official_number', 'date_of_joining', 'permanent_address_line1', 'work_location_add', 'designation', 'department'):
        write.writerow(employee)
 
     response['Content-Disposition'] ='attachment; filename="employee.csv"'
@@ -557,22 +560,35 @@ class LeaveLogsSearchViewSet(viewsets.ModelViewSet):
 class AttendanceViewSet(viewsets.ModelViewSet):
     queryset = Attendance.objects.all()
     serializer_class = AttendaceSerializer
+    pagination_class = CustomAttendanceLogPagination
+
 
 class AttendanceLeaveidViewSet(viewsets.ModelViewSet):
     queryset = AttendenceLeaveid.objects.all()
     serializer_class = AttendaceLeaveidSerializer
-
+    pagination_class = CustomAttendanceLogPagination
 class AttendenceRulesViewSet(viewsets.ModelViewSet):
     queryset = Attendence_rules.objects.all()
     serializer_class = AttendaceRulesSerializer
+    pagination_class = CustomAttendanceLogPagination
 
 class EnterAttendanceViewSet(viewsets.ModelViewSet):
     queryset = Attendance.objects.all()
     serializer_class = EnterAttendanceSerializer
+    pagination_class = CustomAttendanceLogPagination
+
+class SearchAttendanceLogAPIView(viewsets.generics.ListCreateAPIView):
+    search_fields = ['name', 'emp_id', 'department', 'work_location_add']
+    ordering_fields = ['emp_id']
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    queryset = Employee.objects.all()
+    serializer_class = SearchAttendanceLogSerializer
+    pagination_class = CustomAttendanceLogPagination
 
 class UpdateAttendanceLogViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = UpdateAttendanceLogSerializer
+    pagination_class = CustomAttendanceLogPagination
 
 class ListAttendanceLogViewSet(viewsets.ViewSet):
     def create(self, request):
@@ -593,6 +609,7 @@ class ListAttendanceLogViewSet(viewsets.ViewSet):
 class CreateMonthlyEmpSalaryViewSet(viewsets.ModelViewSet):
     queryset = MonthlyEmpSalary.objects.all()
     serializer_class = CreateMonthlyEmpSalarySerializer
+    pagination_class = CustomPayrollPagination
 
 class ListMonthlyEmpSalaryViewSet(viewsets.ViewSet):
     def create(self, request):
@@ -608,37 +625,6 @@ class ListMonthlyEmpSalaryViewSet(viewsets.ViewSet):
             result_page = paginator.paginate_queryset(queryset, request)
             return paginator.get_paginated_response(result_page)
 
-class MonthlyEmpSalarySearchViewSet(viewsets.ModelViewSet):
-
-    serializer_class = EmployeePayrollSerializer
-    pagination_class = CustomPayrollPagination
-
-    def get_queryset(self, *args, **kwargs):
-        qs = Employee.objects.all()
-        query = self.request.GET.get("keyword")
-        if query:
-            qs = qs.filter(Q(name__contains=query) | Q(emp_id__contains=query))
-        query = self.request.GET.get("emp_id")
-        if query:
-            emp_id = query.split(',')
-            qs = qs.filter(emp_id__in=emp_id)
-
-        query = self.request.GET.get("name")
-        if query:
-            name = query.split(',')
-            qs = qs.filter(name__in=name)
-        query = self.request.GET.get("sort_by")
-        if query:
-            sort_key = query
-            if sort_key == 'emp_id':
-                sort_key = 'emp_id'
-            sort_by = ''
-            if 'sort_order' in self.request.data and self.request.data['sort_order'] == 'desc':
-                sort_by = '-'
-            sort_by += sort_key
-            qs = qs.order_by(sort_by)
-
-        return qs
 
 class MonthlyEmpSalaryColumnViewSet(viewsets.ModelViewSet):
     # queryset = Employee.objects.all()
@@ -660,6 +646,7 @@ from rest_framework import generics
 
 class PayrollrunList(generics.ListAPIView):
     serializer_class = CreateMonthlyEmpSalarySerializer
+    pagination_class = CustomPayrollPagination
 
     def get_queryset(self):
         filter = {}
@@ -677,3 +664,12 @@ class PayrollrunList(generics.ListAPIView):
 
         queryset = queryset.filter(**filter)
         return queryset
+
+
+class PayrollSearchAPIView(generics.ListCreateAPIView):
+    search_fields = ['name','emp_id']
+    ordering_fields = ['emp_id']
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    queryset = Employee.objects.all()
+    serializer_class = SearchMonthlyEmpSalarySerializer
+    pagination_class = CustomPayrollPagination
