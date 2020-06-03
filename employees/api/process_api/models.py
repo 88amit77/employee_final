@@ -69,7 +69,7 @@ class ProcessSubpoint(models.Model):
 	pmain_id = models.ForeignKey("ProcessMainid", related_name='mainprocess', on_delete=models.CASCADE)
 	subpoint_name = models.CharField(max_length=50)
 	subpoint_attachment = models.FileField(upload_to='/dropbox/videos_subprocess/', max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'mp4', 'png', 'jpeg', 'jpg'])])
-	subpoint_description = models.TextField(max_length=200, editable=True, blank=True)
+	subpoint_description = models.TextField(max_length=100, editable=True, blank=True)
 
 	def __str__(self):
 		return self.subpoint_name
@@ -144,8 +144,7 @@ class RegularTask(models.Model):
 	prc_id = models.ForeignKey("Process", related_name='regularprocess', on_delete=models.CASCADE)
 	task_type = models.CharField(max_length=50)
 	members = JSONField()
-	task_description = models.CharField(max_length=50)
-	# task_description = models.TextField(max_length=100)
+	task_description = models.TextField(max_length=100)
 	task_files = JSONField()
 	task_duedate = models.DateField()
 	repeat_id = models.ForeignKey("RepeatTask", related_name='repeats', on_delete=models.CASCADE)
