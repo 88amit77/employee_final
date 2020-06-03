@@ -65,7 +65,7 @@ class CustomPagination(PageNumberPagination):
                 'header': {
                              'emp_id': 'Employee Id',
                              'name': 'Employee Name',
-                             'Permanent_address_line1': "Address",
+                             'permanent_address_line1': "Address",
                              "designation": 'Designation',
                              "gender": "Gender",
                              "official_email": 'Official Email',
@@ -110,7 +110,7 @@ class CustomLeaveRulesPagination(PageNumberPagination):
                               'name': 'Employee Name',
                               "designation": 'Designation',
                               'date_of_joining': 'Date Of Joining',
-                              "Employee_type": 'Employee Type',
+                              "employee_type": 'Employee Type',
                               'work_location_add': 'Work Location Add',
                               'leave': 'Leave',
 
@@ -228,7 +228,7 @@ class CustomPayrollPagination(PageNumberPagination):
                               'name': 'Employee Name',
                               "month": 'Department',
                               "lop": 'Lop',
-                              "No_of_days": 'No Of Days',
+                              "no_of_days": 'No Of Days',
                               "ctc": 'CTC',
                               "basic": 'Basic',
                               "hra": 'HRA',
@@ -285,7 +285,7 @@ class EmployeeSearchViewSet(viewsets.ModelViewSet):
 
         if query:
             qs = qs.filter(Q(name__contains=query) | Q(emp_id__contains=query) | Q(official_email__contains=query)
-                           | Q(Permanent_address_line1__contains=query) | Q(designation__contains=query)
+                           | Q(permanent_address_line1__contains=query) | Q(designation__contains=query)
                            | Q(gender__contains=query) | Q(official_email__contains=query) | Q(date_of_joining__contains=query)
                            | Q(department__contains=query) | Q(official_number__contains=query)
                            | Q(dob__contains=query) | Q(work_location_add__contains=query))
@@ -297,7 +297,7 @@ class EmployeeSearchViewSet(viewsets.ModelViewSet):
         if query:
             name = query.split(',')
             qs = qs.filter(name__in=name)
-        query = self.request.GET.get("Permanent_address_line1")
+        query = self.request.GET.get("permanent_address_line1")
         if query:
             Permanent_address_line1 = query.split(',')
             qs = qs.filter(Permanent_address_line1__in=Permanent_address_line1)
@@ -394,7 +394,7 @@ def ExportEmp(request):
     write = csv.writer(response)
     write.writerow(['Employee Id', 'Employee Name', 'Date of Birth', 'Gender', 'Official Email', 'Phone', 'Date of Joining',
                     'Address', 'Work Location', 'Designation', 'Department'])
-    for employee in Employee.objects.all().values('emp_id', 'name', 'dob', 'gender', 'official_email', 'official_number', 'date_of_joining', 'Permanent_address_line1', 'work_location_add', 'designation', 'department'):
+    for employee in Employee.objects.all().values('emp_id', 'name', 'dob', 'gender', 'official_email', 'official_number', 'date_of_joining', 'permanent_address_line1', 'work_location_add', 'designation', 'department'):
        write.writerow(employee)
 
     response['Content-Disposition'] ='attachment; filename="employee.csv"'
@@ -658,7 +658,7 @@ class PayrollrunList(generics.ListAPIView):
         start_date = self.request.query_params.get('start_date', None)
         # end_date = self.request.query_params.get('end_date', None)
         if start_date is not None:
-            filter['due_date__gte'] = parse(start_date)
+            filter['month__gte'] = parse(start_date)
         # if end_date is not None:
         #     filter['month__lte'] = parse(end_date)
 
