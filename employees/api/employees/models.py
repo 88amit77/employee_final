@@ -195,3 +195,8 @@ class MonthlyEmpSalary(models.Model):
      esi_employee = models.FloatField()
      net_employee_payable = models.FloatField()
      due_date = models.DateField()
+     special_allowances = models.FloatField()
+     over_time = models.FloatField()
+     deductions = models.FloatField()
+     reimbursements = models.FloatField()
+    
