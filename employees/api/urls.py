@@ -36,7 +36,7 @@ router.register('update_attendance_log', views.UpdateAttendanceLogViewSet, basen
 router.register('create_attendance_rules', views.AttendenceRulesViewSet, basename="create_attendance_rules")
 router.register('assign_attendance_rules', views.AttendanceLeaveidViewSet, basename="assign_attendance_rules")
 router.register('enter_attendance', views.EnterAttendanceViewSet, basename="enter_attendance")
-router.register('emptest', views.emptestview, basename="emptest")
+router.register('list_assigned_attendance_rule', views.list_assigned_attendance_rule, basename="emptest")
 
 router.register('create_payroll', views.CreateMonthlyEmpSalaryViewSet, basename="create_payroll")
 router.register('list_payroll', views.ListMonthlyEmpSalaryViewSet, basename="list_payroll")

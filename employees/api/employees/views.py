@@ -38,7 +38,7 @@ EmployeePayrollSerializer,
 DynamicFieldsMonthlyEmpSalaryModelSerializer,
 SearchMonthlyEmpSalarySerializer,
 SearchAttendanceLogSerializer,
-EmptestSerializer,
+ListAssignedAttendanceRuleSerializer,
 )
 
 DEFAULT_PAGE = 1
@@ -201,6 +201,39 @@ class CustomAttendanceLogPagination(PageNumberPagination):
                 'sortable': [
                               'emp_id',
                            ],
+
+            },
+            'results': data
+        })
+
+class CustomAttendanceRulePagination(PageNumberPagination):
+    page = DEFAULT_PAGE
+    page_size = 20
+    page_size_query_param = 'page_size'
+
+    def get_paginated_response(self, data):
+        return Response({
+            'links': {
+                'next': self.get_next_link(),
+                'previous': self.get_previous_link()
+            },
+            'total': self.page.paginator.count,
+            'page': int(self.request.GET.get('page', DEFAULT_PAGE)),
+            'page_size': int(self.request.GET.get('page_size', self.page_size)),
+            'UI_data': {
+                'sticky_headers': [
+                               'emp_id',
+                               'name',
+                                         ],
+                'header': {
+                              'emp_id': 'Employee Id',
+                              'name': 'Employee Name',
+                              "department": 'Department',
+                              "employee_type": 'Type',
+                               'attenadance_leaveids':'Attenadance Leave Data',
+
+ },
+
 
             },
             'results': data
@@ -578,6 +611,22 @@ class EnterAttendanceViewSet(viewsets.ModelViewSet):
     serializer_class = EnterAttendanceSerializer
     pagination_class = CustomAttendanceLogPagination
 
+
+class ListAssignedAttendanceRuleView(viewsets.ViewSet):
+
+    def create(self, request):
+        queryset = Employee.objects.all()
+        serializer = ListAssignedAttendanceRuleSerializer(queryset, many=True)
+        if len(queryset) > 0:
+            paginator = CustomAttendanceRulePagination()
+            result_page = paginator.paginate_queryset(queryset, request)
+            serializer = ListAssignedAttendanceRuleSerializer(result_page, many=True)
+            return paginator.get_paginated_response(serializer.data)
+        else:
+            paginator = CustomAttendanceRulePagination()
+            result_page = paginator.paginate_queryset(queryset, request)
+            return paginator.get_paginated_response(result_page)
+
 class SearchAttendanceLogAPIView(viewsets.generics.ListCreateAPIView):
     search_fields = ['name', 'emp_id', 'department', 'work_location_add']
     ordering_fields = ['emp_id']
@@ -676,7 +725,3 @@ class PayrollSearchAPIView(generics.ListCreateAPIView):
     pagination_class = CustomPayrollPagination
 
 
-class emptestview(viewsets.ModelViewSet):
-
-    queryset = Employee.objects.all()
-    serializer_class = EmptestSerializer
