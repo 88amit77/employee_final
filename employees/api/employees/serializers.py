@@ -308,6 +308,13 @@ class Employee1Serializer(serializers.ModelSerializer):
         model = EmpLeaveId
         fields = '__all__'
 
+class ListAssignedRuleSerializer(serializers.ModelSerializer):
+    empleaves = Employee1Serializer(many=True)
+
+    class Meta:
+        model = Employee
+        fields = ('emp_id', 'name', 'department', 'designation', 'date_of_joining','employee_type', 'empleaves')
+
 
 class ListEmployee1Serializer(serializers.Serializer):
     empleaves = Employee1Serializer(many=True)
@@ -400,6 +407,13 @@ class AttendaceRulesSerializer(serializers.ModelSerializer):
         model = Attendence_rules
         fields = '__all__'
 
+class ListAssignedAttendanceRuleSerializer(serializers.ModelSerializer):
+    attenadance_leaveids = AttendaceLeaveidSerializer(many=True)
+
+    class Meta:
+        model = Employee
+        fields = ('emp_id', 'name', 'department', 'employee_type', 'attenadance_leaveids')
+
 #for attendance search
 class SearchAttendanceLogSerializer(serializers.Serializer):
 
@@ -444,7 +458,7 @@ class ListAttendanceLogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('attendances', 'emp_id', 'name','department', 'work_location_add')
+        fields = ('attendances', 'emp_id', 'name', 'department', 'work_location_add')
 
 
 class UpdateAttendanceLogSerializer(serializers.Serializer):
@@ -513,5 +527,7 @@ class SearchMonthlyEmpSalarySerializer(serializers.Serializer):
     emp_id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=30)
     monthlyempsalary = CreateMonthlyEmpSalarySerializer(many=True)
+
+
 
 

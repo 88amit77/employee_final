@@ -53,7 +53,8 @@ class Employee(models.Model):
 
 
 class Documents(models.Model):
-    documents = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='documents_emp', null=True,blank=True)
+    documents = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='documents_emp', null=True,
+                                  blank=True)
     document_id = models.AutoField(primary_key=True, )
     pan_number = models.CharField(max_length=20)
     pan_card = models.FileField(upload_to='uploads/employee_docs/', blank=True, null=True)
@@ -77,7 +78,8 @@ class Education(models.Model):
 
 
 class FamilyMembers(models.Model):
-    family_members = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='family_members_emp', null=True, blank=True)
+    family_members = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='family_members_emp', null=True,
+                                       blank=True)
     family_member_id = models.AutoField(primary_key=True)
     family_member_name = models.CharField(max_length=20)
     relation = models.CharField(max_length=20)
@@ -85,7 +87,8 @@ class FamilyMembers(models.Model):
 
 
 class WorkHistory(models.Model):
-    work_historys = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='work_historys_emp', null=True, blank=True)
+    work_historys = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='work_historys_emp', null=True,
+                                      blank=True)
     work_history_id = models.AutoField(primary_key=True)
     company_name = models.CharField(max_length=30)
     period_from = models.DateField()
@@ -126,8 +129,8 @@ class EmpLeaveApplied(models.Model):
     end_date = models.DateField()
     status = models.CharField(max_length=10, choices=ACTIVITY_TYPES, default="PENDING")
     reason = models.CharField(max_length=50, null=True, blank=True)
-    action_by = models.ForeignKey(Employee, related_name='action_by', on_delete=models.CASCADE, default=None,
-                                  unique=False)
+    action_by = models.ForeignKey(Employee, related_name='action_by', on_delete=models.CASCADE,null=True,
+                               blank=True, default=None, unique=False)
 
     def __str__(self):
         return self.reason
@@ -184,11 +187,15 @@ class MonthlyEmpSalary(models.Model):
      hra = models.FloatField()
      conveyance_allowances = models.FloatField()
      medical_allowance = models.FloatField()
-     cca_allowance = models.FloatField()
-     pf_employer = models.FloatField()
-     pf_employee = models.FloatField()
-     pt = models.FloatField()
-     esi_employer = models.FloatField()
-     esi_employee = models.FloatField()
-     net_employee_payable = models.FloatField()
+     cca_allowance = models.FloatField(default=0.0)
+     pf_employer = models.FloatField(default=0.0)
+     pf_employee = models.FloatField(default=0.0)
+     pt = models.FloatField(default=0.0)
+     esi_employer = models.FloatField(default=0.0)
+     esi_employee = models.FloatField(default=0.0)
+     net_employee_payable = models.FloatField(default=0.0)
      due_date = models.DateField()
+     special_allowances = models.FloatField(default=0.0)
+     over_time = models.FloatField(default=0.0)
+     deductions = models.FloatField(default=0.0)
+     reimbursements = models.FloatField(default=0.0)
