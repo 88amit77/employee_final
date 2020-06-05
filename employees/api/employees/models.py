@@ -129,8 +129,8 @@ class EmpLeaveApplied(models.Model):
     end_date = models.DateField()
     status = models.CharField(max_length=10, choices=ACTIVITY_TYPES, default="PENDING")
     reason = models.CharField(max_length=50, null=True, blank=True)
-    action_by = models.ForeignKey(Employee, related_name='action_by', on_delete=models.CASCADE, default=None,
-                                  unique=False)
+    action_by = models.ForeignKey(Employee, related_name='action_by', on_delete=models.CASCADE,null=True,
+                               blank=True, default=None, unique=False)
 
     def __str__(self):
         return self.reason
