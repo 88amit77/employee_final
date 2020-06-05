@@ -515,3 +515,15 @@ class SearchMonthlyEmpSalarySerializer(serializers.Serializer):
     monthlyempsalary = CreateMonthlyEmpSalarySerializer(many=True)
 
 
+#employee attendance test
+class EmptestSerializer(serializers.ModelSerializer):
+    attenadance_leaveids = AttendaceLeaveidSerializer(many=True)
+
+    class Meta:
+        model = Employee
+        fields = ('emp_id','name','attenadance_leaveids')
+# class EmptestSerializer(serializers.Serializer):
+#
+#     emp_id = serializers.IntegerField(read_only=True)
+#     name = serializers.CharField(max_length=30)
+#     attenadance_leaveids = AttendaceLeaveidSerializer(many=True)

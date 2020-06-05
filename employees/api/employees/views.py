@@ -38,6 +38,7 @@ EmployeePayrollSerializer,
 DynamicFieldsMonthlyEmpSalaryModelSerializer,
 SearchMonthlyEmpSalarySerializer,
 SearchAttendanceLogSerializer,
+EmptestSerializer,
 )
 
 DEFAULT_PAGE = 1
@@ -673,3 +674,9 @@ class PayrollSearchAPIView(generics.ListCreateAPIView):
     queryset = Employee.objects.all()
     serializer_class = SearchMonthlyEmpSalarySerializer
     pagination_class = CustomPayrollPagination
+
+
+class emptestview(viewsets.ModelViewSet):
+
+    queryset = Employee.objects.all()
+    serializer_class = EmptestSerializer
