@@ -29,6 +29,8 @@ router.register('emp_log_approve', views.EmpLogView, basename="emp_log_approve")
 router.register('employee_log', views.EmployeeLogView, basename="employee_log")
 router.register('list_leave_logs', views.ListLeaveLogsViewSet, basename="list_leave_logs")
 router.register('leave_logs_search', views.LeaveLogsSearchViewSet, basename="leave_logs_search")
+router.register('list_assigned_rules', views.ListAssignedRuleView, basename="list_assigned_rules")
+
 
 router.register('attendance', views.AttendanceViewSet, basename="attendance")
 router.register('list_attendance_log', views.ListAttendanceLogViewSet, basename="list_attendance_log")

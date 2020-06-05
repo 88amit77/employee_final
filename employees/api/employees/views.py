@@ -39,6 +39,7 @@ DynamicFieldsMonthlyEmpSalaryModelSerializer,
 SearchMonthlyEmpSalarySerializer,
 SearchAttendanceLogSerializer,
 ListAssignedAttendanceRuleSerializer,
+ListAssignedRuleSerializer,
 )
 
 DEFAULT_PAGE = 1
@@ -113,7 +114,7 @@ class CustomLeaveRulesPagination(PageNumberPagination):
                               'date_of_joining': 'Date Of Joining',
                               "employee_type": 'Employee Type',
                               'work_location_add': 'Work Location Add',
-                              'leave': 'Leave',
+                              'empleaves': 'Empleaves',
 
                            },
                 'sortable': [
@@ -521,8 +522,21 @@ class ListAssignRulesViewSet(viewsets.ViewSet):
             paginator = CustomLeaveRulesPagination()
             result_page = paginator.paginate_queryset(queryset, request)
             return paginator.get_paginated_response(result_page)
+#list assigned rule page
+class ListAssignedRuleView(viewsets.ViewSet):
 
-
+    def create(self, request):
+        queryset = Employee.objects.all()
+        serializer = ListAssignedRuleSerializer(queryset, many=True)
+        if len(queryset) > 0:
+            paginator = CustomLeaveRulesPagination()
+            result_page = paginator.paginate_queryset(queryset, request)
+            serializer = ListAssignedRuleSerializer(result_page, many=True)
+            return paginator.get_paginated_response(serializer.data)
+        else:
+            paginator = CustomLeaveRulesPagination()
+            result_page = paginator.paginate_queryset(queryset, request)
+            return paginator.get_paginated_response(result_page)
 class EmpLeaveAppliedView(viewsets.ModelViewSet):
     queryset = EmpLeaveApplied.objects.all()
     serializer_class = EmpLeaveAppliedSerializer
