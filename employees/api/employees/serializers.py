@@ -406,6 +406,7 @@ class ListAssignedAttendanceRuleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
         fields = ('emp_id', 'name', 'department', 'employee_type', 'attenadance_leaveids')
+
 #for attendance search
 class SearchAttendanceLogSerializer(serializers.Serializer):
 
