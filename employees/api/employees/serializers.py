@@ -408,6 +408,7 @@ class EmpLogSerializer(serializers.ModelSerializer):
 class Emp1Serializer(serializers.Serializer):
     emp_id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=30)
+    department = serializers.CharField(max_length=50)
 class AttendaceSerializer(serializers.ModelSerializer):
 
     class Meta:
