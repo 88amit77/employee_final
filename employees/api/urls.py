@@ -31,7 +31,7 @@ router.register('list_leave_logs', views.ListLeaveLogsViewSet, basename="list_le
 router.register('leave_logs_search', views.LeaveLogsSearchViewSet, basename="leave_logs_search")
 router.register('list_assigned_rules', views.ListAssignedRuleView, basename="list_assigned_rules")
 
-router.register('employee_log', views.EmployeeLogView, basename="employee_log")
+router.register('employee_log1', views.EmployeeLoggView, basename="employee_log")
 router.register('emp_name', views.EmpNameView, basename="emp_name")
 
 

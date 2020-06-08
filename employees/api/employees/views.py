@@ -605,7 +605,7 @@ class LeaveLogsSearchViewSet(viewsets.ModelViewSet):
 
         return qs
 #test
-class EmployeeLogView(viewsets.ModelViewSet):
+class EmployeeLoggView(viewsets.ModelViewSet):
     queryset = EmpLeaveApplied.objects.all()
     serializer_class = EmpLogSerializer
 
