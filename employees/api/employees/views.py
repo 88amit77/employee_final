@@ -40,6 +40,7 @@ SearchMonthlyEmpSalarySerializer,
 SearchAttendanceLogSerializer,
 ListAssignedAttendanceRuleSerializer,
 ListAssignedRuleSerializer,
+Emp1Serializer,
 )
 
 DEFAULT_PAGE = 1
@@ -603,7 +604,15 @@ class LeaveLogsSearchViewSet(viewsets.ModelViewSet):
             qs = qs.order_by(sort_by)
 
         return qs
+#test
+class EmployeeLogView(viewsets.ModelViewSet):
+    queryset = EmpLeaveApplied.objects.all()
+    serializer_class = EmpLogSerializer
 
+
+class EmpNameView(viewsets.ModelViewSet):
+    queryset = Employee.objects.all()
+    serializer_class = Emp1Serializer
 #attendance
 class AttendanceViewSet(viewsets.ModelViewSet):
     queryset = Attendance.objects.all()

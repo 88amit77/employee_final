@@ -388,7 +388,26 @@ class EmpLeaveDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmpLeaveId
         fields = ('status1', 'emp_id', 'leave_id')
+#test
+class EmpLogSerializer(serializers.ModelSerializer):
+    days = serializers.SerializerMethodField(method_name='get_days')
 
+
+    class Meta:
+        model = EmpLeaveApplied
+        fields = ('emp_leave_app_id', 'leave_id', 'start_date', 'end_date', 'status', 'action_by', 'days','emp_id','reason')
+
+    def get_days(self, obj):
+        date_format = "%Y-%m-%d"
+        b = datetime.strptime(str(obj.end_date), date_format)
+        a = datetime.strptime(str(obj.start_date), date_format)
+        # return obj.b - obj.b
+        c = b - a
+        return c.days
+
+class Emp1Serializer(serializers.Serializer):
+    emp_id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(max_length=30)
 class AttendaceSerializer(serializers.ModelSerializer):
 
     class Meta:
