@@ -11,6 +11,7 @@ from rest_framework.pagination import PageNumberPagination
 from .models import (Employee, Education, Documents, FamilyMembers, WorkHistory, LeaveRules, EmpLeaveApplied, EmpLeaveId,
                      Attendance, AttendenceLeaveid, Attendence_rules, MonthlyEmpSalary)
 from .serializers import (
+      PersonalSerializer,
       EmployeeSerializer,
       ListEmployeeSerializer,
       EducationSerializer,
@@ -291,6 +292,10 @@ class CustomPayrollPagination(PageNumberPagination):
             },
             'results': data
         })
+class PersonalViewSet(viewsets.ModelViewSet):
+    queryset = Employee.objects.all()
+    serializer_class = PersonalSerializer
+
 class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer

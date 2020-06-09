@@ -10,6 +10,7 @@ from django.urls import path, include
 
 router = DefaultRouter()
 
+router.register('personal_personal', views.PersonalViewSet, basename="personal_personal")
 router.register('list_employee', views.ListEmployeeViewSet, basename="list_employee")
 router.register('personal', views.EmployeeViewSet, basename="personal")
 router.register('work', views.WorkHistoryViewSet, basename="work")

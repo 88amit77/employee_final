@@ -4,6 +4,11 @@ from .models import (Employee, Documents, Education, WorkHistory, FamilyMembers,
 from rest_framework.validators import UniqueValidator
 from datetime import datetime
 
+class PersonalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = '__all__'
+
 
 class DocumentsSerializer(serializers.ModelSerializer):
     class Meta:
