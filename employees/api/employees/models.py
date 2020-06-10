@@ -199,3 +199,19 @@ class MonthlyEmpSalary(models.Model):
      over_time = models.FloatField(default=0.0)
      deductions = models.FloatField(default=0.0)
      reimbursements = models.FloatField(default=0.0)
+
+
+class TestingNames(models.Model):
+    tn_id = models.AutoField(primary_key=True)
+    tn_name = models.CharField(max_length=50)
+    average_time = models.FloatField()
+    tn_cron_code = models.CharField(max_length=50)
+    tn_type = models.PositiveIntegerField()
+
+
+class TestingStatus(models.Model):
+    ts_id = models.AutoField(primary_key=True)
+    tn_id = models.ForeignKey(TestingNames, related_name='testing_status', on_delete=models.CASCADE, default=None,
+                              unique=False)
+    ts_starttime = models.DateTimeField()
+    ts_stoptime = models.DateTimeField()

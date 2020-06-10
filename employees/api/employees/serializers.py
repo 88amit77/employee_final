@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import (Employee, Documents, Education, WorkHistory, FamilyMembers, LeaveRules, EmpLeaveApplied, EmpLeaveId,
-                     Attendance,AttendenceLeaveid, Attendence_rules,MonthlyEmpSalary)
+                     Attendance,AttendenceLeaveid, Attendence_rules,MonthlyEmpSalary, TestingNames, TestingStatus)
 from rest_framework.validators import UniqueValidator
 from datetime import datetime
 
@@ -553,6 +553,18 @@ class SearchMonthlyEmpSalarySerializer(serializers.Serializer):
     name = serializers.CharField(max_length=30)
     monthlyempsalary = CreateMonthlyEmpSalarySerializer(many=True)
 
+#for API testing
+class TestingNamesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TestingNames
+        fields = '__all__'
+
+class TestingStatusSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TestingStatus
+        fields = '__all__'
 
 
 

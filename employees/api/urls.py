@@ -55,7 +55,8 @@ router.register('create_payroll', views.CreateMonthlyEmpSalaryViewSet, basename=
 router.register('list_payroll', views.ListMonthlyEmpSalaryViewSet, basename="list_payroll")
 router.register('payroll_column', views.MonthlyEmpSalaryColumnViewSet, basename="payroll_column")
 
-
+router.register('testing_names', views.TestingNamesViewSet, basename="testing_names")
+router.register('testing_status', views.TestingStatusViewSet, basename="testing_status")
 
 urlpatterns = [
     path('', include(router.urls)),
