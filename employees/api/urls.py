@@ -16,9 +16,10 @@ schema_view = get_schema_view(openapi.Info(
 
 
 
-router.register('personal_personal', views.PersonalViewSet, basename="personal_personal")
+
 router.register('list_employee', views.ListEmployeeViewSet, basename="list_employee")
 router.register('personal', views.EmployeeViewSet, basename="personal")
+router.register('personal_personal', views.PersonalViewSet, basename="personal_personal")
 router.register('work', views.WorkHistoryViewSet, basename="work")
 router.register('education', views.EducationViewSet, basename="education")
 router.register('family', views.FamilyMembersViewSet, basename="family")
@@ -59,10 +60,10 @@ router.register('payroll_column', views.MonthlyEmpSalaryColumnViewSet, basename=
 urlpatterns = [
     path('', include(router.urls)),
     path("employees_docs/", schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('employee_csv/', views.ExportEmp, name='employee_csv'),
-    path('employee_leave_log_csv/', views.ExportEmpLeaveLog, name='employee_leave_log_csv'),
+ #   path('employee_csv/', views.ExportEmp, name='employee_csv'),
+#    path('employee_leave_log_csv/', views.ExportEmpLeaveLog, name='employee_leave_log_csv'),
     path('attendance_search/', views.SearchAttendanceLogAPIView.as_view()),
-    url('payrollrun', views.PayrollrunList.as_view()),
+     url('payrollrun', views.PayrollrunList.as_view()),
     path('payroll_search/', views.PayrollSearchAPIView.as_view())
 
 ]
