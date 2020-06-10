@@ -1,5 +1,6 @@
-from django.urls import path, include
-from rest_framework_swagger.views import get_swagger_view
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
 from django.conf.urls import url
 
@@ -7,8 +8,13 @@ router = DefaultRouter()
 from .employees import views
 
 from django.urls import path, include
+schema_view = get_schema_view(openapi.Info(
+      title="Employees API",
+      default_version='v1',
+      description="Test description",
+   ), public=True, permission_classes=(permissions.AllowAny,))
 
-router = DefaultRouter()
+
 
 router.register('personal_personal', views.PersonalViewSet, basename="personal_personal")
 router.register('list_employee', views.ListEmployeeViewSet, basename="list_employee")
@@ -48,11 +54,11 @@ router.register('create_payroll', views.CreateMonthlyEmpSalaryViewSet, basename=
 router.register('list_payroll', views.ListMonthlyEmpSalaryViewSet, basename="list_payroll")
 router.register('payroll_column', views.MonthlyEmpSalaryColumnViewSet, basename="payroll_column")
 
-schema_view = get_swagger_view(title='Micromerce API')
+
 
 urlpatterns = [
     path('', include(router.urls)),
-    path("employees/docs/", schema_view),
+    path("employees_docs/", schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('employee_csv/', views.ExportEmp, name='employee_csv'),
     path('employee_leave_log_csv/', views.ExportEmpLeaveLog, name='employee_leave_log_csv'),
     path('attendance_search/', views.SearchAttendanceLogAPIView.as_view()),
