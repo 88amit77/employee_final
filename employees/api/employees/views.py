@@ -432,27 +432,27 @@ class WorkHistoryViewSet(viewsets.ModelViewSet):
     pagination_class = CustomPagination
 
 ##commented to test resolve swagger essue
-# def ExportEmp(request):
-#     response = HttpResponse(content_type='text/csv')
-#     write = csv.writer(response)
-#     write.writerow(['Employee Id', 'Employee Name', 'Date of Birth', 'Gender', 'Official Email', 'Phone', 'Date of Joining',
-#                     'Address', 'Work Location', 'Designation', 'Department'])
-#     for employee in Employee.objects.all().values('emp_id', 'name', 'dob', 'gender', 'official_email', 'official_number', 'date_of_joining', 'permanent_address_line1', 'work_location_add', 'designation', 'department'):
-#        write.writerow(employee)
-#
-#     response['Content-Disposition'] ='attachment; filename="employee.csv"'
-#     return response
+def ExportEmp(request):
+    response = HttpResponse(content_type='text/csv')
+    write = csv.writer(response)
+    write.writerow(['Employee Id', 'Employee Name', 'Date of Birth', 'Gender', 'Official Email', 'Phone', 'Date of Joining',
+                    'Address', 'Work Location', 'Designation', 'Department'])
+    for employee in Employee.objects.all().values('emp_id', 'name', 'dob', 'gender', 'official_email', 'official_number', 'date_of_joining', 'permanent_address_line1', 'work_location_add', 'designation', 'department'):
+       write.writerow(employee)
+
+    response['Content-Disposition'] ='attachment; filename="employee.csv"'
+    return response
 
 
-# def ExportEmpLeaveLog(request):
-#     response = HttpResponse(content_type='text/csv')
-#     write = csv.writer(response)
-#     write.writerow(['emp_leave_app_id','emp_id', 'leave_id', 'start_date', 'end_date', 'status', 'reason', 'action_by'])
-#     for employee in EmpLeaveApplied.objects.all().values('emp_leave_app_id', 'emp_id', 'leave_id', 'start_date', 'end_date', 'status', 'reason', 'action_by'):
-#         write.writerow(employee)
-#
-#     response['Content-Disposition'] = 'attachment; filename="employeeLeaveLog.csv"'
-#     return response
+def ExportEmpLeaveLog(request):
+    response = HttpResponse(content_type='text/csv')
+    write = csv.writer(response)
+    write.writerow(['emp_leave_app_id','emp_id', 'leave_id', 'start_date', 'end_date', 'status', 'reason', 'action_by'])
+    for employee in EmpLeaveApplied.objects.all().values('emp_leave_app_id', 'emp_id', 'leave_id', 'start_date', 'end_date', 'status', 'reason', 'action_by'):
+        write.writerow(employee)
+
+    response['Content-Disposition'] = 'attachment; filename="employeeLeaveLog.csv"'
+    return response
 
 
 class LeaveRulesView(viewsets.ModelViewSet):

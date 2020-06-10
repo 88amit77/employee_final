@@ -60,8 +60,8 @@ router.register('payroll_column', views.MonthlyEmpSalaryColumnViewSet, basename=
 urlpatterns = [
     path('', include(router.urls)),
     path("employees_docs/", schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
- #   path('employee_csv/', views.ExportEmp, name='employee_csv'),
-#    path('employee_leave_log_csv/', views.ExportEmpLeaveLog, name='employee_leave_log_csv'),
+   path('employee_csv/', views.ExportEmp, name='employee_csv'),
+   path('employee_leave_log_csv/', views.ExportEmpLeaveLog, name='employee_leave_log_csv'),
     path('attendance_search/', views.SearchAttendanceLogAPIView.as_view()),
      url('payrollrun', views.PayrollrunList.as_view()),
     path('payroll_search/', views.PayrollSearchAPIView.as_view())
