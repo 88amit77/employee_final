@@ -394,7 +394,7 @@ class EmpLeaveDataSerializer(serializers.ModelSerializer):
         model = EmpLeaveId
         fields = ('status1', 'emp_id', 'leave_id')
 #test
-class EmpLogSerializer(serializers.ModelSerializer):
+class EmpLog2Serializer(serializers.ModelSerializer):
     days = serializers.SerializerMethodField(method_name='get_days')
 
 

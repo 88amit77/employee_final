@@ -42,6 +42,7 @@ SearchAttendanceLogSerializer,
 ListAssignedAttendanceRuleSerializer,
 ListAssignedRuleSerializer,
 Emp1Serializer,
+EmpLog2Serializer,
 )
 
 DEFAULT_PAGE = 1
@@ -615,11 +616,11 @@ class EmployeeLoggView(viewsets.ViewSet):
     # pagination_class = CustomPagination
     def create(self, request):
         queryset = EmpLeaveApplied.objects.all()
-        serializer = EmpLogSerializer(queryset, many=True)
+        serializer = EmpLog2Serializer(queryset, many=True)
         if len(queryset) > 0:
             paginator = CustomLeaveLogsPagination()
             result_page = paginator.paginate_queryset(queryset, request)
-            serializer = EmpLogSerializer(result_page, many=True)
+            serializer = EmpLog2Serializer(result_page, many=True)
             return paginator.get_paginated_response(serializer.data)
         else:
             paginator = CustomLeaveLogsPagination()
