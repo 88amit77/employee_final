@@ -5,6 +5,7 @@ from django.conf.urls import url
 
 router = DefaultRouter()
 from .employees import views
+from api.process.api_v1.rest.views import *
 
 from django.urls import path, include
 
@@ -59,7 +60,8 @@ urlpatterns = [
     path('employee_leave_log_csv/', views.ExportEmpLeaveLog, name='employee_leave_log_csv'),
     path('attendance_search/', views.SearchAttendanceLogAPIView.as_view()),
     url('payrollrun', views.PayrollrunList.as_view()),
-    path('payroll_search/', views.PayrollSearchAPIView.as_view())
+    path('payroll_search/', views.PayrollSearchAPIView.as_view()),
+	path('processes/', include('api.process.urls'))
 
 ]
 
