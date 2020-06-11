@@ -283,6 +283,10 @@ class CustomPayrollPagination(PageNumberPagination):
                     "esi_employee": 'ESI Employee',
                     "net_employee_payable": 'Net Employee Payable',
                     "due_date": 'Due Date',
+                    "special_allowances": "Special Allowances",
+                    "over_time": "Over Time",
+                    "deductions": "Deductions",
+                    "reimbursements": "Reimbursements",
 
                            },
                 'sortable': [
