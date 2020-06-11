@@ -173,7 +173,8 @@ class Attendence_rules(models.Model):
 class AttendenceLeaveid(models.Model):
       attendance_leave_id = models.AutoField(primary_key=True)
       emp_id = models.ForeignKey(Employee, related_name='attenadance_leaveids', on_delete=models.CASCADE, default=None, unique=False)
-      ar_id = models.OneToOneField(Attendence_rules,on_delete=models.CASCADE, default=None, unique=False)
+      # ar_id = models.OneToOneField(Attendence_rules,on_delete=models.CASCADE, default=None, unique=False)
+      ar_id = models.ForeignKey(Attendence_rules,related_name='ar_attenadance_leaveids', on_delete=models.CASCADE, default=None, unique=False)
 
 
 #for pay roll
