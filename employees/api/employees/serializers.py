@@ -318,7 +318,7 @@ class ListAssignedRuleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('emp_id', 'name', 'department', 'designation', 'date_of_joining','employee_type', 'empleaves')
+        fields = ('emp_id', 'name', 'department', 'designation', 'date_of_joining','employee_type', 'empleaves', 'work_location_add')
 
 
 class ListEmployee1Serializer(serializers.Serializer):
