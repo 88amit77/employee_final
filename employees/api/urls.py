@@ -61,11 +61,9 @@ urlpatterns = [
     path('attendance_search/', views.SearchAttendanceLogAPIView.as_view()),
     url('payrollrun', views.PayrollrunList.as_view()),
     path('payroll_search/', views.PayrollSearchAPIView.as_view()),
-	path('processes/', include('api.process.urls'))
+	path('process/', include('api.process.urls'))
 
 ]
-
-
 
 
 
