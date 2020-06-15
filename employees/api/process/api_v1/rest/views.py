@@ -30,13 +30,14 @@ class CustomModelViewSet(viewsets.ModelViewSet):
 		Customize response for header and sticky header notes
 		"""
 		if request.method == "GET":
-			# response.data['headers'] = self.fields_headers if hasattr(self,'fields_headers') else {}
+			response.data['fields_headers'] = self.fields_headers if hasattr(self,'fields_headers') else {}
 			# response.data['sticky_header'] = self.sticky_header if hasattr(self, 'sticky_header') else{}
-			# response.data['dropdowns'] = self.dropdowns if hasattr(self, 'dropdowns') else{}
+			response.data['dropdowns'] = self.dropdowns if hasattr(self, 'dropdowns') else{}
 			# response.data['filter_results_dropdown'] = self.filter_results_dropdown if hasattr(self, 'filter_results_dropdown') else {}
-			# Move results to end
-			response.data.move_to_end('result') if 'result' in response.data else  response.data
 
+			# Move results to end
+			response.data.move_to_end('results') if 'results' in response.data else response.data
+			
 		return super().finalize_response(request, response, *args, **kwargs)
 
 class ProcessViewset(CustomModelViewSet):
