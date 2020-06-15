@@ -12,7 +12,8 @@ router.register(r'process_subpoint', views.ProcessSubpointViewset, basename='pro
 router.register(r'connection', views.ConnectionsViewset, basename='connection')
 router.register(r'repeat_task', views.RepeatTaskViewset, basename='repeat')
 router.register(r'regular_task', views.RegularTaskViewset, basename='regulartask')
-
+router.register(r'department_list', views.DeptViewset, basename='dept')
+router.register(r'templates', views.TemplateViewset, basename='temp')
 
 
 urlpatterns = router.urls

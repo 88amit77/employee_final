@@ -4,6 +4,23 @@ from django.core.validators import FileExtensionValidator
 
 # Create your models here.
 
+class Departments(models.Model):
+	dept_id = models.AutoField(primary_key=True)
+	dept_name = models.CharField(max_length=50)
+
+	def __str__(self):
+		return self.dept_name
+	
+class Templates(models.Model):
+	template_id = models.AutoField(primary_key=True)
+	template_name = models.CharField(max_length=50)
+	depts_template = models.ForeignKey("Departments", related_name="template_depts", on_delete=models.CASCADE, null=True)
+
+	def __str__(self):
+		return self.template_name
+	
+
+
 # Table Process as PP
 # {
 #   Process_id int
@@ -86,6 +103,7 @@ class ProcessSubpoint(models.Model):
 
 class Connections(models.Model):
 	connector_id = models.AutoField(primary_key=True)
+	connection_process = models.ForeignKey("Process", related_name='connectors', on_delete=models.CASCADE, null=True)
 	start_mainpoint_id = models.IntegerField()
 	end_mainpoint_id = models.IntegerField()
 	connector_text = models.CharField(max_length=50)

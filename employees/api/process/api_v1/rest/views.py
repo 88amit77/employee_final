@@ -17,6 +17,7 @@ from api.process.models import *
 # Create your views here.
 
 # Custom Pagination for front_end
+
 class CustomPageNumberPagination(PageNumberPagination):
 	page_size_query_param = 'size'  # items per page
 
@@ -28,17 +29,18 @@ class CustomModelViewSet(viewsets.ModelViewSet):
 		Returns the final response object.
 		Customize response for header and sticky header notes
 		"""
-
 		if request.method == "GET":
-			response.data['fields_headers'] = self.fields_headers if hasattr(self,'fields_headers') else {}
-			# response.data['sticky_header'] = self.sticky_header if hasattr(self, 'sticky_header') else {}
-			response.data['dropdowns'] = self.dropdowns if hasattr(self, 'dropdowns') else {}
+			# response.data['headers'] = self.fields_headers if hasattr(self,'fields_headers') else {}
+			# response.data['sticky_header'] = self.sticky_header if hasattr(self, 'sticky_header') else{}
+			# response.data['dropdowns'] = self.dropdowns if hasattr(self, 'dropdowns') else{}
 			# response.data['filter_results_dropdown'] = self.filter_results_dropdown if hasattr(self, 'filter_results_dropdown') else {}
 			# Move results to end
-			response.data.move_to_end('results') if 'results' in response.data else  response.data
+			response.data.move_to_end('result') if 'result' in response.data else  response.data
+
 		return super().finalize_response(request, response, *args, **kwargs)
 
 class ProcessViewset(CustomModelViewSet):
+	lookup_field = 'process_id'
 	queryset = Process.objects.all().order_by('-process_id')
 	serializer_class = ProcessSerializer
 	pagination_class = CustomPageNumberPagination
@@ -52,8 +54,8 @@ class ProcessViewset(CustomModelViewSet):
 		}
 
 class ProcessMainidViewset(CustomModelViewSet):
-	
-	lookup_field = 'process_id'
+
+	lookup_field = 'process_mainid'
 	queryset = ProcessMainid.objects.all().order_by('-process_mainid')
 	serializer_class = ProcessMainidSerializer
 	pagination_class = CustomPageNumberPagination
@@ -74,6 +76,7 @@ class ProcessMainidViewset(CustomModelViewSet):
 	dropdowns = {'process': test}
 
 class ProcessSubpointViewset(CustomModelViewSet):
+	lookup_field = 'process_subpointid'
 	queryset = ProcessSubpoint.objects.all().order_by('-process_subpointid')
 	serializer_class = ProcessSubpointSerializer
 	pagination_class = CustomPageNumberPagination
@@ -92,18 +95,21 @@ class ProcessSubpointViewset(CustomModelViewSet):
 	dropdowns = {'process_main': test}
 
 class ConnectionsViewset(CustomModelViewSet):
+	lookup_field = 'connector_id'
 	queryset = Connections.objects.all().order_by('-connector_id')
 	serializer_class = ConnectionsSerializer
 	pagination_class = CustomPageNumberPagination
 
 	fields_headers = {
 		'connector_id': 'Connector ID',
+		'connection_process': 'Process',
 		'start_mainpoint_id': 'Start Point',
 		'end_mainpoint_id': 'End Point',
 		'connector_text':'Connector Text',
 		}
 
 class RepeatTaskViewset(CustomModelViewSet):
+	lookup_field = 'repeat_id'
 	queryset = RepeatTask.objects.all().order_by('-repeat_id')
 	serializer_class = RepeatTaskSerializer
 	pagination_class = CustomPageNumberPagination
@@ -119,6 +125,7 @@ class RepeatTaskViewset(CustomModelViewSet):
 		}
 
 class RegularTaskViewset(CustomModelViewSet):
+	lookup_field = 'regular_task_id'
 	queryset = RegularTask.objects.all().order_by('-regular_task_id')
 	serializer_class = RegularTaskSerializer
 	pagination_class = CustomPageNumberPagination
@@ -145,5 +152,19 @@ class RegularTaskViewset(CustomModelViewSet):
 
 	for j in q2:
 		test1.append({'repeat_id': j.repeat_id, 'repeat_type': j.repeat_type})
-	
+
 	dropdowns = {'process_main': test, 'repeat_tasks': test1}
+
+
+class DeptViewset(CustomModelViewSet):
+	lookup_field = 'dept_id'
+	queryset = Departments.objects.all().order_by('-dept_id')
+	serializer_class = DeptSerializer
+	pagination_class = CustomPageNumberPagination
+
+
+class TemplateViewset(CustomModelViewSet):
+	lookup_field = 'template_id'
+	queryset = Templates.objects.all().order_by('template_name')
+	serializer_class = TemplateSerializer
+	pagination_class = CustomPageNumberPagination

@@ -5,6 +5,32 @@ from api.process.models import *
 ######  Serializers for process api ##########
 ##############################################
 
+
+class DeptSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Departments
+		fields = '__all__'
+
+class DeptRelatedField(serializers.RelatedField):
+
+	def display_value(self, instance):
+		return instance
+
+	def to_representation(self, value):
+		return str(value)
+
+	def to_internal_value(self, data):
+		return Departments.objects.get(dept_name=data)
+
+
+class TemplateSerializer(serializers.ModelSerializer):
+
+	depts_template = DeptRelatedField(queryset=Departments.objects.all())
+	class Meta:
+		model = Templates
+		fields = '__all__'
+
+
 # Process
 class ProcessSerializer(serializers.ModelSerializer):
 
@@ -70,7 +96,7 @@ class ProcessSubpointSerializer(serializers.ModelSerializer):
 
 # Connections
 class ConnectionsSerializer(serializers.ModelSerializer):
-
+	connection_process = ProcessRelatedField(queryset=Process.objects.all())
 	class Meta:
 		model = Connections
 		fields = '__all__'
