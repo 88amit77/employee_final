@@ -9,8 +9,9 @@ import requests
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from .models import (Employee, Education, Documents, FamilyMembers, WorkHistory, LeaveRules, EmpLeaveApplied, EmpLeaveId,
-                     Attendance, AttendenceLeaveid, Attendence_rules, MonthlyEmpSalary)
+                     Attendance, AttendenceLeaveid, Attendence_rules, MonthlyEmpSalary,TestingNames, TestingStatus)
 from .serializers import (
+      PersonalSerializer,
       EmployeeSerializer,
       ListEmployeeSerializer,
       EducationSerializer,
@@ -40,6 +41,10 @@ SearchMonthlyEmpSalarySerializer,
 SearchAttendanceLogSerializer,
 ListAssignedAttendanceRuleSerializer,
 ListAssignedRuleSerializer,
+Emp1Serializer,
+EmpLog2Serializer,
+TestingNamesSerializer,
+TestingStatusSerializer,
 )
 
 DEFAULT_PAGE = 1
@@ -155,7 +160,7 @@ class CustomLeaveLogsPagination(PageNumberPagination):
                               'end_date': 'End Date',
                               "days": 'Days',
                               'status': 'Status',
-                              "action_by": 'Actions',
+
                            },
                 'sortable': [
                               'emp_id',
@@ -205,6 +210,7 @@ class CustomAttendanceLogPagination(PageNumberPagination):
             },
             'results': data
         })
+
 
 class CustomAttendanceRulePagination(PageNumberPagination):
     page = DEFAULT_PAGE
@@ -276,6 +282,10 @@ class CustomPayrollPagination(PageNumberPagination):
                     "esi_employee": 'ESI Employee',
                     "net_employee_payable": 'Net Employee Payable',
                     "due_date": 'Due Date',
+                    "special_allowances": "Special Allowances",
+                    "over_time": "Over Time",
+                    "deductions": "Deductions",
+                    "reimbursements": "Reimbursements",
 
                            },
                 'sortable': [
@@ -288,6 +298,10 @@ class CustomPayrollPagination(PageNumberPagination):
             },
             'results': data
         })
+class PersonalViewSet(viewsets.ModelViewSet):
+    queryset = Employee.objects.all()
+    serializer_class = PersonalSerializer
+
 class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
@@ -422,7 +436,7 @@ class WorkHistoryViewSet(viewsets.ModelViewSet):
     serializer_class = WorkHistorySerializer
     pagination_class = CustomPagination
 
-
+##commented to test resolve swagger essue
 def ExportEmp(request):
     response = HttpResponse(content_type='text/csv')
     write = csv.writer(response)
@@ -602,6 +616,26 @@ class LeaveLogsSearchViewSet(viewsets.ModelViewSet):
             qs = qs.order_by(sort_by)
 
         return qs
+#test
+class EmployeeLoggView(viewsets.ViewSet):
+    # pagination_class = CustomPagination
+    def create(self, request):
+        queryset = EmpLeaveApplied.objects.all()
+        serializer = EmpLog2Serializer(queryset, many=True)
+        if len(queryset) > 0:
+            paginator = CustomLeaveLogsPagination()
+            result_page = paginator.paginate_queryset(queryset, request)
+            serializer = EmpLog2Serializer(result_page, many=True)
+            return paginator.get_paginated_response(serializer.data)
+        else:
+            paginator = CustomLeaveLogsPagination()
+            result_page = paginator.paginate_queryset(queryset, request)
+            return paginator.get_paginated_response(result_page)
+
+
+class EmpNameView(viewsets.ModelViewSet):
+    queryset = Employee.objects.all()
+    serializer_class = Emp1Serializer
 
 #attendance
 class AttendanceViewSet(viewsets.ModelViewSet):
@@ -738,3 +772,12 @@ class PayrollSearchAPIView(generics.ListCreateAPIView):
     pagination_class = CustomPayrollPagination
 
 
+#Testin name and status
+class TestingNamesViewSet(viewsets.ModelViewSet):
+
+    queryset = TestingNames.objects.all()
+    serializer_class = TestingNamesSerializer
+
+class TestingStatusViewSet(viewsets.ModelViewSet):
+    queryset = TestingStatus.objects.all()
+    serializer_class = TestingStatusSerializer

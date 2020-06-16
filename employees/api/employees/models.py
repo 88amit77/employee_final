@@ -173,7 +173,8 @@ class Attendence_rules(models.Model):
 class AttendenceLeaveid(models.Model):
       attendance_leave_id = models.AutoField(primary_key=True)
       emp_id = models.ForeignKey(Employee, related_name='attenadance_leaveids', on_delete=models.CASCADE, default=None, unique=False)
-      ar_id = models.OneToOneField(Attendence_rules,on_delete=models.CASCADE, default=None, unique=False)
+      # ar_id = models.OneToOneField(Attendence_rules,on_delete=models.CASCADE, default=None, unique=False)
+      ar_id = models.ForeignKey(Attendence_rules,related_name='ar_attenadance_leaveids', on_delete=models.CASCADE, default=None, unique=False)
 
 
 #for pay roll
@@ -199,3 +200,24 @@ class MonthlyEmpSalary(models.Model):
      over_time = models.FloatField(default=0.0)
      deductions = models.FloatField(default=0.0)
      reimbursements = models.FloatField(default=0.0)
+
+
+class TestingNames(models.Model):
+    tn_id = models.AutoField(primary_key=True)
+    tn_name = models.CharField(max_length=50)
+    average_time = models.FloatField()
+    tn_cron_code = models.CharField(max_length=50)
+    tn_type = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.tn_name
+
+
+class TestingStatus(models.Model):
+    ts_id = models.AutoField(primary_key=True)
+    tn_id = models.ForeignKey(TestingNames, related_name='testing_status', on_delete=models.CASCADE, default=None,
+                              unique=False)
+    ts_starttime = models.DateTimeField()
+    ts_startfile = models.URLField(null=True, blank=True)
+    ts_stoptime = models.DateTimeField()
+    ts_stopfilelog = models.URLField(null=True, blank=True)

@@ -1,8 +1,13 @@
 from rest_framework import serializers
 from .models import (Employee, Documents, Education, WorkHistory, FamilyMembers, LeaveRules, EmpLeaveApplied, EmpLeaveId,
-                     Attendance,AttendenceLeaveid, Attendence_rules,MonthlyEmpSalary)
+                     Attendance,AttendenceLeaveid, Attendence_rules,MonthlyEmpSalary, TestingNames, TestingStatus)
 from rest_framework.validators import UniqueValidator
 from datetime import datetime
+
+class PersonalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = '__all__'
 
 
 class DocumentsSerializer(serializers.ModelSerializer):
@@ -313,7 +318,7 @@ class ListAssignedRuleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('emp_id', 'name', 'department', 'designation', 'date_of_joining','employee_type', 'empleaves')
+        fields = ('emp_id', 'name', 'department', 'designation', 'date_of_joining','employee_type', 'empleaves', 'work_location_add')
 
 
 class ListEmployee1Serializer(serializers.Serializer):
@@ -388,7 +393,27 @@ class EmpLeaveDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmpLeaveId
         fields = ('status1', 'emp_id', 'leave_id')
+#test
+class EmpLog2Serializer(serializers.ModelSerializer):
+    days = serializers.SerializerMethodField(method_name='get_days')
 
+
+    class Meta:
+        model = EmpLeaveApplied
+        fields = ('emp_leave_app_id', 'leave_id', 'start_date', 'end_date', 'status', 'action_by', 'days','emp_id','reason')
+
+    def get_days(self, obj):
+        date_format = "%Y-%m-%d"
+        b = datetime.strptime(str(obj.end_date), date_format)
+        a = datetime.strptime(str(obj.start_date), date_format)
+        # return obj.b - obj.b
+        c = b - a
+        return c.days
+
+class Emp1Serializer(serializers.Serializer):
+    emp_id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(max_length=30)
+    department = serializers.CharField(max_length=50)
 class AttendaceSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -528,6 +553,18 @@ class SearchMonthlyEmpSalarySerializer(serializers.Serializer):
     name = serializers.CharField(max_length=30)
     monthlyempsalary = CreateMonthlyEmpSalarySerializer(many=True)
 
+#for API testing
+class TestingNamesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TestingNames
+        fields = '__all__'
+
+class TestingStatusSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TestingStatus
+        fields = '__all__'
 
 
 
