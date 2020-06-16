@@ -82,6 +82,7 @@ class ProcessMainidViewset(CustomModelViewSet):
 
 	for i in q1:
 		test.append({'process_id': i.process_id, 'process_name': i.process_name})
+	
 	dropdowns = {'process': test}
 
 class ProcessSubpointViewset(CustomModelViewSet):
@@ -101,6 +102,7 @@ class ProcessSubpointViewset(CustomModelViewSet):
 
 	for i in q1:
 		test.append({'process_mainid': i.process_mainid, 'main_name': i.main_name})
+	
 	dropdowns = {'process_main': test}
 
 class ConnectionsViewset(CustomModelViewSet):
@@ -121,7 +123,9 @@ class ConnectionsViewset(CustomModelViewSet):
 
 	for i in q1:
 		test.append({'process_id': i.process_id, 'process_name': i.process_name})
+	
 	dropdowns = {'process': test}
+
 class RepeatTaskViewset(CustomModelViewSet):
 	lookup_field = 'repeat_id'
 	queryset = RepeatTask.objects.all().order_by('-repeat_id')
