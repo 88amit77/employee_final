@@ -6,8 +6,3 @@ __pycache__/
 *.py[cod]
 *$py.class
 .env
-/migrations/*
-employees/api/migrations/*
-employees/api/process/migrations/*
-employees/api/migrations/0001_initial.py
-employees/api/process/migrations/0001_initial.py
