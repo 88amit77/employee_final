@@ -39,7 +39,7 @@ class Process(models.Model):
 	process_description = models.CharField(max_length=50)
 	process_training = models.FileField(blank=True, null=True, upload_to='dropbox/videos', max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
 	process_department = models.PositiveSmallIntegerField() # Fk dept id from employee models
-	process_time_allocated = models.TimeField(blank=True)
+	process_time_allocated = models.DurationField(blank=True)
 	
 	def __str__(self):
 		return self.process_name
