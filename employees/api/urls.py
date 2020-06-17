@@ -6,6 +6,7 @@ from django.conf.urls import url
 
 router = DefaultRouter()
 from .employees import views
+from api.process.api_v1.rest.views import *
 
 from django.urls import path, include
 schema_view = get_schema_view(openapi.Info(
@@ -16,6 +17,12 @@ schema_view = get_schema_view(openapi.Info(
 
 
 
+#  DRF-YASG Swagger
+# from rest_framework import permissions
+# from drf_yasg.views import get_schema_view
+# from drf_yasg import openapi
+
+router = DefaultRouter()
 
 router.register('list_employee', views.ListEmployeeViewSet, basename="list_employee")
 router.register('personal', views.EmployeeViewSet, basename="personal")
@@ -58,19 +65,41 @@ router.register('payroll_column', views.MonthlyEmpSalaryColumnViewSet, basename=
 router.register('testing_names', views.TestingNamesViewSet, basename="testing_names")
 router.register('testing_status', views.TestingStatusViewSet, basename="testing_status")
 
+
+
+# DRF-YASG Swagger/Redoc
+#
+# schema_view = get_schema_view(
+#    openapi.Info(
+#       title="Employee and Process APIs",
+#       default_version='v1',
+#       description="Test description",
+#       terms_of_service="https://www.google.com/policies/terms/",
+#       contact=openapi.Contact(email="contact@snippets.local"),
+#       license=openapi.License(name="BSD License"),
+#    ),
+#    public=True,
+#    permission_classes=(permissions.AllowAny,),
+# )
+
+
 urlpatterns = [
     path('', include(router.urls)),
     path("employees_docs/", schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-   path('employee_csv/', views.ExportEmp, name='employee_csv'),
-   path('employee_leave_log_csv/', views.ExportEmpLeaveLog, name='employee_leave_log_csv'),
+  	path('employee_csv/', views.ExportEmp, name='employee_csv'),
+	path('employee_leave_log_csv/', views.ExportEmpLeaveLog, name='employee_leave_log_csv'),
     path('attendance_search/', views.SearchAttendanceLogAPIView.as_view()),
-     url('payrollrun', views.PayrollrunList.as_view()),
-    path('payroll_search/', views.PayrollSearchAPIView.as_view())
+    url('payrollrun', views.PayrollrunList.as_view()),
+    path('payroll_search/', views.PayrollSearchAPIView.as_view()),
+	path('process/', include('api.process.urls')),
+	url('payrollrun', views.PayrollrunList.as_view()),
+    path('payroll_search/', views.PayrollSearchAPIView.as_view()),
 
 ]
 
+# urlpatterns += [
+#    url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+#    url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+#    url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
-
-
-
-
+# ]

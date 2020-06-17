@@ -207,7 +207,6 @@ class CustomAttendanceLogPagination(PageNumberPagination):
                 'sortable': [
                               'emp_id',
                            ],
-
             },
             'results': data
         })
