@@ -165,4 +165,5 @@ class RegularTask(models.Model):
 	task_description = models.TextField(max_length=100)
 	task_files = JSONField()
 	task_duedate = models.DateField()
-	repeat_id = models.ForeignKey("RepeatTask", related_name='repeats', on_delete=models.CASCADE)
+	# repeat_id = models.ForeignKey("RepeatTask", related_name='repeats', on_delete=models.CASCADE)
+	cron = models.CharField(max_length=50, default='')
