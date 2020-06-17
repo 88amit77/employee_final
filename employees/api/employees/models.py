@@ -205,8 +205,8 @@ class MonthlyEmpSalary(models.Model):
 class TestingNames(models.Model):
     tn_id = models.AutoField(primary_key=True)
     tn_name = models.CharField(max_length=50)
-    average_time = models.FloatField()
-    tn_cron_code = models.CharField(max_length=50)
+    average_time = models.FloatField(default=0.0)
+    tn_cron_code = models.CharField(max_length=50,null=True, blank=True)
     tn_type = models.PositiveIntegerField()
 
     def __str__(self):
