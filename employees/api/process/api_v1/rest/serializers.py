@@ -120,23 +120,22 @@ class RepeatTaskSerializer(serializers.ModelSerializer):
 # 	def to_internal_value(self, data):
 # 		return ProcessMainid.objects.get(main_name=data)
 
-class RepeatTasksRelatedField(serializers.RelatedField):
+# class RepeatTasksRelatedField(serializers.RelatedField):
 
-	def display_value(self, instance):
-		return instance
+# 	def display_value(self, instance):
+# 		return instance
 
-	def to_representation(self, value):
-		return str(value)
+# 	def to_representation(self, value):
+# 		return str(value)
 
-	def to_internal_value(self, data):
-		return RepeatTask.objects.get(repeat_type=data)
+# 	def to_internal_value(self, data):
+# 		return RepeatTask.objects.get(repeat_type=data)
 
 # RegularTask
 class RegularTaskSerializer(serializers.ModelSerializer):
-	# prc_id = ProcessSerializer()
-	# repeat_id = RepeatTaskSerializer()
+	
 	prc_id = ProcessRelatedField(queryset=Process.objects.all())
-	repeat_id = RepeatTasksRelatedField(queryset=RepeatTask.objects.all())
+	# repeat_id = RepeatTasksRelatedField(queryset=RepeatTask.objects.all())
 
 	# def to_internal_value(self, data):
 	# 	self.fields['prc_id'] = serializers.PrimaryKeyRelatedField(queryset=Process.objects.all())
