@@ -221,3 +221,4 @@ class TestingStatus(models.Model):
     ts_startfile = models.URLField(null=True, blank=True)
     ts_stoptime = models.DateTimeField()
     ts_stopfilelog = models.URLField(null=True, blank=True)
+    ts_status = models.CharField(max_length=100,null=True, blank=True)
