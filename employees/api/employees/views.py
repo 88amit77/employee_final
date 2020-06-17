@@ -298,6 +298,9 @@ class CustomPayrollPagination(PageNumberPagination):
             },
             'results': data
         })
+
+
+
 class PersonalViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = PersonalSerializer
@@ -781,3 +784,4 @@ class TestingNamesViewSet(viewsets.ModelViewSet):
 class TestingStatusViewSet(viewsets.ModelViewSet):
     queryset = TestingStatus.objects.all()
     serializer_class = TestingStatusSerializer
+
