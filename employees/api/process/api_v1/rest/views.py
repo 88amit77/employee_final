@@ -38,7 +38,7 @@ class CustomModelViewSet(viewsets.ModelViewSet):
 
 			# Move results to end
 			response.data.move_to_end('results') if 'results' in response.data else response.data
-			
+
 		return super().finalize_response(request, response, *args, **kwargs)
 
 class ProcessViewset(CustomModelViewSet):
@@ -58,7 +58,7 @@ class ProcessViewset(CustomModelViewSet):
 	q1 = Departments.objects.all().order_by('-dept_id')
 	for i in q1:
 		test.append({'dept_id': i.dept_id, 'dept_name': i.dept_name})
-	
+
 	dropdowns = {'Departments': test}
 
 
@@ -76,14 +76,15 @@ class ProcessMainidViewset(CustomModelViewSet):
 		'offsety': 'Offset Y',
 		'main_description': 'Main Description',
 		'main_department': 'Main Department'
-		}
+	}
 	q1 = Process.objects.all().order_by('-process_id')
 	test = []
 
 	for i in q1:
 		test.append({'process_id': i.process_id, 'process_name': i.process_name})
-	
+
 	dropdowns = {'process': test}
+
 
 class ProcessSubpointViewset(CustomModelViewSet):
 	lookup_field = 'process_subpointid'
@@ -96,13 +97,13 @@ class ProcessSubpointViewset(CustomModelViewSet):
 		'subpoint_name': 'Subpoint Name',
 		'subpoint_attachment': 'Subpoint Attachment',
 		'subpoint_description': 'Subpoint Description',
-		}
+	}
 	q1 = ProcessMainid.objects.all().order_by('-process_mainid')
 	test = []
 
 	for i in q1:
 		test.append({'process_mainid': i.process_mainid, 'main_name': i.main_name})
-	
+
 	dropdowns = {'process_main': test}
 
 class ConnectionsViewset(CustomModelViewSet):
@@ -117,13 +118,13 @@ class ConnectionsViewset(CustomModelViewSet):
 		'start_mainpoint_id': 'Start Point',
 		'end_mainpoint_id': 'End Point',
 		'connector_text':'Connector Text',
-		}
+	}
 	q1 = Process.objects.all().order_by('-process_id')
 	test = []
 
 	for i in q1:
 		test.append({'process_id': i.process_id, 'process_name': i.process_name})
-	
+
 	dropdowns = {'process': test}
 
 class RepeatTaskViewset(CustomModelViewSet):
@@ -140,7 +141,7 @@ class RepeatTaskViewset(CustomModelViewSet):
 		'monthly_date': 'Monthly Date',
 		'yearly_date': 'Yearly Date',
 		'yearly_month': 'Yearly Month',
-		}
+	}
 
 class RegularTaskViewset(CustomModelViewSet):
 	lookup_field = 'regular_task_id'
@@ -150,28 +151,28 @@ class RegularTaskViewset(CustomModelViewSet):
 	fields_headers = {
 		'regular_task_id': 'regular task ID',
 		'prc_id': 'Process ID',
-		'repeat_id': 'Repeat ID',
 		'task_name': 'Task Name',
 		'task_deptname': 'Task Dept Name',
 		'task_type': 'Task Type',
 		'members': 'Members',
 		'task_description': 'Task Description',
 		'task_files': 'Task Files',
-		'task_duedate': 'Task Due Date'
-		}
+		'task_duedate': 'Task Due Date',
+		'cron': 'Cron Expression'
+	}
 
 	q1 = Process.objects.all().order_by('-process_id')
-	q2 = RepeatTask.objects.all().order_by('-repeat_id')
+	# q2 = RepeatTask.objects.all().order_by('-repeat_id')
 	test = []
-	test1 = []
+	# test1 = []
 
 	for i in q1:
 		test.append({'process_id': i.process_id, 'process_name': i.process_name})
 
-	for j in q2:
-		test1.append({'repeat_id': j.repeat_id, 'repeat_type': j.repeat_type})
+	# for j in q2:
+	# 	test1.append({'repeat_id': j.repeat_id, 'repeat_type': j.repeat_type})
 
-	dropdowns = {'process_main': test, 'repeat_tasks': test1}
+	dropdowns = {'process_main': test}
 
 
 class DeptViewset(CustomModelViewSet):
@@ -182,7 +183,7 @@ class DeptViewset(CustomModelViewSet):
 	fields_headers = {
 		'dept_id': 'Department ID',
 		'dept_name': 'Department Name'
-		}
+	}
 
 
 class TemplateViewset(CustomModelViewSet):
@@ -194,11 +195,11 @@ class TemplateViewset(CustomModelViewSet):
 		'template_id': 'Template ID',
 		'template_name': 'Template Name',
 		'depts_template': 'Department'
-		}
+	}
 	q1 = Departments.objects.all().order_by('-dept_id')
 	hr = Templates.objects.filter(depts_template__dept_name='HR').values('template_name', 'template_id').order_by('-template_id')
 	sw = Templates.objects.filter(depts_template__dept_name='Software').values('template_name', 'template_id').order_by('-template_id')
-	mgr = Templates.objects.filter(depts_template__dept_name='Manager').values('template_name', 'template_id').order_by('-template_id')
+	mgr = Templates.objects.filter(depts_template__dept_name='Managerial').values('template_name', 'template_id').order_by('-template_id')
 	warh = Templates.objects.filter(depts_template__dept_name='Warehouse').values('template_name', 'template_id').order_by('-template_id')
 	# q2 = Templates.objects.values('depts_template__dept_name', 'template_name', 'template_id').annotate(total=Count('template_id'))
 	test = []
@@ -214,10 +215,10 @@ class TemplateViewset(CustomModelViewSet):
 
 	for k in sw:
 		test2.append({'template_name': k['template_name'], 'template_id': k['template_id']})
-	
+
 	for l in mgr:
 		test3.append({'template_name': l['template_name'], 'template_id': l['template_id']})
-	
+
 	for m in warh:
 		test4.append({'template_name': m['template_name'], 'template_id': m['template_id']})
 
