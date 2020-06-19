@@ -196,19 +196,19 @@ class TemplateViewset(CustomModelViewSet):
 		'template_name': 'Template Name',
 		'depts_template': 'Department'
 	}
-	q1 = Departments.objects.all().order_by('-dept_id')
+	# q1 = Departments.objects.all().order_by('-dept_id')
 	hr = Templates.objects.filter(depts_template__dept_name='HR').values('template_name', 'template_id').order_by('-template_id')
 	sw = Templates.objects.filter(depts_template__dept_name='Software').values('template_name', 'template_id').order_by('-template_id')
 	mgr = Templates.objects.filter(depts_template__dept_name='Managerial').values('template_name', 'template_id').order_by('-template_id')
 	warh = Templates.objects.filter(depts_template__dept_name='Warehouse').values('template_name', 'template_id').order_by('-template_id')
 	# q2 = Templates.objects.values('depts_template__dept_name', 'template_name', 'template_id').annotate(total=Count('template_id'))
-	test = []
+	# test = []
 	test1 = []
 	test2 = []
 	test3 = []
 	test4 = []
-	for i in q1:
-		test.append({'dept_id': i.dept_id, 'dept_name': i.dept_name})
+	# for i in q1:
+	# 	test.append({'dept_id': i.dept_id, 'dept_name': i.dept_name})
 
 	for j in hr:
 		test1.append({'template_name': j['template_name'], 'template_id': j['template_id']})
@@ -223,4 +223,4 @@ class TemplateViewset(CustomModelViewSet):
 		test4.append({'template_name': m['template_name'], 'template_id': m['template_id']})
 
 
-	dropdowns = {'departments': test, 'hr_templates_available': test1, 'sw_templates_available': test2, 'mgr_templates_available': test3, 'warehouse_templates_available': test4}
+	dropdowns = {'HR': test1, 'Software': test2, 'Managerial': test3, 'Warehouse': test4}
