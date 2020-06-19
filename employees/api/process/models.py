@@ -36,7 +36,7 @@ class Templates(models.Model):
 class Process(models.Model):
 	process_id = models.AutoField(primary_key=True)
 	process_name = models.CharField(max_length=50)
-	process_description = models.CharField(max_length=50)
+	process_description = models.CharField(max_length=50, blank=True, null=True)
 	process_training = models.FileField(blank=True, null=True, upload_to='dropbox/videos', max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
 	process_department = models.PositiveSmallIntegerField() # Fk dept id from employee models
 	process_time_allocated = models.DurationField(blank=True)
@@ -162,7 +162,7 @@ class RegularTask(models.Model):
 	prc_id = models.ForeignKey("Process", related_name='regularprocess', on_delete=models.CASCADE)
 	task_type = models.CharField(max_length=50)
 	members = JSONField()
-	task_description = models.TextField(max_length=100)
+	task_description = models.TextField(max_length=100, blank=True, null=True)
 	task_files = JSONField()
 	task_duedate = models.DateField()
 	# repeat_id = models.ForeignKey("RepeatTask", related_name='repeats', on_delete=models.CASCADE)
