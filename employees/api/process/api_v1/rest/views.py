@@ -188,7 +188,7 @@ class DeptViewset(CustomModelViewSet):
 
 class TemplateViewset(CustomModelViewSet):
 	lookup_field = 'template_id'
-	queryset = Templates.objects.all().order_by('template_name')
+	queryset = Templates.objects.all().order_by('-template_id')
 	serializer_class = TemplateSerializer
 	pagination_class = CustomPageNumberPagination
 	fields_headers = {
