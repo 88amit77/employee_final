@@ -197,10 +197,10 @@ class TemplateViewset(CustomModelViewSet):
 		'depts_template': 'Department'
 	}
 	# q1 = Departments.objects.all().order_by('-dept_id')
-	hr = Templates.objects.filter(depts_template__dept_name='HR').values('template_name', 'template_id').order_by('-template_id')
-	sw = Templates.objects.filter(depts_template__dept_name='Software').values('template_name', 'template_id').order_by('-template_id')
-	mgr = Templates.objects.filter(depts_template__dept_name='Managerial').values('template_name', 'template_id').order_by('-template_id')
-	warh = Templates.objects.filter(depts_template__dept_name='Warehouse').values('template_name', 'template_id').order_by('-template_id')
+	hr = Templates.objects.filter(depts_template__dept_name='HR').all().values('template_name', 'template_id').order_by('-template_id')
+	sw = Templates.objects.filter(depts_template__dept_name='Software').all().values('template_name', 'template_id').order_by('-template_id')
+	mgr = Templates.objects.filter(depts_template__dept_name='Managerial').all().values('template_name', 'template_id').order_by('-template_id')
+	warh = Templates.objects.filter(depts_template__dept_name='Warehouse').all().values('template_name', 'template_id').order_by('-template_id')
 	# q2 = Templates.objects.values('depts_template__dept_name', 'template_name', 'template_id').annotate(total=Count('template_id'))
 	# test = []
 	test1 = []
