@@ -196,31 +196,27 @@ class TemplateViewset(CustomModelViewSet):
 		'template_name': 'Template Name',
 		'depts_template': 'Department'
 	}
-	# q1 = Departments.objects.all().order_by('-dept_id')
-	hr = Templates.objects.filter(depts_template__dept_name='HR').all().values('template_name', 'template_id').order_by('-template_id')
-	sw = Templates.objects.filter(depts_template__dept_name='Software').all().values('template_name', 'template_id').order_by('-template_id')
-	mgr = Templates.objects.filter(depts_template__dept_name='Managerial').all().values('template_name', 'template_id').order_by('-template_id')
-	warh = Templates.objects.filter(depts_template__dept_name='Warehouse').all().values('template_name', 'template_id').order_by('-template_id')
-	# q2 = Templates.objects.values('depts_template__dept_name', 'template_name', 'template_id').annotate(total=Count('template_id'))
-	# test = []
 	test1 = []
 	test2 = []
 	test3 = []
 	test4 = []
-	# for i in q1:
-	# 	test.append({'dept_id': i.dept_id, 'dept_name': i.dept_name})
 
-	for j in hr:
-		test1.append({'template_name': j['template_name'], 'template_id': j['template_id']})
+	query = Templates.objects.filter().prefetch_related('depts_template__dept_name').values('template_name', 'depts_template__dept_name', 'template_id').order_by('-template_id')
 
-	for k in sw:
-		test2.append({'template_name': k['template_name'], 'template_id': k['template_id']})
+	for j in query:
+		if j['depts_template__dept_name'] == 'HR':
+			test1.append({'template_name': j['template_name'], 'template_id': j['template_id']})
 
-	for l in mgr:
-		test3.append({'template_name': l['template_name'], 'template_id': l['template_id']})
+		elif j['depts_template__dept_name'] == 'Software':
+			test2.append({'template_name': j['template_name'], 'template_id': j['template_id']})
 
-	for m in warh:
-		test4.append({'template_name': m['template_name'], 'template_id': m['template_id']})
+		elif j['depts_template__dept_name'] == 'Managerial':
+			test3.append({'template_name': j['template_name'], 'template_id': j['template_id']})
 
+		elif j['depts_template__dept_name'] == 'Warehouse':
+			test4.append({'template_name': j['template_name'], 'template_id': j['template_id']})
+
+		else:
+			pass
 
 	dropdowns = {'HR': test1, 'Software': test2, 'Managerial': test3, 'Warehouse': test4}
