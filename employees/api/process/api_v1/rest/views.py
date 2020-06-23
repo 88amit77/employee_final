@@ -1,10 +1,11 @@
+import datetime
+import math
+
+import psycopg2
+from django.db import connection
 from django.db.models import Count
 from django.http import Http404
 from django.shortcuts import render
-# from django_filters import rest_framework as dfilters
-# import django_filters
-# from django_filters.fields import BaseCSVField, BaseCSVWidget
-# from django_filters.widgets import BooleanWidget, CSVWidget
 from rest_framework import filters, generics, status, viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -12,7 +13,9 @@ from rest_framework.response import Response
 from api.process.api_v1.rest.serializers import *
 from api.process.models import *
 
-# from rest_framework.views import APIView
+# from django_filters import rest_framework as dfilters
+# import django_filters
+
 
 
 # Create your views here.
@@ -201,21 +204,41 @@ class TemplateViewset(CustomModelViewSet):
 	test3 = []
 	test4 = []
 
-	query = Templates.objects.filter().prefetch_related('depts_template__dept_name').values('template_name', 'depts_template__dept_name', 'template_id').order_by('-template_id')
+	# ORM Query
+	# query = Templates.objects.filter().prefetch_related('depts_template__dept_name').values('template_name', 'depts_template__dept_name', 'template_id').order_by('-template_id')
 
-	for j in query:
-		if j['depts_template__dept_name'] == 'HR':
-			test1.append({'template_name': j['template_name'], 'template_id': j['template_id']})
+	# for j in query:
+	# 	if j['depts_template__dept_name'] == 'HR':
+	# 		test1.append({'template_name': j['template_name'], 'template_id': j['template_id']})
+	# 	elif j['depts_template__dept_name'] == 'Software':
+	# 		test2.append({'template_name': j['template_name'], 'template_id': j['template_id']})
+	# 	elif j['depts_template__dept_name'] == 'Managerial':
+	# 		test3.append({'template_name': j['template_name'], 'template_id': j['template_id']})
+	# 	elif j['depts_template__dept_name'] == 'Warehouse':
+	# 		test4.append({'template_name': j['template_name'], 'template_id': j['template_id']})
+	# 	else:
+	# 		pass
 
-		elif j['depts_template__dept_name'] == 'Software':
-			test2.append({'template_name': j['template_name'], 'template_id': j['template_id']})
+	# Raw query
+	cursor = connection.cursor()
+	rquery = "SELECT process_departments.dept_name, process_templates.template_name, process_templates.template_id FROM public.process_templates, public.process_departments WHERE process_templates.depts_template_id = process_departments.dept_id ORDER BY process_departments.dept_name"
+	cursor.execute(rquery)
+	res = cursor.fetchall()
+	column_names = [desc[0] for desc in cursor.description]
+	results_data = []
+	if res is not None:
+		for single_record in res:
+			results_data.append(dict(zip(column_names, single_record)))
 
-		elif j['depts_template__dept_name'] == 'Managerial':
-			test3.append({'template_name': j['template_name'], 'template_id': j['template_id']})
-
-		elif j['depts_template__dept_name'] == 'Warehouse':
-			test4.append({'template_name': j['template_name'], 'template_id': j['template_id']})
-
+	for i in results_data:
+		if i['dept_name'] == 'HR':
+			test1.append({'template_name': i['template_name'], 'template_id': i['template_id']})
+		elif i['dept_name'] == 'Software':
+			test2.append({'template_name': i['template_name'], 'template_id': i['template_id']})
+		elif i['dept_name'] == 'Managerial':
+			test3.append({'template_name': i['template_name'], 'template_id': i['template_id']})
+		elif i['dept_name'] == 'Warehouse':
+			test4.append({'template_name': i['template_name'], 'template_id': i['template_id']})
 		else:
 			pass
 
