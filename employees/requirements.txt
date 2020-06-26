@@ -23,10 +23,12 @@ django-storages==1.9.1
 djangorestframework==3.11.0
 docutils==0.15.2
 drf-yasg==1.17.1
+dropbox==10.2.0
 et-xmlfile==1.0.1
 filelock==3.0.12
 fsspec==0.7.2
 gunicorn==20.0.4
+html5lib==1.0.1
 identify==1.4.13
 idna==2.9
 inflection==0.3.1
@@ -50,11 +52,13 @@ psycopg2-binary==2.8.4
 py==1.8.1
 pycparser==2.20
 pyparsing==2.4.6
+PyPDF2==1.26.0
 pytest==5.4.1
 pytest-django==3.8.0
 python-dateutil==2.8.1
 pytz==2019.3
 PyYAML==5.3.1
+reportlab==3.5.42
 requests==2.23.0
 ruamel.yaml==0.16.10
 ruamel.yaml.clib==0.2.0
@@ -68,4 +72,6 @@ uritemplate==3.0.1
 urllib3==1.25.8
 virtualenv==20.0.13
 wcwidth==0.1.9
+webencodings==0.5.1
+xhtml2pdf==0.2.4
 zstandard==0.13.0
