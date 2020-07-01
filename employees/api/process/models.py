@@ -11,13 +11,13 @@ class Departments(models.Model):
 	def __str__(self):
 		return self.dept_name
 	
-class Templates(models.Model):
-	template_id = models.AutoField(primary_key=True)
-	template_name = models.CharField(max_length=50)
-	depts_template = models.ForeignKey("Departments", related_name="template_depts", on_delete=models.CASCADE, null=True)
+# class Templates(models.Model):
+# 	template_id = models.AutoField(primary_key=True)
+# 	template_name = models.CharField(max_length=50)
+# 	depts_template = models.ForeignKey("Departments", related_name="template_depts", on_delete=models.CASCADE, null=True)
 
-	def __str__(self):
-		return self.template_name
+# 	def __str__(self):
+# 		return self.template_name
 	
 
 
@@ -38,7 +38,8 @@ class Process(models.Model):
 	process_name = models.CharField(max_length=50)
 	process_description = models.CharField(max_length=50, blank=True, null=True)
 	process_training = models.FileField(blank=True, null=True, upload_to='process/videos/', max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
-	process_department = models.PositiveSmallIntegerField() # Fk dept id from employee models
+	# process_department = models.PositiveSmallIntegerField()  # Fk dept id from employee models
+	process_department = models.ForeignKey("Departments", related_name='depts', on_delete=models.CASCADE)
 	process_time_allocated = models.DurationField(blank=True)
 	
 	def __str__(self):
@@ -66,7 +67,8 @@ class ProcessMainid(models.Model):
 	offsety = models.FloatField()
 	main_attachment = models.FileField(blank=True, null=True, upload_to='process_main/videos/', max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'mp4', 'png', 'jpeg', 'jpg'])])
 	main_description = models.TextField(max_length=200, editable=True, blank=True)
-	main_department = models.SmallIntegerField()  # Fk dept id from employee models
+	# main_department = models.SmallIntegerField()  # Fk dept id from employee models
+	main_department = models.ForeignKey("Departments", related_name='mdepts', on_delete=models.CASCADE)
 
 	def __str__(self):
 		return self.main_name
@@ -104,8 +106,10 @@ class ProcessSubpoint(models.Model):
 class Connections(models.Model):
 	connector_id = models.AutoField(primary_key=True)
 	connection_process = models.ForeignKey("Process", related_name='connectors', on_delete=models.CASCADE, null=True)
-	start_mainpoint_id = models.IntegerField()
-	end_mainpoint_id = models.IntegerField()
+	# start_mainpoint_id = models.IntegerField()  # FK to mainid
+	start_mainpoint_id = models.ForeignKey("ProcessMainid", related_name='mainconnect', on_delete=models.CASCADE)
+	# end_mainpoint_id = models.IntegerField()  # FK to mainid
+	end_mainpoint_id = models.ForeignKey("ProcessMainid", related_name='mainconnector', on_delete=models.CASCADE)
 	connector_text = models.CharField(max_length=50)
 
 	def __str__(self):

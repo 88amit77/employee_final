@@ -23,17 +23,18 @@ class DeptRelatedField(serializers.RelatedField):
 		return Departments.objects.get(dept_name=data)
 
 
-class TemplateSerializer(serializers.ModelSerializer):
+# class TemplateSerializer(serializers.ModelSerializer):
 
-	depts_template = DeptRelatedField(queryset=Departments.objects.all())
-	class Meta:
-		model = Templates
-		fields = '__all__'
+# 	depts_template = DeptRelatedField(queryset=Departments.objects.all())
+# 	class Meta:
+# 		model = Templates
+# 		fields = '__all__'
 
 
 # Process
 class ProcessSerializer(serializers.ModelSerializer):
 
+	process_department = DeptRelatedField(queryset=Departments.objects.all())
 	class Meta:
 		model = Process
 		fields = '__all__'
@@ -52,14 +53,10 @@ class ProcessRelatedField(serializers.RelatedField):
 
 # ProcessMainid
 class ProcessMainidSerializer(serializers.ModelSerializer):
-	process_id = ProcessRelatedField(queryset=Process.objects.all())
-	# process_id = ProcessSerializer()
 
-	# def to_internal_value(self, data):
-	# 	 self.fields['process_id'] = serializers.PrimaryKeyRelatedField(
-	# 		 queryset=Process.objects.all())
-	# 	 return super(ProcessMainidSerializer, self).to_internal_value(data)
-	
+	process_id = ProcessRelatedField(queryset=Process.objects.all())
+	main_department = DeptRelatedField(queryset=Departments.objects.all())
+
 	class Meta:
 		model = ProcessMainid
 		fields = '__all__'
@@ -68,7 +65,7 @@ class ProcessMainidSerializer(serializers.ModelSerializer):
 
 
 class ProcessSubpointRelatedField(serializers.RelatedField):
-	
+
 	def display_value(self, instance):
 		return instance
 
@@ -81,25 +78,36 @@ class ProcessSubpointRelatedField(serializers.RelatedField):
 
 # ProcessSubpoint
 class ProcessSubpointSerializer(serializers.ModelSerializer):
-	pmain_id = ProcessSubpointRelatedField(queryset=ProcessMainid.objects.all())
-	# pmain_id = ProcessMainidSerializer()
 
-	# def to_internal_value(self, data):
-	# 	self.fields['pmain_id'] = serializers.PrimaryKeyRelatedField(
-	# 		queryset=ProcessMainid.objects.all())
-	# 	return super(ProcessSubpointSerializer, self).to_internal_value(data)
-	
+	pmain_id = ProcessSubpointRelatedField(queryset=ProcessMainid.objects.all())
+
 	class Meta:
 		model = ProcessSubpoint
 		fields = '__all__'
 		depth = 1
 
 # Connections
+
+class ConnectionsRelatedField(serializers.RelatedField):
+
+	def display_value(self, instance):
+		return instance
+
+	def to_representation(self, value):
+		return str(value)
+
+	def to_internal_value(self, data):
+		return ProcessMainid.objects.get(main_name=data)
+
 class ConnectionsSerializer(serializers.ModelSerializer):
 	connection_process = ProcessRelatedField(queryset=Process.objects.all())
+	start_mainpoint_id = ConnectionsRelatedField(queryset=ProcessMainid.objects.all())
+	end_mainpoint_id = ConnectionsRelatedField(queryset=ProcessMainid.objects.all())
+
 	class Meta:
 		model = Connections
 		fields = '__all__'
+
 
 # RepeatTask
 class RepeatTaskSerializer(serializers.ModelSerializer):
@@ -133,18 +141,9 @@ class RepeatTaskSerializer(serializers.ModelSerializer):
 
 # RegularTask
 class RegularTaskSerializer(serializers.ModelSerializer):
-	
+
 	prc_id = ProcessRelatedField(queryset=Process.objects.all())
-	# repeat_id = RepeatTasksRelatedField(queryset=RepeatTask.objects.all())
 
-	# def to_internal_value(self, data):
-	# 	self.fields['prc_id'] = serializers.PrimaryKeyRelatedField(queryset=Process.objects.all())
-	# 	self.fields['repeat_id'] = serializers.PrimaryKeyRelatedField(queryset=RepeatTask.objects.all())
-	# 	return super(RegularTaskSerializer, self).to_internal_value(data)
-
-	# 	# self.fields['repeat_id'] = serializers.PrimaryKeyRelatedField(queryset=RepeatTask.objects.all())
-	# 	# return super(RepeatTaskSerializer, self).to_internal_value(data)
-	
 	class Meta:
 		model = RegularTask
 		fields = '__all__'
