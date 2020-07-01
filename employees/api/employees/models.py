@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import FileExtensionValidator
 
 
 class Employee(models.Model):
@@ -57,11 +58,11 @@ class Documents(models.Model):
                                   blank=True)
     document_id = models.AutoField(primary_key=True, )
     pan_number = models.CharField(max_length=20)
-    pan_card = models.FileField(upload_to='uploads/employee_docs/', blank=True, null=True)
-    address_proof = models.FileField(upload_to='uploads/employee_docs/', blank=True, null=True)
-    permanent_proof = models.FileField(upload_to='uploads/employee_docs/', blank=True, null=True)
+    pan_card = models.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
+    address_proof = models.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
+    permanent_proof = models.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
     aadharcard_number = models.CharField(max_length=20)
-    aadharcard = models.FileField(blank=True, null=True)
+    aadharcard = models.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
 
 
 class Education(models.Model):
@@ -144,8 +145,8 @@ class Attendance(models.Model):
     emp_id = models.ForeignKey(Employee, related_name='attendances', on_delete=models.CASCADE, default=None, unique=False)
     work_date = models.DateField(null=True, blank=True)
     login = models.TimeField(default="00:00:00")
-    login_image = models.FileField(upload_to='uploads/employee_docs/', validators=[validate_file_extension],blank=True, null=True)
-    logout_image = models.FileField(upload_to='uploads/employee_docs/',  validators=[validate_file_extension],blank=True, null=True)
+    login_image = models.FileField(upload_to='Employees/Attendance/', blank=True, null=True, max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
+    logout_image = models.FileField(upload_to='Employees/Attendance/', blank=True, null=True, max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
     logout = models.TimeField(default="00:00:00")
     annomaly = models.BooleanField(default=False)
     ip_address = models.CharField(max_length=30, null=True, blank=True)
