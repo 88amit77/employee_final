@@ -3,18 +3,9 @@ version: '2'
 services:
   employees_web:
     build: ./employees
-    command: bash -c "python3 ./employees/manage.py runserver 0.0.0.0:8001"
+    command: bash -c "cd employees && gunicorn api.wsgi --bind 0.0.0.0:80 --reload"
     volumes:
       - .:/code
     ports:
-      - 8001:8001
-    restart: always
-      
-  nginx:
-    build: ./web
-    ports:
       - 80:80
-    links:
-      - employees_web
-    depends_on:
-      - employees_web
+    restart: always
