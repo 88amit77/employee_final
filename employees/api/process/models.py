@@ -62,7 +62,7 @@ class Process(models.Model):
 class ProcessMainid(models.Model):
 	process_mainid = models.AutoField(primary_key=True)
 	process_id = models.ForeignKey("Process", related_name='processes', on_delete=models.CASCADE)
-	main_name = models.CharField(max_length=50)
+	main_name = models.CharField(max_length=50, blank=True, null=True)
 	offsetx = models.FloatField()
 	offsety = models.FloatField()
 	main_attachment = models.FileField(blank=True, null=True, upload_to='process_main/videos/', max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'mp4', 'png', 'jpeg', 'jpg'])])
@@ -86,7 +86,7 @@ class ProcessMainid(models.Model):
 class ProcessSubpoint(models.Model):
 	process_subpointid = models.AutoField(primary_key=True)
 	pmain_id = models.ForeignKey("ProcessMainid", related_name='mainprocess', on_delete=models.CASCADE)
-	subpoint_name = models.CharField(max_length=50)
+	subpoint_name = models.CharField(max_length=50, blank=True, null=True)
 	subpoint_attachment = models.FileField(blank=True, null=True, upload_to='process_subpoint/videos/', max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'mp4', 'png', 'jpeg', 'jpg'])])
 	subpoint_description = models.TextField(max_length=100, editable=True, blank=True)
 
