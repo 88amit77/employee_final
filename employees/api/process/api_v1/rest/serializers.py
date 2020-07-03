@@ -88,21 +88,21 @@ class ProcessSubpointSerializer(serializers.ModelSerializer):
 
 # Connections
 
-class ConnectionsRelatedField(serializers.RelatedField):
+# class ConnectionsRelatedField(serializers.RelatedField):
 
-	def display_value(self, instance):
-		return instance
+# 	def display_value(self, instance):
+# 		return instance
 
-	def to_representation(self, value):
-		return str(value)
+# 	def to_representation(self, value):
+# 		return str(value)
 
-	def to_internal_value(self, data):
-		return ProcessMainid.objects.get(main_name=data)
+# 	def to_internal_value(self, data):
+# 		return ProcessMainid.objects.get(main_name=data)
 
 class ConnectionsSerializer(serializers.ModelSerializer):
 	connection_process = ProcessRelatedField(queryset=Process.objects.all())
-	start_mainpoint_id = ConnectionsRelatedField(queryset=ProcessMainid.objects.all())
-	end_mainpoint_id = ConnectionsRelatedField(queryset=ProcessMainid.objects.all())
+	# start_mainpoint_id = ConnectionsRelatedField(queryset=ProcessMainid.objects.all())
+	# end_mainpoint_id = ConnectionsRelatedField(queryset=ProcessMainid.objects.all())
 
 	class Meta:
 		model = Connections
