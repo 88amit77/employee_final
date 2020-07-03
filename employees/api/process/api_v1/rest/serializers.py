@@ -38,53 +38,49 @@ class ProcessSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Process
 		fields = '__all__'
-		depth = 1
 
-class ProcessRelatedField(serializers.RelatedField):
+# class ProcessRelatedField(serializers.RelatedField):
 
-	def display_value(self, instance):
-		return instance
+# 	def display_value(self, instance):
+# 		return instance
 
-	def to_representation(self, value):
-		return str(value)
+# 	def to_representation(self, value):
+# 		return str(value)
 
-	def to_internal_value(self, data):
-		return Process.objects.get(process_name=data)
+# 	def to_internal_value(self, data):
+# 		return Process.objects.get(process_name=data)
 
 # ProcessMainid
 class ProcessMainidSerializer(serializers.ModelSerializer):
 
-	process_id = ProcessRelatedField(queryset=Process.objects.all())
+	# process_id = ProcessRelatedField(queryset=Process.objects.all())
 	main_department = DeptRelatedField(queryset=Departments.objects.all())
 
 	class Meta:
 		model = ProcessMainid
 		fields = '__all__'
-		depth = 1
 
 
 
-class ProcessSubpointRelatedField(serializers.RelatedField):
+# class ProcessSubpointRelatedField(serializers.RelatedField):
 
-	def display_value(self, instance):
-		return instance
+# 	def display_value(self, instance):
+# 		return instance
 
-	def to_representation(self, value):
-		return str(value)
+# 	def to_representation(self, value):
+# 		return str(value)
 
-	def to_internal_value(self, data):
-		return ProcessMainid.objects.get(main_name=data)
-
+# 	def to_internal_value(self, data):
+# 		return ProcessMainid.objects.get(main_name=data)
 
 # ProcessSubpoint
 class ProcessSubpointSerializer(serializers.ModelSerializer):
 
-	pmain_id = ProcessSubpointRelatedField(queryset=ProcessMainid.objects.all())
+	# pmain_id = ProcessSubpointRelatedField(queryset=ProcessMainid.objects.all())
 
 	class Meta:
 		model = ProcessSubpoint
 		fields = '__all__'
-		depth = 1
 
 # Connections
 
@@ -100,7 +96,7 @@ class ProcessSubpointSerializer(serializers.ModelSerializer):
 # 		return ProcessMainid.objects.get(main_name=data)
 
 class ConnectionsSerializer(serializers.ModelSerializer):
-	connection_process = ProcessRelatedField(queryset=Process.objects.all())
+	# connection_process = ProcessRelatedField(queryset=Process.objects.all())
 	# start_mainpoint_id = ConnectionsRelatedField(queryset=ProcessMainid.objects.all())
 	# end_mainpoint_id = ConnectionsRelatedField(queryset=ProcessMainid.objects.all())
 
@@ -142,7 +138,7 @@ class RepeatTaskSerializer(serializers.ModelSerializer):
 # RegularTask
 class RegularTaskSerializer(serializers.ModelSerializer):
 
-	prc_id = ProcessRelatedField(queryset=Process.objects.all())
+	# prc_id = ProcessRelatedField(queryset=Process.objects.all())
 
 	class Meta:
 		model = RegularTask
