@@ -203,23 +203,3 @@ class MonthlyEmpSalary(models.Model):
      reimbursements = models.FloatField(default=0.0)
 
 
-class TestingNames(models.Model):
-    tn_id = models.AutoField(primary_key=True)
-    tn_name = models.CharField(max_length=50)
-    average_time = models.FloatField(default=0.0)
-    tn_cron_code = models.CharField(max_length=50,null=True, blank=True)
-    tn_type = models.PositiveIntegerField()
-
-    def __str__(self):
-        return self.tn_name
-
-
-class TestingStatus(models.Model):
-    ts_id = models.AutoField(primary_key=True)
-    tn_id = models.ForeignKey(TestingNames, related_name='testing_status', on_delete=models.CASCADE, default=None,
-                              unique=False)
-    ts_starttime = models.DateTimeField()
-    ts_startfile = models.URLField(null=True, blank=True)
-    ts_stoptime = models.DateTimeField()
-    ts_stopfilelog = models.URLField(null=True, blank=True)
-    ts_status = models.CharField(max_length=100,null=True, blank=True)

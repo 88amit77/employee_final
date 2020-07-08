@@ -65,8 +65,6 @@ router.register('employee/create_payroll', views.CreateMonthlyEmpSalaryViewSet, 
 router.register('employee/list_payroll', views.ListMonthlyEmpSalaryViewSet, basename="list_payroll")
 router.register('employee/payroll_column', views.MonthlyEmpSalaryColumnViewSet, basename="payroll_column")
 
-router.register('employee/testing_names', views.TestingNamesViewSet, basename="testing_names")
-router.register('employee/testing_status', views.TestingStatusViewSet, basename="testing_status")
 
 
 
