@@ -1,8 +1,6 @@
 appdirs==1.4.3
 asgiref==3.2.5
 attrs==19.3.0
-boto3==1.12.39
-botocore==1.15.39
 Brotli==1.0.7
 certifi==2019.11.28
 cffi==1.14.0
@@ -17,7 +15,6 @@ django-compression-middleware==0.4.1
 django-cors-headers==3.2.1
 django-extensions==2.2.9
 django-filter==2.2.0
-django-import-csv==0.1.10
 django-rest-swagger==2.2.0
 django-storages==1.9.1
 djangorestframework==3.11.0
@@ -62,8 +59,6 @@ reportlab==3.5.42
 requests==2.23.0
 ruamel.yaml==0.16.10
 ruamel.yaml.clib==0.2.0
-s3fs==0.4.2
-s3transfer==0.3.3
 simplejson==3.17.0
 six==1.14.0
 sqlparse==0.3.1
