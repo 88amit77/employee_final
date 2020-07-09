@@ -9,7 +9,7 @@ import requests
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from .models import (Employee, Education, Documents, FamilyMembers, WorkHistory, LeaveRules, EmpLeaveApplied, EmpLeaveId,
-                     Attendance, AttendenceLeaveid, Attendence_rules, MonthlyEmpSalary)
+                     Attendance, AttendenceLeaveid, Attendence_rules, MonthlyEmpSalary, Salary)
 from .serializers import (
       PersonalSerializer,
       EmployeeSerializer,
@@ -43,6 +43,8 @@ ListAssignedAttendanceRuleSerializer,
 ListAssignedRuleSerializer,
 Emp1Serializer,
 EmpLog2Serializer,
+CreateEmpSalarySerializer,
+# ListEmpSalarySerializer,
 )
 
 DEFAULT_PAGE = 1
@@ -772,5 +774,8 @@ class PayrollSearchAPIView(generics.ListCreateAPIView):
     serializer_class = SearchMonthlyEmpSalarySerializer
     pagination_class = CustomPayrollPagination
 
-
+#salary
+class CreateEmpSalaryViewSet(viewsets.ModelViewSet):
+    queryset = Salary.objects.all()
+    serializer_class = CreateEmpSalarySerializer
 

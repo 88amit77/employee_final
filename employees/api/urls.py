@@ -61,7 +61,8 @@ router.register('list_assigned_attendance_rule', views.ListAssignedAttendanceRul
 router.register('create_payroll', views.CreateMonthlyEmpSalaryViewSet, basename="create_payroll")
 router.register('list_payroll', views.ListMonthlyEmpSalaryViewSet, basename="list_payroll")
 router.register('payroll_column', views.MonthlyEmpSalaryColumnViewSet, basename="payroll_column")
-
+#salary
+router.register('create_salary', views.CreateEmpSalaryViewSet, basename="create_salary")
 
 
 
