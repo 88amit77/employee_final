@@ -203,3 +203,21 @@ class MonthlyEmpSalary(models.Model):
      reimbursements = models.FloatField(default=0.0)
 
 
+
+
+class Salary(models.Model):
+
+    emp_id = models.ForeignKey(Employee, related_name='empsalary', on_delete=models.CASCADE, default=None, unique=False)
+    ctc = models.FloatField()
+    basic = models.FloatField()
+    hra = models.FloatField()
+    conveyance_allowances = models.FloatField()
+    medical_allowance = models.FloatField()
+    cca_allowance = models.FloatField()
+    pf_employer = models.FloatField()
+    pf_employee = models.FloatField()
+    pt = models.FloatField()
+    esi_employer = models.FloatField()
+    esi_employee = models.FloatField()
+
+

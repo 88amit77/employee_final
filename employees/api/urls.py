@@ -61,10 +61,11 @@ router.register('employee/assign_attendance_rules', views.AttendanceLeaveidViewS
 router.register('employee/enter_attendance', views.EnterAttendanceViewSet, basename="enter_attendance")
 router.register('list_assigned_attendance_rule', views.ListAssignedAttendanceRuleView, basename="emptest")
 
-router.register('employee/create_payroll', views.CreateMonthlyEmpSalaryViewSet, basename="create_payroll")
-router.register('employee/list_payroll', views.ListMonthlyEmpSalaryViewSet, basename="list_payroll")
-router.register('employee/payroll_column', views.MonthlyEmpSalaryColumnViewSet, basename="payroll_column")
-
+router.register('create_payroll', views.CreateMonthlyEmpSalaryViewSet, basename="create_payroll")
+router.register('list_payroll', views.ListMonthlyEmpSalaryViewSet, basename="list_payroll")
+router.register('payroll_column', views.MonthlyEmpSalaryColumnViewSet, basename="payroll_column")
+#salary
+router.register('create_salary', views.CreateEmpSalaryViewSet, basename="create_salary")
 
 
 
