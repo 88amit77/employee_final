@@ -200,7 +200,7 @@ class CustomAttendanceLogPagination(PageNumberPagination):
                               "work_location_add": 'Location',
                               "annomaly": 'Outstanding Anomalies',
                               "status": 'Status',
-                              "Work Date": 'work_date',
+                              'work_date': 'Work Date',
                               "login": 'In Time',
                               "logout": 'Out Time',
 
