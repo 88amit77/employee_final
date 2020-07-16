@@ -2,10 +2,12 @@ import datetime
 import math
 
 import psycopg2
+import requests
 from django.db import connection
 from django.db.models import Count
 from django.http import Http404
 from django.shortcuts import render
+from django_filters import rest_framework as dfilters
 from rest_framework import filters, generics, status, viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -13,7 +15,6 @@ from rest_framework.response import Response
 from api.process.api_v1.rest.serializers import *
 from api.process.models import *
 
-from django_filters import rest_framework as dfilters
 # import django_filters
 
 
@@ -63,6 +64,10 @@ class ProcessViewset(CustomModelViewSet):
 
 	query = Process.objects.filter().prefetch_related('process_department__dept_name').values('process_name', 'process_department__dept_name', 'process_id').order_by('-process_id')
 
+	# url = 'https://buymore2api.sellerbuymore.com/employee/process/process_list/'
+	# resultant = requests.get(url)
+	# response = resultant.json()['results']
+
 	for j in query:
 		if j['process_department__dept_name'] == 'HR':
 			test1.append({'process_name': j['process_name'], 'process_id': j['process_id']})
@@ -74,6 +79,18 @@ class ProcessViewset(CustomModelViewSet):
 			test4.append({'process_name': j['process_name'], 'process_id': j['process_id']})
 		else:
 			pass
+	# parse data from API to populate dropdowns
+	# for j in response:
+	# 	if j['process_department'] == 'HR':
+	# 		test1.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+	# 	elif j['process_department'] == 'Software':
+	# 		test2.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+	# 	elif j['process_department'] == 'Managerial':
+	# 		test3.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+	# 	elif j['process_department'] == 'Warehouse':
+	# 		test4.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+	# 	else:
+	# 		pass
 
 	dropdowns = {'HR': test1, 'Software': test2, 'Managerial': test3, 'Warehouse': test4}
 
