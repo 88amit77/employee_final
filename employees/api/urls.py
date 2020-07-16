@@ -52,20 +52,20 @@ router.register('employee/list_assigned_rules', views.ListAssignedRuleView, base
 router.register('employee/employee_log1', views.EmployeeLoggView, basename="employee_log")
 router.register('employee/emp_name', views.EmpNameView, basename="emp_name")
 
-
+router.register('employee/search_by_data_attendance_log', views.SearchByDateAttendanceLogViewSet, basename="search_by_data_attendance_log")
 router.register('employee/attendance', views.AttendanceViewSet, basename="attendance")
 router.register('employee/list_attendance_log', views.ListAttendanceLogViewSet, basename="list_attendance_log")
 router.register('employee/update_attendance_log', views.UpdateAttendanceLogViewSet, basename="update_attendance_log")
 router.register('employee/create_attendance_rules', views.AttendenceRulesViewSet, basename="create_attendance_rules")
 router.register('employee/assign_attendance_rules', views.AttendanceLeaveidViewSet, basename="assign_attendance_rules")
 router.register('employee/enter_attendance', views.EnterAttendanceViewSet, basename="enter_attendance")
-router.register('list_assigned_attendance_rule', views.ListAssignedAttendanceRuleView, basename="emptest")
+router.register('employee/list_assigned_attendance_rule', views.ListAssignedAttendanceRuleView, basename="emptest")
 
-router.register('create_payroll', views.CreateMonthlyEmpSalaryViewSet, basename="create_payroll")
-router.register('list_payroll', views.ListMonthlyEmpSalaryViewSet, basename="list_payroll")
-router.register('payroll_column', views.MonthlyEmpSalaryColumnViewSet, basename="payroll_column")
+router.register('employee/create_payroll', views.CreateMonthlyEmpSalaryViewSet, basename="create_payroll")
+router.register('employee/list_payroll', views.ListMonthlyEmpSalaryViewSet, basename="list_payroll")
+router.register('employee/payroll_column', views.MonthlyEmpSalaryColumnViewSet, basename="payroll_column")
 #salary
-router.register('create_salary', views.CreateEmpSalaryViewSet, basename="create_salary")
+router.register('employee/create_salary', views.CreateEmpSalaryViewSet, basename="create_salary")
 
 
 

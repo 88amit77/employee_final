@@ -448,6 +448,18 @@ class SearchAttendanceLogSerializer(serializers.Serializer):
     work_location_add = serializers.CharField(max_length=30)
     attendances = AttendaceSerializer(many=True)
 
+#for SearchBydate attendance search
+
+class SearchByDateAttendaceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Attendance
+        fields = ('attendance_id','login','logout','annomaly','work_date')
+class SearchBydateAttendanceLogSerializer(serializers.ModelSerializer):
+    attendances = SearchByDateAttendaceSerializer(many=True)
+    class Meta:
+        model = Employee
+        fields = ('emp_id', 'name', 'department', 'work_location_add',  'attendances')
 
 class EnterAttendanceSerializer(serializers.ModelSerializer):
     class Meta:

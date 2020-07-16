@@ -45,6 +45,7 @@ Emp1Serializer,
 EmpLog2Serializer,
 CreateEmpSalarySerializer,
 # ListEmpSalarySerializer,
+SearchBydateAttendanceLogSerializer,
 )
 
 DEFAULT_PAGE = 1
@@ -199,6 +200,7 @@ class CustomAttendanceLogPagination(PageNumberPagination):
                               "work_location_add": 'Location',
                               "annomaly": 'Outstanding Anomalies',
                               "status": 'Status',
+                              "Work Date": 'work_date',
                               "login": 'In Time',
                               "logout": 'Out Time',
 
@@ -685,6 +687,15 @@ class SearchAttendanceLogAPIView(viewsets.generics.ListCreateAPIView):
     serializer_class = SearchAttendanceLogSerializer
     pagination_class = CustomAttendanceLogPagination
 
+###for search by date
+class SearchByDateAttendanceLogViewSet(viewsets.ModelViewSet):
+        search_fields = [
+            'attendances__work_date',
+        ]
+        filter_backends = (filters.SearchFilter,)
+        queryset = Employee.objects.all()
+        serializer_class = SearchBydateAttendanceLogSerializer
+        pagination_class = CustomAttendanceLogPagination
 class UpdateAttendanceLogViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = UpdateAttendanceLogSerializer
