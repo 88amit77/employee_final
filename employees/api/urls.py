@@ -52,7 +52,7 @@ router.register('employee/list_assigned_rules', views.ListAssignedRuleView, base
 router.register('employee/employee_log1', views.EmployeeLoggView, basename="employee_log")
 router.register('employee/emp_name', views.EmpNameView, basename="emp_name")
 ####attendance
-router.register('employee/search_by_data_attendance_log', views.SearchByDateAttendanceLogViewSet, basename="search_by_data_attendance_log")
+#router.register('employee/search_by_data_attendance_log', views.SearchByDateAttendanceLogViewSet, basename="search_by_data_attendance_log")
 router.register('employee/attendance', views.AttendanceViewSet, basename="attendance")
 router.register('employee/list_attendance_log', views.ListAttendanceLogViewSet, basename="list_attendance_log")
 router.register('employee/update_attendance_log', views.UpdateAttendanceLogViewSet, basename="update_attendance_log")
