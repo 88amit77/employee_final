@@ -36,39 +36,26 @@ class CustomModelViewSet(viewsets.ModelViewSet):
 		if request.method == "GET":
 			response.data['fields_headers'] = self.fields_headers if hasattr(self,'fields_headers') else {}
 			# response.data['sticky_header'] = self.sticky_header if hasattr(self, 'sticky_header') else{}
-			response.data['dropdowns'] = self.dropdowns if hasattr(self, 'dropdowns') else{}
-			# response.data['filter_results_dropdown'] = self.filter_results_dropdown if hasattr(self, 'filter_results_dropdown') else {}
-
+			response.data['dropdown'] = self.dropdown if hasattr(self, 'dropdown') else {}
 			# Move results to end
 			response.data.move_to_end('results') if 'results' in response.data else response.data
 
 		return super().finalize_response(request, response, *args, **kwargs)
 
-class ProcessViewset(CustomModelViewSet):
-	lookup_field = 'process_id'
-	queryset = Process.objects.all().order_by('-process_id')
-	serializer_class = ProcessSerializer
-	pagination_class = CustomPageNumberPagination
-	# fields_headers = {
-	# 	'process_id': 'Process ID',
-	# 	'process_name': 'Process Name',
-	# 	'process_description': 'Process Description',
-	# 	'process_training': 'Process Training',
-	# 	'process_department': 'Process Department',
-	# 	'process_time_allocated': 'Process Time Allocated'
-	# }
+def process_drps():
 	test1 = []
 	test2 = []
 	test3 = []
 	test4 = []
 
-	query = Process.objects.filter().prefetch_related('process_department__dept_name').values('process_name', 'process_department__dept_name', 'process_id').order_by('-process_id')
+	queries = Process.objects.all().values('process_name', 'process_department__dept_name', 'process_id').order_by('-process_id')
+	# print(queries)
 
 	# url = 'https://buymore2api.sellerbuymore.com/employee/process/process_list/'
 	# resultant = requests.get(url)
 	# response = resultant.json()['results']
 
-	for j in query:
+	for j in queries:
 		if j['process_department__dept_name'] == 'HR':
 			test1.append({'process_name': j['process_name'], 'process_id': j['process_id']})
 		elif j['process_department__dept_name'] == 'Software':
@@ -92,7 +79,64 @@ class ProcessViewset(CustomModelViewSet):
 	# 	else:
 	# 		pass
 
+	# print(dir(queries))
+	# queries.__repr__
 	dropdowns = {'HR': test1, 'Software': test2, 'Managerial': test3, 'Warehouse': test4}
+	return dropdowns
+
+class ProcessViewset(CustomModelViewSet):
+	lookup_field = 'process_id'
+	queryset = Process.objects.all().order_by('-process_id')
+	serializer_class = ProcessSerializer
+	pagination_class = CustomPageNumberPagination
+	# fields_headers = {
+	# 	'process_id': 'Process ID',
+	# 	'process_name': 'Process Name',
+	# 	'process_description': 'Process Description',
+	# 	'process_training': 'Process Training',
+	# 	'process_department': 'Process Department',
+	# 	'process_time_allocated': 'Process Time Allocated'
+	# }
+	# test1 = []
+	# test2 = []
+	# test3 = []
+	# test4 = []
+
+	# queries = Process.objects.all().values('process_name', 'process_department__dept_name', 'process_id').order_by('-process_id')
+	# print(queries)
+
+	# url = 'https://buymore2api.sellerbuymore.com/employee/process/process_list/'
+	# resultant = requests.get(url)
+	# response = resultant.json()['results']
+
+	# for j in queries:
+	# 	if j['process_department__dept_name'] == 'HR':
+	# 		test1.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+	# 	elif j['process_department__dept_name'] == 'Software':
+	# 		test2.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+	# 	elif j['process_department__dept_name'] == 'Managerial':
+	# 		test3.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+	# 	elif j['process_department__dept_name'] == 'Warehouse':
+	# 		test4.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+	# 	else:
+	# 		pass
+
+
+	# parse data from API to populate dropdowns
+	# for j in response:
+	# 	if j['process_department'] == 'HR':
+	# 		test1.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+	# 	elif j['process_department'] == 'Software':
+	# 		test2.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+	# 	elif j['process_department'] == 'Managerial':
+	# 		test3.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+	# 	elif j['process_department'] == 'Warehouse':
+	# 		test4.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+	# 	else:
+	# 		pass
+
+	# queries.__repr__
+	dropdown = process_drps()
 
 
 class ProcessMainidViewset(CustomModelViewSet):
