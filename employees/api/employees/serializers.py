@@ -580,4 +580,3 @@ class ListEmpSalarySerializer(serializers.ModelSerializer):
         model = Employee
         fields = ('empsalary', 'emp_id', 'name')
 
-

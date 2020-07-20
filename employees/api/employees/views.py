@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework import generics
 import csv
 from rest_framework import filters
 from django.views.generic import View
@@ -46,6 +47,7 @@ EmpLog2Serializer,
 CreateEmpSalarySerializer,
 # ListEmpSalarySerializer,
 SearchBydateAttendanceLogSerializer,
+
 )
 
 DEFAULT_PAGE = 1
@@ -267,31 +269,79 @@ class CustomPayrollPagination(PageNumberPagination):
                                'name',
                                          ],
                 'header': {
-                              'name': 'Employee Name',
-                              "month": 'Department',
-                              "lop": 'Lop',
-                              "no_of_days": 'No Of Days',
-                              "ctc": 'CTC',
-                              "basic": 'Basic',
-                              "hra": 'HRA',
-                    "conveyance_allowances": 'Conveyance Allowances',
-                    "medical_allowance": 'Medical Allowance',
-                    "cca_allowance": 'CCA Allowance',
-                    "pf_employer": 'PF Employer',
-                    "pf_employee": 'PF Employee',
-                    "pt": 'PT',
-                    "esi_employer": 'ESI Employer',
-                    "esi_employee": 'ESI Employee',
-                    "net_employee_payable": 'Net Employee Payable',
-                    "due_date": 'Due Date',
-                    "special_allowances": "Special Allowances",
-                    "over_time": "Over Time",
-                    "deductions": "Deductions",
-                    "reimbursements": "Reimbursements",
+                            'name': 'Employee Name',
+                            "department": 'Department',
+                            "month": "Month",
+                            "lop": 'Lop',
+                            "no_of_days": 'No Of Days',
+                            "ctc": 'CTC',
+                            "basic": 'Basic',
+                            "hra": 'HRA',
+                            "conveyance_allowances": 'Conveyance Allowances',
+                            "medical_allowance": 'Medical Allowance',
+                            "cca_allowance": 'CCA Allowance',
+                            "pf_employer": 'PF Employer',
+                            "pf_employee": 'PF Employee',
+                            "pt": 'PT',
+                            "esi_employer": 'ESI Employer',
+                            "esi_employee": 'ESI Employee',
+                            "net_employee_payable": 'Net Employee Payable',
+                            "due_date": 'Due Date',
+                            "special_allowances": "Special Allowances",
+                            "over_time": "Over Time",
+                            "deductions": "Deductions",
+                            "reimbursements": "Reimbursements",
 
                            },
+                'searchable': [
+                    'emp_id',
+                    'name',
+                    'department',
+                    "month",
+                    "lop",
+                    "no_of_days",
+                    "ctc",
+                    "basic",
+                    "hra",
+                    "conveyance_allowances",
+                    "medical_allowance",
+                    "cca_allowance",
+                    "pf_employer",
+                    "pf_employee",
+                    "pt",
+                    "esi_employer",
+                    "esi_employee",
+                    "net_employee_payable",
+                    "due_date",
+                    "special_allowances",
+                    "over_time",
+                    "deductions",
+                    "reimbursements",
+                ],
                 'sortable': [
                               'emp_id',
+                              'name',
+                              'department',
+                              "month",
+                              "lop",
+                                "no_of_days",
+                                "ctc",
+                                "basic",
+                                "hra",
+                                "conveyance_allowances",
+                                "medical_allowance",
+                                "cca_allowance",
+                                "pf_employer",
+                                "pf_employee",
+                                "pt",
+                                "esi_employer",
+                                "esi_employee",
+                                "net_employee_payable",
+                                "due_date",
+                                "special_allowances",
+                                "over_time",
+                                "deductions",
+                                "reimbursements",
                            ],
                 'date_filters': [
                     'due_date'
@@ -440,29 +490,6 @@ class WorkHistoryViewSet(viewsets.ModelViewSet):
     queryset = WorkHistory.objects.all()
     serializer_class = WorkHistorySerializer
     pagination_class = CustomPagination
-
-##commented to test resolve swagger essue
-def ExportEmp(request):
-    response = HttpResponse(content_type='text/csv')
-    write = csv.writer(response)
-    write.writerow(['Employee Id', 'Employee Name', 'Date of Birth', 'Gender', 'Official Email', 'Phone', 'Date of Joining',
-                    'Address', 'Work Location', 'Designation', 'Department'])
-    for employee in Employee.objects.all().values('emp_id', 'name', 'dob', 'gender', 'official_email', 'official_number', 'date_of_joining', 'permanent_address_line1', 'work_location_add', 'designation', 'department'):
-       write.writerow(employee)
-
-    response['Content-Disposition'] ='attachment; filename="employee.csv"'
-    return response
-
-
-def ExportEmpLeaveLog(request):
-    response = HttpResponse(content_type='text/csv')
-    write = csv.writer(response)
-    write.writerow(['emp_leave_app_id','emp_id', 'leave_id', 'start_date', 'end_date', 'status', 'reason', 'action_by'])
-    for employee in EmpLeaveApplied.objects.all().values('emp_leave_app_id', 'emp_id', 'leave_id', 'start_date', 'end_date', 'status', 'reason', 'action_by'):
-        write.writerow(employee)
-
-    response['Content-Disposition'] = 'attachment; filename="employeeLeaveLog.csv"'
-    return response
 
 
 class LeaveRulesView(viewsets.ModelViewSet):
@@ -696,6 +723,54 @@ class SearchByDateAttendanceLogViewSet(viewsets.ModelViewSet):
         queryset = Employee.objects.all()
         serializer_class = SearchBydateAttendanceLogSerializer
         pagination_class = CustomAttendanceLogPagination
+
+##test attendance search date between for attendance log
+
+from dateutil.parser import parse
+from rest_framework import generics
+
+# class SearchByDateBetweenAttendanceLog(generics.ListAPIView):
+#     serializer_class = SearchBydateAttendanceLogSerializer
+#     pagination_class = CustomAttendanceLogPagination
+#
+#     def get_queryset(self):
+#         filter = {}
+#         """
+#         Optionally restricts the returned data to a given date,
+#         by filtering against a `start_date` query parameter in the URL(?start_date=01-01-2021).
+#         """
+#         queryset = Employee.objects.all()
+#         start_date = self.request.query_params.get('start_date', None)
+#         end_date = self.request.query_params.get('end_date', None)
+#         if start_date is not None:
+#             filter['attendances__work_date__gte'] = parse(start_date)
+#         if end_date is not None:
+#            filter['attendances__work_date__lte'] = parse(end_date)
+#
+#         queryset = queryset.filter(**filter)
+#         return queryset
+
+class SearchByDateBetweenAttendanceLog(generics.ListAPIView):
+    serializer_class = AttendaceSerializer
+    pagination_class = CustomAttendanceLogPagination
+
+    def get_queryset(self):
+        filter = {}
+        """
+        Optionally restricts the returned data to a given date,
+        by filtering against a `start_date` query parameter in the URL(?start_date=01-01-2021).
+        """
+        queryset = Attendance.objects.all()
+        start_date = self.request.query_params.get('start_date', None)
+        end_date = self.request.query_params.get('end_date', None)
+        if start_date is not None:
+            filter['work_date__gte'] = parse(start_date)
+        if end_date is not None:
+           filter['work_date__lte'] = parse(end_date)
+
+        queryset = queryset.filter(**filter)
+        return queryset
+
 class UpdateAttendanceLogViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = UpdateAttendanceLogSerializer
@@ -751,35 +826,63 @@ class MonthlyEmpSalaryColumnViewSet(viewsets.ModelViewSet):
             return qs
 
 
-from dateutil.parser import parse
-from rest_framework import generics
 
-
-class PayrollrunList(generics.ListAPIView):
+class PayrollrunViewSet(viewsets.ModelViewSet):
+    search_fields = [
+        '=month',
+    ]
+    filter_backends = (filters.SearchFilter,)
+    queryset = MonthlyEmpSalary.objects.all()
     serializer_class = CreateMonthlyEmpSalarySerializer
     pagination_class = CustomPayrollPagination
 
-    def get_queryset(self):
-        filter = {}
-        """
-        Optionally restricts the returned data to a given date,
-        by filtering against a `start_date` query parameter in the URL(?start_date=01-01-2021).
-        """
-        queryset = MonthlyEmpSalary.objects.all()
-        start_date = self.request.query_params.get('start_date', None)
-        # end_date = self.request.query_params.get('end_date', None)
-        if start_date is not None:
-            filter['month__gte'] = parse(start_date)
-        # if end_date is not None:
-        #     filter['month__lte'] = parse(end_date)
-
-        queryset = queryset.filter(**filter)
-        return queryset
-
-
-class PayrollSearchAPIView(generics.ListCreateAPIView):
-    search_fields = ['name','emp_id']
-    ordering_fields = ['emp_id']
+class PayrollSearchViewSet(viewsets.ModelViewSet):
+    search_fields = [        'emp_id',
+                              'name',
+                             "department",
+                              "monthlyempsalary__month",
+                              "monthlyempsalary__lop",
+                                "monthlyempsalary__no_of_days",
+                                "monthlyempsalary__ctc",
+                                "monthlyempsalary__basic",
+                                "monthlyempsalary__hra",
+                                "monthlyempsalary__conveyance_allowances",
+                                "monthlyempsalary__medical_allowance",
+                                "monthlyempsalary__cca_allowance",
+                                "monthlyempsalary__pf_employer",
+                                "monthlyempsalary__pf_employee",
+                                "monthlyempsalary__pt",
+                                "monthlyempsalary__esi_employer",
+                                "monthlyempsalary__esi_employee",
+                                "monthlyempsalary__net_employee_payable",
+                                "monthlyempsalary__due_date",
+                                "monthlyempsalary__special_allowances",
+                                "monthlyempsalary__over_time",
+                                "monthlyempsalary__deductions",
+                                "monthlyempsalary__reimbursements",]
+    ordering_fields = ['emp_id',
+                              'name',
+                              'department',
+                              "monthlyempsalary__month",
+                              "monthlyempsalary__lop",
+                                "monthlyempsalary__no_of_days",
+                                "monthlyempsalary__ctc",
+                                "monthlyempsalary__basic",
+                                "monthlyempsalary__hra",
+                                "monthlyempsalary__conveyance_allowances",
+                                "monthlyempsalary__medical_allowance",
+                                "monthlyempsalary__cca_allowance",
+                                "monthlyempsalary__pf_employer",
+                                "monthlyempsalary__pf_employee",
+                                "monthlyempsalary__pt",
+                                "monthlyempsalary__esi_employer",
+                                "monthlyempsalary__esi_employee",
+                                "monthlyempsalary__net_employee_payable",
+                                "monthlyempsalary__due_date",
+                                "smonthlyempsalary__pecial_allowances",
+                                "monthlyempsalary__over_time",
+                                "monthlyempsalary__deductions",
+                                "monthlyempsalary__reimbursements",]
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     queryset = Employee.objects.all()
     serializer_class = SearchMonthlyEmpSalarySerializer
@@ -789,4 +892,6 @@ class PayrollSearchAPIView(generics.ListCreateAPIView):
 class CreateEmpSalaryViewSet(viewsets.ModelViewSet):
     queryset = Salary.objects.all()
     serializer_class = CreateEmpSalarySerializer
+
+
 

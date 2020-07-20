@@ -56,13 +56,13 @@ class Employee(models.Model):
 class Documents(models.Model):
     documents = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='documents_emp', null=True,
                                   blank=True)
-    document_id = models.AutoField(primary_key=True, )
+    document_id = models.AutoField(primary_key=True)
     pan_number = models.CharField(max_length=20)
-    pan_card = models.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
-    address_proof = models.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
-    permanent_proof = models.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
+    pan_card = models.FileField()
+    address_proof = models.FileField()
+    permanent_proof = models.FileField()
     aadharcard_number = models.CharField(max_length=20)
-    aadharcard = models.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
+    aadharcard = models.FileField()
 
 
 class Education(models.Model):
@@ -94,7 +94,7 @@ class WorkHistory(models.Model):
     company_name = models.CharField(max_length=30)
     period_from = models.DateField()
     period_to = models.DateField()
-    designation = models.CharField(max_length=20)
+    designation = models.CharField(max_length=100)
     reason_for_leaving = models.CharField(max_length=50)
     verified = models.BooleanField(default=False)
 
@@ -113,7 +113,7 @@ class LeaveRules(models.Model):
 
 class EmpLeaveId(models.Model):
     emp_leave_id = models.AutoField(primary_key=True)
-    emp_id = models.ForeignKey(Employee, related_name='empleaves', on_delete=models.CASCADE, default=None, unique=False)
+    emp_id = models.OneToOneField(Employee,on_delete=models.CASCADE, default=None, unique=False)
     leave_id = models.ManyToManyField(LeaveRules)
 
 
@@ -145,8 +145,8 @@ class Attendance(models.Model):
     emp_id = models.ForeignKey(Employee, related_name='attendances', on_delete=models.CASCADE, default=None, unique=False)
     work_date = models.DateField(null=True, blank=True)
     login = models.TimeField(default="00:00:00")
-    login_image = models.FileField(upload_to='Employees/Attendance/', blank=True, null=True, max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
-    logout_image = models.FileField(upload_to='Employees/Attendance/', blank=True, null=True, max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
+    login_image = models.FileField(null=True, blank=True)
+    logout_image = models.FileField(null=True, blank=True)
     logout = models.TimeField(default="00:00:00")
     annomaly = models.BooleanField(default=False)
     ip_address = models.CharField(max_length=30, null=True, blank=True)
@@ -173,15 +173,15 @@ class Attendence_rules(models.Model):
 
 class AttendenceLeaveid(models.Model):
       attendance_leave_id = models.AutoField(primary_key=True)
-      emp_id = models.ForeignKey(Employee, related_name='attenadance_leaveids', on_delete=models.CASCADE, default=None, unique=False)
-      # ar_id = models.OneToOneField(Attendence_rules,on_delete=models.CASCADE, default=None, unique=False)
+      #emp_id = models.ForeignKey(Employee, related_name='attenadance_leaveids', on_delete=models.CASCADE, default=None, unique=False)
+      emp_id = models.OneToOneField(Employee,on_delete=models.CASCADE, default=None, unique=False)
       ar_id = models.ForeignKey(Attendence_rules,related_name='ar_attenadance_leaveids', on_delete=models.CASCADE, default=None, unique=False)
 
 
 #for pay roll
 class MonthlyEmpSalary(models.Model):
      emp_id = models.ForeignKey(Employee, related_name='monthlyempsalary', on_delete=models.CASCADE, default=None, unique=False)
-     month = models.DateField()
+     month = models.CharField(max_length=100)
      lop = models.PositiveIntegerField()
      no_of_days = models.PositiveIntegerField()
      ctc = models.FloatField()
