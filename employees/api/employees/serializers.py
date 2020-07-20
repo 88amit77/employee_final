@@ -310,15 +310,15 @@ class LeaveRulesSerializer(serializers.ModelSerializer):
 #         fields = ('emp_id', 'name', 'official_email', 'leave')
 class Employee1Serializer(serializers.ModelSerializer):
     class Meta:
-        model = EmpLeaveId
-        fields = '__all__'
+        model = Employee
+        fields = ('emp_id', 'name', 'department', 'designation', 'date_of_joining','employee_type', 'work_location_add')
 
 class ListAssignedRuleSerializer(serializers.ModelSerializer):
-    empleaves = Employee1Serializer(many=True)
+    emp_id = Employee1Serializer(required=True)
 
     class Meta:
-        model = Employee
-        fields = ('emp_id', 'name', 'department', 'designation', 'date_of_joining','employee_type', 'empleaves', 'work_location_add')
+        model = EmpLeaveId
+        fields = ('emp_id','leave_id','emp_leave_id')
 
 
 class ListEmployee1Serializer(serializers.Serializer):
@@ -377,7 +377,7 @@ class EmployeenewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('employee', 'emp_id', 'name')
+        fields = ('employee', 'emp_id','department', 'name')
 
 class EmpLog1Serializer(serializers.ModelSerializer):
 
@@ -426,18 +426,17 @@ class AttendaceLeaveidSerializer(serializers.ModelSerializer):
         model = AttendenceLeaveid
         fields = '__all__'
 
-class AttendaceRulesSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Attendence_rules
-        fields = '__all__'
-
-class ListAssignedAttendanceRuleSerializer(serializers.ModelSerializer):
-    attenadance_leaveids = AttendaceLeaveidSerializer(many=True)
-
+class EmployeeListAttendance(serializers.ModelSerializer):
     class Meta:
         model = Employee
-        fields = ('emp_id', 'name', 'department', 'employee_type', 'attenadance_leaveids')
+        fields = ('emp_id', 'name', 'department', 'employee_type')
+
+class ListAssignedAttendanceRuleSerializer(serializers.ModelSerializer):
+    emp_id = EmployeeListAttendance(required=True)
+
+    class Meta:
+        model = AttendenceLeaveid
+        fields = ('attendance_leave_id', 'ar_id','emp_id')
 
 #for attendance search
 class SearchAttendanceLogSerializer(serializers.Serializer):

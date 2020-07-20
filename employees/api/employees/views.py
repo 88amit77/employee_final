@@ -122,7 +122,7 @@ class CustomLeaveRulesPagination(PageNumberPagination):
                               'date_of_joining': 'Date Of Joining',
                               "employee_type": 'Employee Type',
                               'work_location_add': 'Work Location Add',
-                              'empleaves': 'Empleaves',
+                              'leave_id': 'Leave ID',
 
                            },
                 'sortable': [
@@ -571,7 +571,7 @@ class ListAssignRulesViewSet(viewsets.ViewSet):
 class ListAssignedRuleView(viewsets.ViewSet):
 
     def create(self, request):
-        queryset = Employee.objects.all()
+        queryset = EmpLeaveId.objects.all()
         serializer = ListAssignedRuleSerializer(queryset, many=True)
         if len(queryset) > 0:
             paginator = CustomLeaveRulesPagination()
@@ -694,7 +694,7 @@ class EnterAttendanceViewSet(viewsets.ModelViewSet):
 class ListAssignedAttendanceRuleView(viewsets.ViewSet):
 
     def create(self, request):
-        queryset = Employee.objects.all()
+        queryset = AttendenceLeaveid.objects.all()
         serializer = ListAssignedAttendanceRuleSerializer(queryset, many=True)
         if len(queryset) > 0:
             paginator = CustomAttendanceRulePagination()
@@ -715,14 +715,14 @@ class SearchAttendanceLogAPIView(viewsets.generics.ListCreateAPIView):
     pagination_class = CustomAttendanceLogPagination
 
 ###for search by date
-class SearchByDateAttendanceLogViewSet(viewsets.ModelViewSet):
-        search_fields = [
-            'attendances__work_date',
-        ]
-        filter_backends = (filters.SearchFilter,)
-        queryset = Employee.objects.all()
-        serializer_class = SearchBydateAttendanceLogSerializer
-        pagination_class = CustomAttendanceLogPagination
+# class SearchByDateAttendanceLogViewSet(viewsets.ModelViewSet):
+#         search_fields = [
+#             'attendances__work_date',
+#         ]
+#         filter_backends = (filters.SearchFilter,)
+#         queryset = Employee.objects.all()
+#         serializer_class = SearchBydateAttendanceLogSerializer
+#         pagination_class = CustomAttendanceLogPagination
 
 ##test attendance search date between for attendance log
 
@@ -838,7 +838,7 @@ class PayrollrunViewSet(viewsets.ModelViewSet):
 
 class PayrollSearchViewSet(viewsets.ModelViewSet):
     search_fields = [        'emp_id',
-                              'name',
+                             'name',
                              "department",
                               "monthlyempsalary__month",
                               "monthlyempsalary__lop",
@@ -884,7 +884,7 @@ class PayrollSearchViewSet(viewsets.ModelViewSet):
                                 "monthlyempsalary__deductions",
                                 "monthlyempsalary__reimbursements",]
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
-    queryset = Employee.objects.all()
+    queryset = MonthlyEmpSalary.objects.all()
     serializer_class = SearchMonthlyEmpSalarySerializer
     pagination_class = CustomPayrollPagination
 
