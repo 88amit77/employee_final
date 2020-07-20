@@ -377,7 +377,7 @@ class EmployeenewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('employee', 'emp_id','department', 'name')
+        fields = ('employee', 'emp_id', 'name')
 
 class EmpLog1Serializer(serializers.ModelSerializer):
 
@@ -426,6 +426,11 @@ class AttendaceLeaveidSerializer(serializers.ModelSerializer):
         model = AttendenceLeaveid
         fields = '__all__'
 
+class AttendaceRulesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Attendence_rules
+        fields = '__all__'
 class EmployeeListAttendance(serializers.ModelSerializer):
     class Meta:
         model = Employee
