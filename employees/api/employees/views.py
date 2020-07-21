@@ -51,6 +51,7 @@ SearchByDateAttendaceSerializer,
 ListleaveLogSerializer,
 DynamicFieldsLeaveLogModelSerializer,
 DynamicFieldsAttendenceModelSerializer,
+ForEmployeeIdSearchSerializer,
 
 )
 
@@ -860,6 +861,13 @@ class SearchByDateBetweenAttendanceLog(generics.ListAPIView):
 
         queryset = queryset.filter(**filter)
         return queryset
+class ForEmployeeIdSearchViewSet(viewsets.ModelViewSet):
+    search_fields = ['emp_id',]
+
+    filter_backends = (filters.SearchFilter,)
+    queryset = Employee.objects.all()
+    serializer_class = ForEmployeeIdSearchSerializer
+    pagination_class = CustomAttendanceLogPagination
 
 class UpdateAttendanceLogViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
