@@ -37,6 +37,8 @@ router.register('employee/doc', views.DocumentsViewSet, basename="doc")
 router.register('employee/employee_search', views.EmployeeSearchViewSet, basename="employee_search")
 router.register('employee/employee_column', views.EmployeeColumnViewSet, basename="employee_column")
 # router.register('leave_rule', views.LeaveRulesViewSet, basename="leave_rule")
+##leave
+router.register('employee/leave_log_column', views.LeaveLogColumnViewSet, basename="leave_log_column")
 router.register('employee/leave', views.LeaveRulesView, basename="leave")
 router.register('employee/assign_employee_leave', views.EmployeeView, basename="'assign_employee_leave")
 router.register('employee/list_assigned', views.ListAssignRulesViewSet, basename="list_assigned")
@@ -54,7 +56,8 @@ router.register('employee/search_leave_policy_logs', views.SearchLeavePolicyLogs
 router.register('employee/employee_log1', views.EmployeeLoggView, basename="employee_log")
 router.register('employee/emp_name', views.EmpNameView, basename="emp_name")
 ####attendance
-#router.register('employee/search_by_data_attendance_log', views.SearchByDateAttendanceLogViewSet, basename="search_by_data_attendance_log")
+router.register('employee/attendance_column', views.AttendanceColumnViewSet, basename="attendance_column")
+
 router.register('employee/attendance', views.AttendanceViewSet, basename="attendance")
 router.register('employee/list_attendance_log', views.ListAttendanceLogViewSet, basename="list_attendance_log")
 router.register('employee/update_attendance_log', views.UpdateAttendanceLogViewSet, basename="update_attendance_log")

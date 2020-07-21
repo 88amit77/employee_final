@@ -48,7 +48,9 @@ SearchBydateAttendanceLogSerializer,
 PayrollRunSerializer,
 PayrollSearchSerializer,
 SearchByDateAttendaceSerializer,
-ListleaveLogSerializer
+ListleaveLogSerializer,
+DynamicFieldsLeaveLogModelSerializer,
+DynamicFieldsAttendenceModelSerializer,
 
 )
 
@@ -705,7 +707,19 @@ class EmployeeLoggView(viewsets.ViewSet):
             result_page = paginator.paginate_queryset(queryset, request)
             return paginator.get_paginated_response(result_page)
 
+##leave_log column filter
+class LeaveLogColumnViewSet(viewsets.ModelViewSet):
+    # queryset = Employee.objects.all()
+    serializer_class = DynamicFieldsLeaveLogModelSerializer
+    pagination_class = CustomLeaveLogsPagination
 
+    def get_queryset(self, *args, **kwargs):
+        qs = EmpLeaveApplied.objects.all()
+        query = self.request.GET.get("fields")
+        if query:
+            return qs
+        else:
+            return qs
 class EmpNameView(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = Emp1Serializer
@@ -739,6 +753,19 @@ class SearchLeavePolicyLogsViewSet(viewsets.ModelViewSet):
 
 
 #attendance
+
+class AttendanceColumnViewSet(viewsets.ModelViewSet):
+    # queryset = Employee.objects.all()
+    serializer_class = DynamicFieldsAttendenceModelSerializer
+    pagination_class = CustomAttendanceLogPagination
+
+    def get_queryset(self, *args, **kwargs):
+        qs = Attendance.objects.all()
+        query = self.request.GET.get("fields")
+        if query:
+            return qs
+        else:
+            return qs
 class AttendanceViewSet(viewsets.ModelViewSet):
     queryset = Attendance.objects.all()
     serializer_class = AttendaceSerializer

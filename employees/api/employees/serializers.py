@@ -347,7 +347,30 @@ class EmpLeaveAppliedNewSerializer(serializers.ModelSerializer):
 #         fields = '__all__'
 
 
+
 #for logs page
+
+class DynamicFieldsLeaveLogModelSerializer(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        # Don't pass the 'fields' arg up to the superclass
+        request = kwargs.get('context', {}).get('request')
+        str_fields = request.GET.get('fields', '') if request else None
+        fields = str_fields.split(',') if str_fields else None
+
+        # Instantiate the superclass normally
+        super(DynamicFieldsLeaveLogModelSerializer, self).__init__(*args, **kwargs)
+
+        if fields is not None:
+            # Drop any fields that are not specified in the `fields` argument.
+            allowed = set(fields)
+            existing = set(self.fields)
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
+
+    class Meta:
+        model = EmpLeaveApplied
+        fields = '__all__'
 class EmpLogSerializer(serializers.ModelSerializer):
     days = serializers.SerializerMethodField(method_name='get_days')
 
@@ -459,6 +482,30 @@ class ListAssignedAttendanceRuleSerializer(serializers.ModelSerializer):
     class Meta:
         model = AttendenceLeaveid
         fields = ('attendance_leave_id', 'ar_id','emp_id')
+
+##attendance column filter
+class DynamicFieldsAttendenceModelSerializer(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        # Don't pass the 'fields' arg up to the superclass
+        request = kwargs.get('context', {}).get('request')
+        str_fields = request.GET.get('fields', '') if request else None
+        fields = str_fields.split(',') if str_fields else None
+
+        # Instantiate the superclass normally
+        super(DynamicFieldsAttendenceModelSerializer, self).__init__(*args, **kwargs)
+
+        if fields is not None:
+            # Drop any fields that are not specified in the `fields` argument.
+            allowed = set(fields)
+            existing = set(self.fields)
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
+
+    class Meta:
+        model = Attendance
+        fields = '__all__'
+
 
 #for attendance search
 class SearchAttendanceLogSerializer(serializers.Serializer):
