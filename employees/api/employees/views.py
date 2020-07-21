@@ -796,12 +796,12 @@ class AttendanceLeaveidViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     queryset = AttendenceLeaveid.objects.all()
     serializer_class = AttendaceLeaveidSerializer
-    pagination_class = CustomAttendanceRulePagination
+    # pagination_class = CustomAttendanceRulePagination
 
 class AttendenceRulesViewSet(viewsets.ModelViewSet):
     queryset = Attendence_rules.objects.all()
     serializer_class = AttendaceRulesSerializer
-    pagination_class = CustomAttendanceLogPagination
+    # pagination_class = CustomAttendanceLogPagination
 
 class EnterAttendanceViewSet(viewsets.ModelViewSet):
     queryset = Attendance.objects.all()
@@ -867,7 +867,7 @@ class ForEmployeeIdSearchViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     queryset = Employee.objects.all()
     serializer_class = ForEmployeeIdSearchSerializer
-    pagination_class = CustomAttendanceLogPagination
+    pagination_class = CustomAttendanceRulePagination
 
 class UpdateAttendanceLogViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
