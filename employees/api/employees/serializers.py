@@ -472,11 +472,15 @@ class AttendaceSerializer(serializers.ModelSerializer):
         model = Attendance
         fields = '__all__'
 
+##assigned attendance rule
 class AttendaceLeaveidSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+    employee_type = serializers.CharField(source='emp_id.employee_type', read_only=True)
 
     class Meta:
         model = AttendenceLeaveid
-        fields = '__all__'
+        fields = ("attendance_leave_id", "emp_id", 'name', 'department','employee_type','ar_id')
 
 class AttendaceRulesSerializer(serializers.ModelSerializer):
 

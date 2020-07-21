@@ -285,6 +285,20 @@ class CustomAttendanceRulePagination(PageNumberPagination):
                                'attenadance_leaveids':'Attenadance Leave Data',
 
  },
+                'searchable': [
+                    'emp_id',
+                              'name',
+                              "department",
+                              "employee_type",
+                               'attenadance_leaveids',
+                ],
+                'sortable': [
+                    'emp_id',
+                              'name',
+                              "department",
+                              "employee_type",
+                               'attenadance_leaveids',
+                ],
 
 
             },
@@ -772,10 +786,17 @@ class AttendanceViewSet(viewsets.ModelViewSet):
     pagination_class = CustomAttendanceLogPagination
 
 
+
 class AttendanceLeaveidViewSet(viewsets.ModelViewSet):
+    search_fields = ['emp_id__emp_id', 'emp_id__name', 'emp_id__department', 'emp_id__employee_type',
+                     'attenadance_leaveids']
+    ordering_fields = ['emp_id__emp_id', 'emp_id__name', 'emp_id__department', 'emp_id__employee_type',
+                     'attenadance_leaveids']
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     queryset = AttendenceLeaveid.objects.all()
     serializer_class = AttendaceLeaveidSerializer
-    pagination_class = CustomAttendanceLogPagination
+    pagination_class = CustomAttendanceRulePagination
+
 class AttendenceRulesViewSet(viewsets.ModelViewSet):
     queryset = Attendence_rules.objects.all()
     serializer_class = AttendaceRulesSerializer
