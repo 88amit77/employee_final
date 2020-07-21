@@ -269,6 +269,7 @@ class CustomPayrollPagination(PageNumberPagination):
                                'name',
                                          ],
                 'header': {
+                            'emp_id':'Emp ID',
                             'name': 'Employee Name',
                             "department": 'Department',
                             "month": "Month",
