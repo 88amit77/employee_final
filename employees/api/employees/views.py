@@ -36,9 +36,7 @@ UpdateAttendanceLogSerializer,
 ListAttendanceLogSerializer,
 CreateMonthlyEmpSalarySerializer,
 ListMonthlyEmpSalarySerializer,
-EmployeePayrollSerializer,
 DynamicFieldsMonthlyEmpSalaryModelSerializer,
-SearchMonthlyEmpSalarySerializer,
 SearchAttendanceLogSerializer,
 ListAssignedAttendanceRuleSerializer,
 ListAssignedRuleSerializer,
@@ -47,6 +45,8 @@ EmpLog2Serializer,
 CreateEmpSalarySerializer,
 # ListEmpSalarySerializer,
 SearchBydateAttendanceLogSerializer,
+PayrollRunSerializer,
+PayrollSearchSerializer
 
 )
 
@@ -826,68 +826,68 @@ class MonthlyEmpSalaryColumnViewSet(viewsets.ModelViewSet):
             return qs
 
 
+class PayrollSearchViewSet(viewsets.ModelViewSet):
+    search_fields = [         'emp_id__emp_id',
+                              'emp_id__name',
+                              "emp_id__department",
+                               "month",
+                               "lop",
+                                "no_of_days",
+                                "ctc",
+                                "basic",
+                                "hra",
+                                "conveyance_allowances",
+                                "medical_allowance",
+                                "cca_allowance",
+                                "pf_employer",
+                                "pf_employee",
+                                "pt",
+                                "esi_employer",
+                                "esi_employee",
+                                "net_employee_payable",
+                                "due_date",
+                                "special_allowances",
+                                "over_time",
+                                "deductions",
+                                "reimbursements",]
 
-class PayrollrunViewSet(viewsets.ModelViewSet):
+    ordering_fields = [        'emp_id__emp_id',
+                                'emp_id__name',
+                                "emp_id__department",
+                               "month",
+                               "lop",
+                                "no_of_days",
+                                "ctc",
+                                "basic",
+                                "hra",
+                                "conveyance_allowances",
+                                "medical_allowance",
+                                "cca_allowance",
+                                "pf_employer",
+                                "pf_employee",
+                                "pt",
+                                "esi_employer",
+                                "esi_employee",
+                                "net_employee_payable",
+                                "due_date",
+                                "special_allowances",
+                                "over_time",
+                                "deductions",
+                                "reimbursements",]
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    queryset = MonthlyEmpSalary.objects.all()
+    serializer_class = PayrollSearchSerializer
+    pagination_class = CustomPayrollPagination
+
+class PayrollRunViewSet(viewsets.ModelViewSet):
     search_fields = [
         '=month',
+        # 'emp_id__name',
     ]
     filter_backends = (filters.SearchFilter,)
     queryset = MonthlyEmpSalary.objects.all()
-    serializer_class = CreateMonthlyEmpSalarySerializer
+    serializer_class = PayrollRunSerializer
     pagination_class = CustomPayrollPagination
-
-class PayrollSearchViewSet(viewsets.ModelViewSet):
-    search_fields = [        'emp_id',
-                             'name',
-                             "department",
-                              "monthlyempsalary__month",
-                              "monthlyempsalary__lop",
-                                "monthlyempsalary__no_of_days",
-                                "monthlyempsalary__ctc",
-                                "monthlyempsalary__basic",
-                                "monthlyempsalary__hra",
-                                "monthlyempsalary__conveyance_allowances",
-                                "monthlyempsalary__medical_allowance",
-                                "monthlyempsalary__cca_allowance",
-                                "monthlyempsalary__pf_employer",
-                                "monthlyempsalary__pf_employee",
-                                "monthlyempsalary__pt",
-                                "monthlyempsalary__esi_employer",
-                                "monthlyempsalary__esi_employee",
-                                "monthlyempsalary__net_employee_payable",
-                                "monthlyempsalary__due_date",
-                                "monthlyempsalary__special_allowances",
-                                "monthlyempsalary__over_time",
-                                "monthlyempsalary__deductions",
-                                "monthlyempsalary__reimbursements",]
-    ordering_fields = ['emp_id',
-                              'name',
-                              'department',
-                              "monthlyempsalary__month",
-                              "monthlyempsalary__lop",
-                                "monthlyempsalary__no_of_days",
-                                "monthlyempsalary__ctc",
-                                "monthlyempsalary__basic",
-                                "monthlyempsalary__hra",
-                                "monthlyempsalary__conveyance_allowances",
-                                "monthlyempsalary__medical_allowance",
-                                "monthlyempsalary__cca_allowance",
-                                "monthlyempsalary__pf_employer",
-                                "monthlyempsalary__pf_employee",
-                                "monthlyempsalary__pt",
-                                "monthlyempsalary__esi_employer",
-                                "monthlyempsalary__esi_employee",
-                                "monthlyempsalary__net_employee_payable",
-                                "monthlyempsalary__due_date",
-                                "smonthlyempsalary__pecial_allowances",
-                                "monthlyempsalary__over_time",
-                                "monthlyempsalary__deductions",
-                                "monthlyempsalary__reimbursements",]
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
-    queryset = MonthlyEmpSalary.objects.all()
-    serializer_class = SearchMonthlyEmpSalarySerializer
-    pagination_class = CustomPayrollPagination
-
 #salary
 class CreateEmpSalaryViewSet(viewsets.ModelViewSet):
     queryset = Salary.objects.all()

@@ -556,19 +556,34 @@ class ListMonthlyEmpSalarySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('monthlyempsalary', 'emp_id', 'name')
+        fields = ('monthlyempsalary', 'emp_id', 'name','department')
 
-class EmployeePayrollSerializer(serializers.ModelSerializer):
+
+class PayrollSearchSerializer(serializers.ModelSerializer):
+
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+
     class Meta:
-        model = Employee
-        fields = ('emp_id', 'name')
+        model = MonthlyEmpSalary
+        fields = ('emp_id','name','department',
+                  'month','lop','no_of_days','ctc','basic','hra','conveyance_allowances','medical_allowance',
+                  'cca_allowance','pf_employer','pf_employee','pt','esi_employer','esi_employee','net_employee_payable',
+                  'due_date','special_allowances','over_time','deductions','reimbursements'
+                  )
 
-class SearchMonthlyEmpSalarySerializer(serializers.Serializer):
+class PayrollRunSerializer(serializers.ModelSerializer):
 
-    emp_id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(max_length=30)
-    monthlyempsalary = CreateMonthlyEmpSalarySerializer(many=True)
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
 
+    class Meta:
+        model = MonthlyEmpSalary
+        fields = ('emp_id','name','department',
+                  'month','lop','no_of_days','ctc','basic','hra','conveyance_allowances','medical_allowance',
+                  'cca_allowance','pf_employer','pf_employee','pt','esi_employer','esi_employee','net_employee_payable',
+                  'due_date','special_allowances','over_time','deductions','reimbursements'
+                  )
 
 #salary
 class CreateEmpSalarySerializer(serializers.ModelSerializer):
