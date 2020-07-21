@@ -712,7 +712,7 @@ class SearchAttendanceLogAPIView(viewsets.generics.ListCreateAPIView):
     search_fields = ['emp_id__emp_id','emp_id__name','emp_id__department','emp_id__work_location_add','attendance_id','login','logout','annomaly','work_date']
     ordering_fields = ['emp_id__emp_id','emp_id__name','emp_id__department','emp_id__work_location_add','emp_id__attendance_id','login','logout','annomaly','work_date']
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
-    queryset = Employee.objects.all()
+    queryset = Attendance.objects.all()
     serializer_class = SearchByDateAttendaceSerializer
     pagination_class = CustomAttendanceLogPagination
 
@@ -726,8 +726,8 @@ from rest_framework import generics
 
 
 class SearchByDateBetweenAttendanceLog(generics.ListAPIView):
-    serializer_class = AttendaceSerializer
-    pagination_class = SearchByDateAttendaceSerializer
+    serializer_class = SearchByDateAttendaceSerializer
+    pagination_class = CustomAttendanceLogPagination
 
     def get_queryset(self):
         filter = {}
