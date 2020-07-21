@@ -49,6 +49,8 @@ router.register('employee/list_leave_logs', views.ListLeaveLogsViewSet, basename
 router.register('employee/leave_logs_search', views.LeaveLogsSearchViewSet, basename="leave_logs_search")
 router.register('employee/list_assigned_rules', views.ListAssignedRuleView, basename="list_assigned_rules")
 
+router.register('employee/search_leave_policy_logs', views.SearchLeavePolicyLogsViewSet, basename="search_leave_policy_logs")
+
 router.register('employee/employee_log1', views.EmployeeLoggView, basename="employee_log")
 router.register('employee/emp_name', views.EmpNameView, basename="emp_name")
 ####attendance

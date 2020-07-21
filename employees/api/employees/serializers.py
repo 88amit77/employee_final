@@ -410,6 +410,23 @@ class EmpLog2Serializer(serializers.ModelSerializer):
         c = b - a
         return c.days
 
+class ListleaveLogSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+    days = serializers.SerializerMethodField(method_name='get_days')
+
+
+    class Meta:
+        model = EmpLeaveApplied
+        fields = (
+        'emp_id','name', 'department', 'start_date', 'end_date', 'days', 'status')
+
+    def get_days(self, obj):
+        date_format = "%Y-%m-%d"
+        b = datetime.strptime(str(obj.end_date), date_format)
+        a = datetime.strptime(str(obj.start_date), date_format)
+        c = b - a
+        return c.days
 class Emp1Serializer(serializers.Serializer):
     emp_id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=30)

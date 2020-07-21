@@ -47,7 +47,8 @@ CreateEmpSalarySerializer,
 SearchBydateAttendanceLogSerializer,
 PayrollRunSerializer,
 PayrollSearchSerializer,
-SearchByDateAttendaceSerializer
+SearchByDateAttendaceSerializer,
+ListleaveLogSerializer
 
 )
 
@@ -689,6 +690,32 @@ class EmployeeLoggView(viewsets.ViewSet):
 class EmpNameView(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = Emp1Serializer
+
+class SearchLeavePolicyLogsViewSet(viewsets.ModelViewSet):
+    search_fields = ['emp_id__emp_id',
+                     'emp_id__name',
+                     "emp_id__department",
+                     'start_date',
+                       'end_date',
+
+                       'status',
+
+                     ]
+
+    ordering_fields = ['emp_id__emp_id',
+                       'emp_id__name',
+                       "emp_id__department",
+                       'start_date',
+                       'end_date',
+
+                       'status',
+
+                        ]
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    queryset = EmpLeaveApplied.objects.all()
+    serializer_class = ListleaveLogSerializer
+    pagination_class = CustomLeaveLogsPagination
+
 
 #attendance
 class AttendanceViewSet(viewsets.ModelViewSet):
