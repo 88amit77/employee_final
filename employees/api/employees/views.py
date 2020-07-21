@@ -789,9 +789,9 @@ class AttendanceViewSet(viewsets.ModelViewSet):
 
 class AttendanceLeaveidViewSet(viewsets.ModelViewSet):
     search_fields = ['emp_id__emp_id', 'emp_id__name', 'emp_id__department', 'emp_id__employee_type',
-                     'attenadance_leaveids']
+                     'ar_id__attenadance_leaveids']
     ordering_fields = ['emp_id__emp_id', 'emp_id__name', 'emp_id__department', 'emp_id__employee_type',
-                     'attenadance_leaveids']
+                     'ar_id__attenadance_leaveids']
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     queryset = AttendenceLeaveid.objects.all()
     serializer_class = AttendaceLeaveidSerializer
