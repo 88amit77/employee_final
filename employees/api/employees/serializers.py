@@ -454,11 +454,17 @@ class SearchAttendanceLogSerializer(serializers.Serializer):
 
 #for SearchBydate attendance search
 
+
 class SearchByDateAttendaceSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+    work_location_add = serializers.CharField(source='emp_id.work_location_add', read_only=True)
 
     class Meta:
         model = Attendance
-        fields = ('attendance_id','login','logout','annomaly','work_date')
+        fields = ('emp_id','name','department','work_location_add','attendance_id','login','logout','annomaly','work_date')
+
+
 class SearchBydateAttendanceLogSerializer(serializers.ModelSerializer):
     attendances = SearchByDateAttendaceSerializer(many=True)
     class Meta:
@@ -470,29 +476,7 @@ class EnterAttendanceSerializer(serializers.ModelSerializer):
         model = Attendance
         fields = ('emp_id', 'login', "logout")
 
-# class EnterAttendanceSerializer(serializers.Serializer):
-#
-#     emp_id = serializers.IntegerField(read_only=True)
-#     attendances = AttendaceSerializer(many=True)
-#
-#     def create(self, validated_data):
-#
-#         attendances_data = validated_data.pop('attendances')
-#         employee = Employee.objects.create(**validated_data)
-#         for attendance_data in attendances_data:
-#             Attendance.objects.create(emp_id=employee, **attendance_data)
-#         return employee
-#     def update(self, instance, validated_data):
-#         attendances_data = validated_data.pop('attendances')
-#         emp_id = (instance.emp_id).all()
-#         emp_id = list(emp_id)
-#         instance.save()
-#         for attendancess_data in attendances_data:
-#             emp = emp_id.pop(0)
-#             emp.login = attendancess_data.get('login', emp.login)
-#             emp.logout = attendancess_data.get('logout', emp.logout)
-#             emp.save()
-#         return instance
+
 class ListAttendanceLogSerializer(serializers.ModelSerializer):
 
     attendances = AttendaceSerializer(many=True)

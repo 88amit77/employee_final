@@ -46,7 +46,8 @@ CreateEmpSalarySerializer,
 # ListEmpSalarySerializer,
 SearchBydateAttendanceLogSerializer,
 PayrollRunSerializer,
-PayrollSearchSerializer
+PayrollSearchSerializer,
+SearchByDateAttendaceSerializer
 
 )
 
@@ -269,7 +270,7 @@ class CustomPayrollPagination(PageNumberPagination):
                                'name',
                                          ],
                 'header': {
-                            'emp_id':'Emp ID',
+                            'emp_id':'Employee Id',
                             'name': 'Employee Name',
                             "department": 'Department',
                             "month": "Month",
@@ -708,52 +709,25 @@ class ListAssignedAttendanceRuleView(viewsets.ViewSet):
             return paginator.get_paginated_response(result_page)
 
 class SearchAttendanceLogAPIView(viewsets.generics.ListCreateAPIView):
-    search_fields = ['name', 'emp_id', 'department', 'work_location_add']
-    ordering_fields = ['emp_id']
+    search_fields = ['emp_id__emp_id','emp_id__name','emp_id__department','emp_id__work_location_add','attendance_id','login','logout','annomaly','work_date']
+    ordering_fields = ['emp_id__emp_id','emp_id__name','emp_id__department','emp_id__work_location_add','emp_id__attendance_id','login','logout','annomaly','work_date']
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     queryset = Employee.objects.all()
-    serializer_class = SearchAttendanceLogSerializer
+    serializer_class = SearchByDateAttendaceSerializer
     pagination_class = CustomAttendanceLogPagination
 
-###for search by date
-# class SearchByDateAttendanceLogViewSet(viewsets.ModelViewSet):
-#         search_fields = [
-#             'attendances__work_date',
-#         ]
-#         filter_backends = (filters.SearchFilter,)
-#         queryset = Employee.objects.all()
-#         serializer_class = SearchBydateAttendanceLogSerializer
-#         pagination_class = CustomAttendanceLogPagination
+
 
 ##test attendance search date between for attendance log
 
 from dateutil.parser import parse
 from rest_framework import generics
 
-# class SearchByDateBetweenAttendanceLog(generics.ListAPIView):
-#     serializer_class = SearchBydateAttendanceLogSerializer
-#     pagination_class = CustomAttendanceLogPagination
-#
-#     def get_queryset(self):
-#         filter = {}
-#         """
-#         Optionally restricts the returned data to a given date,
-#         by filtering against a `start_date` query parameter in the URL(?start_date=01-01-2021).
-#         """
-#         queryset = Employee.objects.all()
-#         start_date = self.request.query_params.get('start_date', None)
-#         end_date = self.request.query_params.get('end_date', None)
-#         if start_date is not None:
-#             filter['attendances__work_date__gte'] = parse(start_date)
-#         if end_date is not None:
-#            filter['attendances__work_date__lte'] = parse(end_date)
-#
-#         queryset = queryset.filter(**filter)
-#         return queryset
+
 
 class SearchByDateBetweenAttendanceLog(generics.ListAPIView):
     serializer_class = AttendaceSerializer
-    pagination_class = CustomAttendanceLogPagination
+    pagination_class = SearchByDateAttendaceSerializer
 
     def get_queryset(self):
         filter = {}
