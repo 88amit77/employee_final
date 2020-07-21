@@ -209,8 +209,27 @@ class CustomAttendanceLogPagination(PageNumberPagination):
 
 
                            },
+                'searchable': [
+                             'emp_id',
+                              'name',
+                              "department",
+                              "work_location_add",
+                              "annomaly",
+                              "status",
+                              'work_date',
+                              "login",
+                              "logout",
+                ],
                 'sortable': [
                               'emp_id',
+                              'name',
+                              "department",
+                              "work_location_add",
+                              "annomaly",
+                              "status",
+                              'work_date',
+                              "login",
+                              "logout",
                            ],
             },
             'results': data
