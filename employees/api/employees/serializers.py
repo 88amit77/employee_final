@@ -367,10 +367,21 @@ class DynamicFieldsLeaveLogModelSerializer(serializers.ModelSerializer):
     department = serializers.CharField(source='emp_id.department', read_only=True)
     days = serializers.SerializerMethodField(method_name='get_days')
 
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+    days = serializers.SerializerMethodField(method_name='get_days')
+
     class Meta:
         model = EmpLeaveApplied
         fields = (
             'emp_id', 'name', 'department', 'leave_id', 'start_date', 'end_date', 'days', 'reason', 'status')
+
+    def get_days(self, obj):
+        date_format = "%Y-%m-%d"
+        b = datetime.strptime(str(obj.end_date), date_format)
+        a = datetime.strptime(str(obj.start_date), date_format)
+        c = b - a
+        return c.days
 
 class EmpLogSerializer(serializers.ModelSerializer):
     days = serializers.SerializerMethodField(method_name='get_days')
