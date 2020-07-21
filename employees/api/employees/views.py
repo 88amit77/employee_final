@@ -164,11 +164,30 @@ class CustomLeaveLogsPagination(PageNumberPagination):
                               "start_date": 'Start Date',
                               'end_date': 'End Date',
                               "days": 'Days',
+                              'reason':'Reason',
                               'status': 'Status',
 
                            },
+                'searchable': [
+                             'emp_id',
+                              'name',
+                              "department",
+                              "leave_id",
+                              "start_date",
+                              "end_date",
+                              'status',
+                    'reason',
+
+                ],
                 'sortable': [
-                              'emp_id',
+                    'emp_id',
+                    'name',
+                    "department",
+                    "leave_id",
+                    "start_date",
+                    "end_date",
+                    'status',
+                    'reason',
                            ],
                'date_filters': [
                    'start_date'
@@ -699,6 +718,7 @@ class SearchLeavePolicyLogsViewSet(viewsets.ModelViewSet):
                        'end_date',
 
                        'status',
+                     'reason',
 
                      ]
 
@@ -709,6 +729,7 @@ class SearchLeavePolicyLogsViewSet(viewsets.ModelViewSet):
                        'end_date',
 
                        'status',
+                       'reason',
 
                         ]
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
