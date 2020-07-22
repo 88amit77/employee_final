@@ -53,6 +53,7 @@ ForEmployeeIdSearchSerializer,
 LastAttendaceLogSerializer,
 ForEmployeeIdSearchForleavePolicySerializer,
 leavepolicyAssignedLeaveidSerializer,
+EmployeeOrderingSerializer,
 
 )
 
@@ -93,6 +94,16 @@ class CustomPagination(PageNumberPagination):
                            },
                 'sortable': [
                               'emp_id',
+                             'name',
+                             'permanent_address_line1',
+                             "designation",
+                             "gender",
+                             "official_email",
+                             "date_of_joining",
+                             'department',
+                             "official_number",
+                             'dob',
+                             "work_location_add",
                            ],
                 'date_filters': [
                    'date_of_joining', 'dob'
@@ -468,8 +479,25 @@ class CustomPayrollPagination(PageNumberPagination):
             },
             'results': data
         })
+###for  ordering of employee views
+class EmployeeOrderingViewSet(viewsets.ModelViewSet):
 
+    ordering_fields = [ 'emp_id',
+                             'name',
+                             'permanent_address_line1',
+                             "designation",
+                             "gender",
+                             "official_email",
+                             "date_of_joining",
+                             'department',
+                             "official_number",
+                             'dob',
+                             "work_location_add",]
 
+    filter_backends = (filters.OrderingFilter,)
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeOrderingSerializer
+    pagination_class = CustomPagination
 
 class PersonalViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
@@ -881,9 +909,12 @@ class AttendenceRulesViewSet(viewsets.ModelViewSet):
     # pagination_class = CustomAttendanceLogPagination
 
 class EnterAttendanceViewSet(viewsets.ModelViewSet):
+    search_fields = ['=emp_id__emp_id','=work_date']
+
+    filter_backends = (filters.SearchFilter,)
     queryset = Attendance.objects.all()
     serializer_class = EnterAttendanceSerializer
-    pagination_class = CustomAttendanceLogPagination
+    # pagination_class = CustomAttendanceLogPagination
 
 
 class ListAssignedAttendanceRuleView(viewsets.ViewSet):

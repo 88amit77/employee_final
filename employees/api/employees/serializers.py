@@ -34,6 +34,21 @@ class EducationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class EmployeeOrderingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = ('emp_id',
+                             'name',
+                             'permanent_address_line1',
+                             "designation",
+                             "gender",
+                             "official_email",
+                             "date_of_joining",
+                             'department',
+                             "official_number",
+                             'dob',
+                             "work_location_add",)
+
 class EmployeeSerializer(serializers.Serializer):
 
     emp_id = serializers.IntegerField(read_only=True)
@@ -599,7 +614,7 @@ class SearchBydateAttendanceLogSerializer(serializers.ModelSerializer):
 class EnterAttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
-        fields = ('emp_id', 'login', "logout")
+        fields = ('emp_id', 'login', "logout", 'login_image', 'logout_image', 'work_date')
 
 
 class ListAttendanceLogSerializer(serializers.ModelSerializer):

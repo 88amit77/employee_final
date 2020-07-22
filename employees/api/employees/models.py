@@ -115,7 +115,7 @@ class LeaveRules(models.Model):
 class EmpLeaveId(models.Model):
     emp_leave_id = models.AutoField(primary_key=True)
     emp_id = models.OneToOneField(Employee,on_delete=models.CASCADE, default=None, unique=False)
-    leave_id = models.ManyToManyField(LeaveRules)
+    leave_id = models.ManyToManyField(LeaveRules, blank=True, null=True)
 
 
 class EmpLeaveApplied(models.Model):

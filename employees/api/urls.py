@@ -35,6 +35,8 @@ router.register('employee/education', views.EducationViewSet, basename="educatio
 router.register('employee/family', views.FamilyMembersViewSet, basename="family")
 router.register('employee/doc', views.DocumentsViewSet, basename="doc")
 router.register('employee/employee_search', views.EmployeeSearchViewSet, basename="employee_search")
+router.register('employee/employee_ordering', views.EmployeeOrderingViewSet, basename="employee_ordering")
+
 router.register('employee/employee_column', views.EmployeeColumnViewSet, basename="employee_column")
 # router.register('leave_rule', views.LeaveRulesViewSet, basename="leave_rule")
 ##leave
