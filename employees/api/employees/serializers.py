@@ -562,11 +562,17 @@ class LastAttendaceLogSerializer(serializers.ModelSerializer):
         fields = ('emp_id','login','logout','work_date', 'work_duration')
 
     def get_time(self, obj):
-        date_format = "%Y-%m-%d"
-        b = datetime.strptime(str(obj.end_date), date_format)
-        a = datetime.strptime(str(obj.start_date), date_format)
+        # date_format = "%H-%M-%S"
+        # b = datetime.strptime(str(obj.logout), date_format)
+        # a = datetime.strptime(str(obj.login), date_format)
+        b = datetime.strptime(str(obj.logout), '%H:%M:%S')
+        a = datetime.strptime(str(obj.login), '%H:%M:%S')
         c = b - a
-        return c.days
+
+        d = (c/(60**2))
+
+        return d
+
 
 class SearchBydateAttendanceLogSerializer(serializers.ModelSerializer):
     attendances = SearchByDateAttendaceSerializer(many=True)
