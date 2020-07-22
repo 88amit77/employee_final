@@ -485,7 +485,7 @@ class ListleaveLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmpLeaveApplied
         fields = (
-        'emp_id','name', 'department','leave_id', 'start_date', 'end_date', 'days', 'reason','status')
+        'emp_id','name', 'department','leave_id', 'start_date', 'end_date', 'days', 'reason','status', 'action_by')
 
     def get_days(self, obj):
         date_format = "%Y-%m-%d"
