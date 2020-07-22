@@ -862,6 +862,15 @@ class ForEmployeeIdSearchForleavePolicyViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = ForEmployeeIdSearchForleavePolicySerializer
     pagination_class = CustomLeaveRulesPagination
+#for leave apply assign page
+class ApplyLeavePageViewSet(viewsets.ModelViewSet):
+
+    search_fields = ['emp_id__emp_id',
+                     ]
+
+    filter_backends = (filters.SearchFilter, )
+    queryset = EmpLeaveId.objects.all()
+    serializer_class = leavepolicyAssignedLeaveidSerializer
 #for leave policy assign page
 class LeavePolicyLeaveidViewSet(viewsets.ModelViewSet):
 
