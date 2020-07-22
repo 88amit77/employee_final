@@ -52,6 +52,7 @@ ListleaveLogSerializer,
 DynamicFieldsLeaveLogModelSerializer,
 DynamicFieldsAttendenceModelSerializer,
 ForEmployeeIdSearchSerializer,
+LastAttendaceLogSerializer,
 
 )
 
@@ -258,7 +259,50 @@ class CustomAttendanceLogPagination(PageNumberPagination):
             'results': data
         })
 
+class LastCustomAttendanceLogPagination(PageNumberPagination):
+    page = DEFAULT_PAGE
+    page_size = 20
+    page_size_query_param = 'page_size'
 
+    def get_paginated_response(self, data):
+        return Response({
+            'links': {
+                'next': self.get_next_link(),
+                'previous': self.get_previous_link()
+            },
+            'total': self.page.paginator.count,
+            'page': int(self.request.GET.get('page', DEFAULT_PAGE)),
+            'page_size': int(self.request.GET.get('page_size', self.page_size)),
+            'UI_data': {
+                'sticky_headers': [
+                               'emp_id',
+                               'name',
+                                         ],
+                'header': {
+                              'emp_id': 'Employee Id',
+                              'work_date': 'Work Date',
+                              "login": 'In Time',
+                              "logout": 'Out Time',
+
+
+                           },
+                'searchable': [
+                             'emp_id',
+
+                              'work_date',
+                              "login",
+                              "logout",
+                ],
+                'sortable': [
+                              'emp_id',
+
+                              'work_date',
+                              "login",
+                              "logout",
+                           ],
+            },
+            'results': data
+        })
 class CustomAttendanceRulePagination(PageNumberPagination):
     page = DEFAULT_PAGE
     page_size = 20
@@ -887,7 +931,14 @@ class ListAttendanceLogViewSet(viewsets.ViewSet):
             paginator = CustomAttendanceLogPagination()
             result_page = paginator.paginate_queryset(queryset, request)
             return paginator.get_paginated_response(result_page)
-
+####Employees wise attendance log last page
+class EmployeeWiseAttendanceLogViewSet(viewsets.ModelViewSet):
+    search_fields = ['emp_id__emp_id','login','logout','work_date']
+    ordering_fields = ['emp_id__emp_id','login','logout','work_date']
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    queryset = Attendance.objects.all()
+    serializer_class = LastAttendaceLogSerializer
+    pagination_class = LastCustomAttendanceLogPagination
 
 #payroll page
 class CreateMonthlyEmpSalaryViewSet(viewsets.ModelViewSet):

@@ -554,6 +554,11 @@ class SearchByDateAttendaceSerializer(serializers.ModelSerializer):
         model = Attendance
         fields = ('emp_id','name','department','work_location_add','attendance_id','login','logout','annomaly','work_date')
 
+###for last attendance page emp wise data
+class LastAttendaceLogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attendance
+        fields = ('emp_id''login','logout','work_date')
 
 class SearchBydateAttendanceLogSerializer(serializers.ModelSerializer):
     attendances = SearchByDateAttendaceSerializer(many=True)
