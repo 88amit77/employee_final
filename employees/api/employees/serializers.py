@@ -310,15 +310,15 @@ class LeaveRulesSerializer(serializers.ModelSerializer):
 #         fields = ('emp_id', 'name', 'official_email', 'leave')
 class Employee1Serializer(serializers.ModelSerializer):
     class Meta:
-        model = EmpLeaveId
-        fields = '__all__'
+        model = Employee
+        fields = ('emp_id', 'name', 'department', 'designation', 'date_of_joining','employee_type', 'work_location_add')
 
 class ListAssignedRuleSerializer(serializers.ModelSerializer):
-    empleaves = Employee1Serializer(many=True)
+    emp_id = Employee1Serializer(required=True)
 
     class Meta:
-        model = Employee
-        fields = ('emp_id', 'name', 'department', 'designation', 'date_of_joining','employee_type', 'empleaves', 'work_location_add')
+        model = EmpLeaveId
+        fields = ('emp_id','leave_id','emp_leave_id')
 
 
 class ListEmployee1Serializer(serializers.Serializer):
@@ -341,13 +341,64 @@ class EmpLeaveAppliedNewSerializer(serializers.ModelSerializer):
         model = EmpLeaveApplied
         fields = '__all__'
 
-# class Employee1Serializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = EmpLeaveId
-#         fields = '__all__'
+#####assigned rules
+class leavepolicyAssignedLeaveidSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    designation = serializers.CharField(source='emp_id.designation', read_only=True)
+    date_of_joining = serializers.CharField(source='emp_id.date_of_joining', read_only=True)
+    work_location_add = serializers.CharField(source='emp_id.work_location_add', read_only=True)
+    employee_type = serializers.CharField(source='emp_id.employee_type', read_only=True)
 
+    class Meta:
+        model = EmpLeaveId
+        fields = ("emp_leave_id", "emp_id", 'name','designation','date_of_joining', 'work_location_add','employee_type','leave_id')
+
+##assigned attendance rule leavePolicy assign page
+class ForEmployeeIdSearchForleavePolicySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = ('emp_id','name', 'designation', 'date_of_joining','employee_type','work_location_add')
 
 #for logs page
+
+class DynamicFieldsLeaveLogModelSerializer(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        # Don't pass the 'fields' arg up to the superclass
+        request = kwargs.get('context', {}).get('request')
+        str_fields = request.GET.get('fields', '') if request else None
+        fields = str_fields.split(',') if str_fields else None
+
+        # Instantiate the superclass normally
+        super(DynamicFieldsLeaveLogModelSerializer, self).__init__(*args, **kwargs)
+
+        if fields is not None:
+            # Drop any fields that are not specified in the `fields` argument.
+            allowed = set(fields)
+            existing = set(self.fields)
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
+
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+    days = serializers.SerializerMethodField(method_name='get_days')
+
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+    days = serializers.SerializerMethodField(method_name='get_days')
+
+    class Meta:
+        model = EmpLeaveApplied
+        fields = (
+            'emp_id', 'name', 'department', 'leave_id', 'start_date', 'end_date', 'days', 'reason', 'status')
+
+    def get_days(self, obj):
+        date_format = "%Y-%m-%d"
+        b = datetime.strptime(str(obj.end_date), date_format)
+        a = datetime.strptime(str(obj.start_date), date_format)
+        c = b - a
+        return c.days
+
 class EmpLogSerializer(serializers.ModelSerializer):
     days = serializers.SerializerMethodField(method_name='get_days')
 
@@ -410,6 +461,23 @@ class EmpLog2Serializer(serializers.ModelSerializer):
         c = b - a
         return c.days
 
+class ListleaveLogSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+    days = serializers.SerializerMethodField(method_name='get_days')
+
+
+    class Meta:
+        model = EmpLeaveApplied
+        fields = (
+        'emp_id','name', 'department','leave_id', 'start_date', 'end_date', 'days', 'reason','status')
+
+    def get_days(self, obj):
+        date_format = "%Y-%m-%d"
+        b = datetime.strptime(str(obj.end_date), date_format)
+        a = datetime.strptime(str(obj.start_date), date_format)
+        c = b - a
+        return c.days
 class Emp1Serializer(serializers.Serializer):
     emp_id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=30)
@@ -420,24 +488,66 @@ class AttendaceSerializer(serializers.ModelSerializer):
         model = Attendance
         fields = '__all__'
 
+##assigned attendance rule
+class ForEmployeeIdSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = ('emp_id','name', 'department','employee_type')
+
 class AttendaceLeaveidSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+    employee_type = serializers.CharField(source='emp_id.employee_type', read_only=True)
 
     class Meta:
         model = AttendenceLeaveid
-        fields = '__all__'
+        fields = ("attendance_leave_id", "emp_id", 'name', 'department','employee_type','ar_id')
 
 class AttendaceRulesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Attendence_rules
         fields = '__all__'
-
-class ListAssignedAttendanceRuleSerializer(serializers.ModelSerializer):
-    attenadance_leaveids = AttendaceLeaveidSerializer(many=True)
-
+class EmployeeListAttendance(serializers.ModelSerializer):
     class Meta:
         model = Employee
-        fields = ('emp_id', 'name', 'department', 'employee_type', 'attenadance_leaveids')
+        fields = ('emp_id', 'name', 'department', 'employee_type')
+
+class ListAssignedAttendanceRuleSerializer(serializers.ModelSerializer):
+    emp_id = EmployeeListAttendance(required=True)
+
+    class Meta:
+        model = AttendenceLeaveid
+        fields = ('attendance_leave_id', 'ar_id','emp_id')
+
+##attendance column filter
+class DynamicFieldsAttendenceModelSerializer(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        # Don't pass the 'fields' arg up to the superclass
+        request = kwargs.get('context', {}).get('request')
+        str_fields = request.GET.get('fields', '') if request else None
+        fields = str_fields.split(',') if str_fields else None
+
+        # Instantiate the superclass normally
+        super(DynamicFieldsAttendenceModelSerializer, self).__init__(*args, **kwargs)
+
+        if fields is not None:
+            # Drop any fields that are not specified in the `fields` argument.
+            allowed = set(fields)
+            existing = set(self.fields)
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
+
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+    work_location_add = serializers.CharField(source='emp_id.work_location_add', read_only=True)
+
+    class Meta:
+        model = Attendance
+        fields = ('emp_id', 'name', 'department', 'work_location_add', 'attendance_id', 'login', 'logout', 'annomaly',
+                  'work_date')
+
 
 #for attendance search
 class SearchAttendanceLogSerializer(serializers.Serializer):
@@ -450,11 +560,36 @@ class SearchAttendanceLogSerializer(serializers.Serializer):
 
 #for SearchBydate attendance search
 
+
 class SearchByDateAttendaceSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+    work_location_add = serializers.CharField(source='emp_id.work_location_add', read_only=True)
 
     class Meta:
         model = Attendance
-        fields = ('attendance_id','login','logout','annomaly','work_date')
+        fields = ('emp_id','name','department','work_location_add','attendance_id','login','logout','annomaly','work_date')
+
+###for last attendance page emp wise data
+class LastAttendaceLogSerializer(serializers.ModelSerializer):
+    work_duration = serializers.SerializerMethodField(method_name='get_time')
+    class Meta:
+        model = Attendance
+        fields = ('emp_id','login','logout','work_date', 'work_duration')
+
+    def get_time(self, obj):
+        # date_format = "%H-%M-%S"
+        # b = datetime.strptime(str(obj.logout), date_format)
+        # a = datetime.strptime(str(obj.login), date_format)
+        b = datetime.strptime(str(obj.logout), '%H:%M:%S')
+        a = datetime.strptime(str(obj.login), '%H:%M:%S')
+        c = b - a
+
+        d = (c/(60**2))
+
+        return d
+
+
 class SearchBydateAttendanceLogSerializer(serializers.ModelSerializer):
     attendances = SearchByDateAttendaceSerializer(many=True)
     class Meta:
@@ -466,29 +601,7 @@ class EnterAttendanceSerializer(serializers.ModelSerializer):
         model = Attendance
         fields = ('emp_id', 'login', "logout")
 
-# class EnterAttendanceSerializer(serializers.Serializer):
-#
-#     emp_id = serializers.IntegerField(read_only=True)
-#     attendances = AttendaceSerializer(many=True)
-#
-#     def create(self, validated_data):
-#
-#         attendances_data = validated_data.pop('attendances')
-#         employee = Employee.objects.create(**validated_data)
-#         for attendance_data in attendances_data:
-#             Attendance.objects.create(emp_id=employee, **attendance_data)
-#         return employee
-#     def update(self, instance, validated_data):
-#         attendances_data = validated_data.pop('attendances')
-#         emp_id = (instance.emp_id).all()
-#         emp_id = list(emp_id)
-#         instance.save()
-#         for attendancess_data in attendances_data:
-#             emp = emp_id.pop(0)
-#             emp.login = attendancess_data.get('login', emp.login)
-#             emp.logout = attendancess_data.get('logout', emp.logout)
-#             emp.save()
-#         return instance
+
 class ListAttendanceLogSerializer(serializers.ModelSerializer):
 
     attendances = AttendaceSerializer(many=True)
@@ -537,9 +650,17 @@ class DynamicFieldsMonthlyEmpSalaryModelSerializer(serializers.ModelSerializer):
             for field_name in existing - allowed:
                 self.fields.pop(field_name)
 
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+
     class Meta:
         model = MonthlyEmpSalary
-        fields = '__all__'
+        fields = ('emp_id', 'name', 'department',
+                  'month', 'lop', 'no_of_days', 'ctc', 'basic', 'hra', 'conveyance_allowances', 'medical_allowance',
+                  'cca_allowance', 'pf_employer', 'pf_employee', 'pt', 'esi_employer', 'esi_employee',
+                  'net_employee_payable',
+                  'due_date', 'special_allowances', 'over_time', 'deductions', 'reimbursements'
+                  )
 
 class CreateMonthlyEmpSalarySerializer(serializers.ModelSerializer):
 
@@ -552,19 +673,34 @@ class ListMonthlyEmpSalarySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('monthlyempsalary', 'emp_id', 'name')
+        fields = ('monthlyempsalary', 'emp_id', 'name','department')
 
-class EmployeePayrollSerializer(serializers.ModelSerializer):
+
+class PayrollSearchSerializer(serializers.ModelSerializer):
+
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+
     class Meta:
-        model = Employee
-        fields = ('emp_id', 'name')
+        model = MonthlyEmpSalary
+        fields = ('emp_id','name','department',
+                  'month','lop','no_of_days','ctc','basic','hra','conveyance_allowances','medical_allowance',
+                  'cca_allowance','pf_employer','pf_employee','pt','esi_employer','esi_employee','net_employee_payable',
+                  'due_date','special_allowances','over_time','deductions','reimbursements'
+                  )
 
-class SearchMonthlyEmpSalarySerializer(serializers.Serializer):
+class PayrollRunSerializer(serializers.ModelSerializer):
 
-    emp_id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(max_length=30)
-    monthlyempsalary = CreateMonthlyEmpSalarySerializer(many=True)
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
 
+    class Meta:
+        model = MonthlyEmpSalary
+        fields = ('emp_id','name','department',
+                  'month','lop','no_of_days','ctc','basic','hra','conveyance_allowances','medical_allowance',
+                  'cca_allowance','pf_employer','pf_employee','pt','esi_employer','esi_employee','net_employee_payable',
+                  'due_date','special_allowances','over_time','deductions','reimbursements'
+                  )
 
 #salary
 class CreateEmpSalarySerializer(serializers.ModelSerializer):
