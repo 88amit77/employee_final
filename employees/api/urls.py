@@ -93,13 +93,14 @@ urlpatterns = [
     path("employee/employees_docs/", schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('employee/attendance_search/', views.SearchAttendanceLogAPIView.as_view()),
     url('employee/SearchByDateBetweenAttendanceLog', views.SearchByDateBetweenAttendanceLog.as_view()),
+    path('employee/process', include('api.process.urls')),
 
 ]
 
 urlpatterns += staticfiles_urlpatterns()
-urlpatterns += [
-   url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-   url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-   url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+# urlpatterns += [
+#    url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+#    url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+#    url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
-]
+# ]
