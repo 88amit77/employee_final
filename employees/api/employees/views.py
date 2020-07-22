@@ -910,7 +910,7 @@ class ForEmployeeIdSearchViewSet(viewsets.ModelViewSet):
     search_fields = ['emp_id','name', 'department','employee_type']
     ordering_fields = ['emp_id','name', 'department','employee_type']
 
-    filter_backends = (filters.SearchFilter,)
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     queryset = Employee.objects.all()
     serializer_class = ForEmployeeIdSearchSerializer
     pagination_class = CustomAttendanceRulePagination
