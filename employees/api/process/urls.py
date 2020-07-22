@@ -14,5 +14,10 @@ router.register(r'repeat_task', views.RepeatTaskViewset, basename='repeat')
 router.register(r'regular_task', views.RegularTaskViewset, basename='regulartask')
 router.register(r'department_list', views.DeptViewset, basename='dept')
 
+router.register(r'flows', views.FlowViewset, basename='flow')
+router.register(r'flow_main', views.FlowMainChecklistViewset, basename='mainflow')
+router.register(r'flow_sub', views.FlowSubpointChecklistViewset, basename='subflow')
+router.register(r'time', views.TimeViewset, basename='timeflow')
+
 urlpatterns = router.urls
 

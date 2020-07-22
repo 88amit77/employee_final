@@ -324,3 +324,36 @@ class DeptViewset(CustomModelViewSet):
 # 			pass
 
 # 	dropdowns = {'HR': test1, 'Software': test2, 'Managerial': test3, 'Warehouse': test4}
+
+
+class FlowViewset(CustomModelViewSet):
+	lookup_field = 'flow_id'
+	queryset = Flow.objects.all().order_by('-flow_id')
+	serializer_class = FlowSerializer
+	pagination_class = CustomPageNumberPagination
+	filter_backends = (dfilters.DjangoFilterBackend,)
+	filterset_fields = ('regular_task', 'percentage_complete',)
+
+class FlowMainChecklistViewset(CustomModelViewSet):
+	lookup_field = 'flow_main_id'
+	queryset = FlowMainChecklist.objects.all().order_by('-flow_main_id')
+	serializer_class = FlowMainChecklistSerializer
+	pagination_class = CustomPageNumberPagination
+	filter_backends = (dfilters.DjangoFilterBackend,)
+	filterset_fields = ('flow', 'mprocess',)
+
+class FlowSubpointChecklistViewset(CustomModelViewSet):
+	lookup_field = 'flow_subpoint_id'
+	queryset = FlowSubpointChecklist.objects.all().order_by('-flow_subpoint_id')
+	serializer_class = FlowSubpointChecklistSerializer
+	pagination_class = CustomPageNumberPagination
+	filter_backends = (dfilters.DjangoFilterBackend,)
+	filterset_fields = ('flow_main', 'flowpt', 'subpoint',)
+
+class TimeViewset(CustomModelViewSet):
+	lookup_field = 'flow_time_id'
+	queryset = Time.objects.all().order_by('-flow_time_id')
+	serializer_class = TimeSerializer
+	pagination_class = CustomPageNumberPagination
+	filter_backends =  (dfilters.DjangoFilterBackend,)
+	filterset_fields = ('tflow', 'mainpoints', 'subpoints',)
