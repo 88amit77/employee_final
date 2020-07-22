@@ -850,7 +850,7 @@ class SearchLeavePolicyLogsViewSet(viewsets.ModelViewSet):
 
                         ]
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
-    queryset = EmpLeaveApplied.objects.all()
+    queryset = EmpLeaveApplied.objects.all().order_by('-start_date')
     serializer_class = ListleaveLogSerializer
     pagination_class = CustomLeaveLogsPagination
 
@@ -923,7 +923,7 @@ class EnterAttendanceViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     queryset = Attendance.objects.all()
     serializer_class = EnterAttendanceSerializer
-    # pagination_class = CustomAttendanceLogPagination
+
 
 
 class ListAssignedAttendanceRuleView(viewsets.ViewSet):

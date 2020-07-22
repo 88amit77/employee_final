@@ -614,7 +614,7 @@ class SearchBydateAttendanceLogSerializer(serializers.ModelSerializer):
 class EnterAttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
-        fields = ('emp_id', 'login', "logout", 'login_image', 'logout_image', 'work_date')
+        fields = ("attendance_id", 'emp_id', 'login', "logout", 'login_image', 'logout_image', 'work_date')
 
 
 class ListAttendanceLogSerializer(serializers.ModelSerializer):
