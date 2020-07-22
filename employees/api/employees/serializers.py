@@ -342,6 +342,17 @@ class EmpLeaveAppliedNewSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 #####assigned rules
+class leavepolicyAssignedLeaveidSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    designation = serializers.CharField(source='emp_id.designation', read_only=True)
+    date_of_joining = serializers.CharField(source='emp_id.date_of_joining', read_only=True)
+    work_location_add = serializers.CharField(source='emp_id.work_location_add', read_only=True)
+    employee_type = serializers.CharField(source='emp_id.employee_type', read_only=True)
+
+    class Meta:
+        model = EmpLeaveId
+        fields = ("emp_leave_id", "emp_id", 'name','designation','date_of_joining', 'work_location_add','employee_type','leave_id')
+
 ##assigned attendance rule leavePolicy assign page
 class ForEmployeeIdSearchForleavePolicySerializer(serializers.ModelSerializer):
     class Meta:

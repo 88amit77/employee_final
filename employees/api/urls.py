@@ -53,6 +53,7 @@ router.register('employee/list_assigned_rules', views.ListAssignedRuleView, base
 
 router.register('employee/search_leave_policy_logs', views.SearchLeavePolicyLogsViewSet, basename="search_leave_policy_logs")
 router.register('employee/emp_id_search_leave_policy_assign', views.ForEmployeeIdSearchForleavePolicyViewSet, basename="emp_id_search_leave_policy_assign")
+router.register('employee/assign_leave_policy', views.LeavePolicyLeaveidViewSet, basename="assign_leave_policy")
 
 
 router.register('employee/employee_log1', views.EmployeeLoggView, basename="employee_log")
