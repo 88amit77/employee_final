@@ -935,10 +935,10 @@ class ListAttendanceLogViewSet(viewsets.ViewSet):
             return paginator.get_paginated_response(result_page)
 ####Employees wise attendance log last page
 class EmployeeWiseAttendanceLogViewSet(viewsets.ModelViewSet):
-    search_fields = ['emp_id__emp_id','login','logout','work_date']
+    search_fields = ['emp_id__emp_id']
     ordering_fields = ['emp_id__emp_id','login','logout','work_date']
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
-    queryset = Attendance.objects.all()
+    queryset = Attendance.objects.all().order_by('-work_date')
     serializer_class = LastAttendaceLogSerializer
     pagination_class = LastCustomAttendanceLogPagination
 
