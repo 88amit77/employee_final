@@ -341,7 +341,12 @@ class EmpLeaveAppliedNewSerializer(serializers.ModelSerializer):
         model = EmpLeaveApplied
         fields = '__all__'
 
-
+#####assigned rules
+##assigned attendance rule leavePolicy assign page
+class ForEmployeeIdSearchForleavePolicySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = ('emp_id','name', 'designation', 'date_of_joining','employee_type','work_location_add')
 
 #for logs page
 

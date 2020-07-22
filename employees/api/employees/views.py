@@ -53,6 +53,7 @@ DynamicFieldsLeaveLogModelSerializer,
 DynamicFieldsAttendenceModelSerializer,
 ForEmployeeIdSearchSerializer,
 LastAttendaceLogSerializer,
+ForEmployeeIdSearchForleavePolicySerializer,
 
 )
 
@@ -127,12 +128,27 @@ class CustomLeaveRulesPagination(PageNumberPagination):
                               "designation": 'Designation',
                               'date_of_joining': 'Date Of Joining',
                               "employee_type": 'Employee Type',
-                              'work_location_add': 'Work Location Add',
+                              'work_location_add': 'Work Location',
                               'leave_id': 'Leave ID',
 
                            },
+                'searchable': [
+                             'emp_id',
+                              'name',
+                              "designation",
+                              'date_of_joining',
+                              "employee_type",
+                              'work_location_add',
+
+
+                ],
                 'sortable': [
-                              'emp_id',
+                     'emp_id',
+                              'name',
+                              "designation",
+                              'date_of_joining',
+                              "employee_type",
+                              'work_location_add',
                            ],
                'date_filters': [
                    'date_of_joining'
@@ -811,7 +827,14 @@ class SearchLeavePolicyLogsViewSet(viewsets.ModelViewSet):
     serializer_class = ListleaveLogSerializer
     pagination_class = CustomLeaveLogsPagination
 
+class ForEmployeeIdSearchForleavePolicyViewSet(viewsets.ModelViewSet):
+    search_fields = ['emp_id','name', 'designation', 'date_of_joining','employee_type','work_location_add']
+    ordering_fields = ['emp_id','name', 'designation', 'date_of_joining','employee_type','work_location_add']
 
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    queryset = Employee.objects.all()
+    serializer_class = ForEmployeeIdSearchForleavePolicySerializer
+    pagination_class = CustomLeaveRulesPagination
 #attendance
 
 class AttendanceColumnViewSet(viewsets.ModelViewSet):
