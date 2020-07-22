@@ -838,9 +838,9 @@ class ForEmployeeIdSearchForleavePolicyViewSet(viewsets.ModelViewSet):
 class LeavePolicyLeaveidViewSet(viewsets.ModelViewSet):
 
     search_fields = ['emp_id__emp_id', 'emp_id__name', 'emp_id__designation','emp_id__date_of_joining','emp_id__work_location_add', 'emp_id__employee_type',
-                     'leave_id']
+                     ]
     ordering_fields = ['emp_id__emp_id', 'emp_id__name', 'emp_id__designation','emp_id__date_of_joining','emp_id__work_location_add', 'emp_id__employee_type',
-                     'leave_id']
+                     ]
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     queryset = EmpLeaveId.objects.all()
     serializer_class = leavepolicyAssignedLeaveidSerializer
