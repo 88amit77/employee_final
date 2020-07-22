@@ -556,9 +556,17 @@ class SearchByDateAttendaceSerializer(serializers.ModelSerializer):
 
 ###for last attendance page emp wise data
 class LastAttendaceLogSerializer(serializers.ModelSerializer):
+    work_duration = serializers.SerializerMethodField(method_name='get_time')
     class Meta:
         model = Attendance
-        fields = ('emp_id','login','logout','work_date')
+        fields = ('emp_id','login','logout','work_date', 'work_duration')
+
+    def get_time(self, obj):
+        date_format = "%Y-%m-%d"
+        b = datetime.strptime(str(obj.end_date), date_format)
+        a = datetime.strptime(str(obj.start_date), date_format)
+        c = b - a
+        return c.days
 
 class SearchBydateAttendanceLogSerializer(serializers.ModelSerializer):
     attendances = SearchByDateAttendaceSerializer(many=True)

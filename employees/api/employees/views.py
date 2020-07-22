@@ -283,6 +283,7 @@ class LastCustomAttendanceLogPagination(PageNumberPagination):
                               'work_date': 'Work Date',
                               "login": 'In Time',
                               "logout": 'Out Time',
+                              "work_duration": "Work Duration",
 
 
                            },
@@ -327,7 +328,7 @@ class CustomAttendanceRulePagination(PageNumberPagination):
                               'name': 'Employee Name',
                               "department": 'Department',
                               "employee_type": 'Type',
-                               'attenadance_leaveids':'Attenadance Leave Data',
+                               'attenadance_leaveids':'Attenadance Leave ',
 
  },
                 'searchable': [
@@ -335,14 +336,14 @@ class CustomAttendanceRulePagination(PageNumberPagination):
                               'name',
                               "department",
                               "employee_type",
-                               'attenadance_leaveids',
+                               # 'attenadance_leaveids',
                 ],
                 'sortable': [
                     'emp_id',
                               'name',
                               "department",
                               "employee_type",
-                               'attenadance_leaveids',
+                               # 'attenadance_leaveids',
                 ],
 
 
@@ -906,7 +907,8 @@ class SearchByDateBetweenAttendanceLog(generics.ListAPIView):
         queryset = queryset.filter(**filter)
         return queryset
 class ForEmployeeIdSearchViewSet(viewsets.ModelViewSet):
-    search_fields = ['emp_id',]
+    search_fields = ['emp_id','name', 'department','employee_type']
+    ordering_fields = ['emp_id','name', 'department','employee_type']
 
     filter_backends = (filters.SearchFilter,)
     queryset = Employee.objects.all()
