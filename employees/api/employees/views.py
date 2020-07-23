@@ -881,6 +881,33 @@ class LeavePolicyLeaveidViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     queryset = EmpLeaveId.objects.all()
     serializer_class = leavepolicyAssignedLeaveidSerializer
+
+###for leave calculation
+class CalculLeavePolicyLogsViewSet(viewsets.ModelViewSet):
+    search_fields = ['=emp_id__emp_id',
+
+                    ]
+    filter_backends = (filters.SearchFilter, )
+    queryset = EmpLeaveApplied.objects.all()
+    serializer_class = ListleaveLogSerializer
+
+    def get_queryset(self):
+        filter = {}
+        """
+        Optionally restricts the returned data to a given date,
+        by filtering against a `start_date` query parameter in the URL(?start_date=01-01-2021).
+        """
+        queryset = EmpLeaveApplied.objects.all()
+        start_date = self.request.query_params.get('start_date', None)
+        end_date = self.request.query_params.get('end_date', None)
+        if start_date is not None:
+            filter['start_date__gte'] = parse(start_date)
+        if end_date is not None:
+            filter['end_date__lte'] = parse(end_date)
+
+        queryset = queryset.filter(**filter)
+        return queryset
+    # pagination_class = CustomLeaveLogsPagination
 #attendance
 
 class AttendanceColumnViewSet(viewsets.ModelViewSet):
@@ -945,7 +972,7 @@ class SearchAttendanceLogAPIView(viewsets.generics.ListCreateAPIView):
     search_fields = ['emp_id__emp_id','emp_id__name','emp_id__department','emp_id__work_location_add','attendance_id','login','logout','annomaly','work_date']
     ordering_fields = ['emp_id__emp_id','emp_id__name','emp_id__department','emp_id__work_location_add','emp_id__attendance_id','login','logout','annomaly','work_date']
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
-    queryset = Attendance.objects.all()
+    queryset = Attendance.objects.all().order_by('-work_date')
     serializer_class = SearchByDateAttendaceSerializer
     pagination_class = CustomAttendanceLogPagination
 

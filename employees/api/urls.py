@@ -57,6 +57,7 @@ router.register('employee/search_leave_policy_logs', views.SearchLeavePolicyLogs
 router.register('employee/emp_id_search_leave_policy_assign', views.ForEmployeeIdSearchForleavePolicyViewSet, basename="emp_id_search_leave_policy_assign")
 router.register('employee/assign_leave_policy', views.LeavePolicyLeaveidViewSet, basename="assign_leave_policy")
 router.register('employee/apply_leave_emp', views.ApplyLeavePageViewSet, basename="apply_leave_emp")
+router.register('employee/calculation_leave_policy_logs', views.CalculLeavePolicyLogsViewSet, basename="calculation_leave_policy_logs")
 
 
 
