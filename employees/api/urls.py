@@ -35,6 +35,8 @@ router.register('employee/education', views.EducationViewSet, basename="educatio
 router.register('employee/family', views.FamilyMembersViewSet, basename="family")
 router.register('employee/doc', views.DocumentsViewSet, basename="doc")
 router.register('employee/employee_search', views.EmployeeSearchViewSet, basename="employee_search")
+router.register('employee/employee_ordering', views.EmployeeOrderingViewSet, basename="employee_ordering")
+
 router.register('employee/employee_column', views.EmployeeColumnViewSet, basename="employee_column")
 # router.register('leave_rule', views.LeaveRulesViewSet, basename="leave_rule")
 ##leave
@@ -54,6 +56,9 @@ router.register('employee/list_assigned_rules', views.ListAssignedRuleView, base
 router.register('employee/search_leave_policy_logs', views.SearchLeavePolicyLogsViewSet, basename="search_leave_policy_logs")
 router.register('employee/emp_id_search_leave_policy_assign', views.ForEmployeeIdSearchForleavePolicyViewSet, basename="emp_id_search_leave_policy_assign")
 router.register('employee/assign_leave_policy', views.LeavePolicyLeaveidViewSet, basename="assign_leave_policy")
+router.register('employee/apply_leave_emp', views.ApplyLeavePageViewSet, basename="apply_leave_emp")
+
+
 
 
 router.register('employee/employee_log1', views.EmployeeLoggView, basename="employee_log")

@@ -34,6 +34,21 @@ class EducationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class EmployeeOrderingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = ('emp_id',
+                             'name',
+                             'permanent_address_line1',
+                             "designation",
+                             "gender",
+                             "official_email",
+                             "date_of_joining",
+                             'department',
+                             "official_number",
+                             'dob',
+                             "work_location_add",)
+
 class EmployeeSerializer(serializers.Serializer):
 
     emp_id = serializers.IntegerField(read_only=True)
@@ -469,8 +484,8 @@ class ListleaveLogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EmpLeaveApplied
-        fields = (
-        'emp_id','name', 'department','leave_id', 'start_date', 'end_date', 'days', 'reason','status')
+        fields = ("emp_leave_app_id",
+        'emp_id','name', 'department','leave_id', 'start_date', 'end_date', 'days', 'reason','status', 'action_by')
 
     def get_days(self, obj):
         date_format = "%Y-%m-%d"
@@ -578,16 +593,15 @@ class LastAttendaceLogSerializer(serializers.ModelSerializer):
         fields = ('emp_id','login','logout','work_date', 'work_duration')
 
     def get_time(self, obj):
-        # date_format = "%H-%M-%S"
-        # b = datetime.strptime(str(obj.logout), date_format)
-        # a = datetime.strptime(str(obj.login), date_format)
+
         b = datetime.strptime(str(obj.logout), '%H:%M:%S')
         a = datetime.strptime(str(obj.login), '%H:%M:%S')
-        c = b - a
-
-        d = (c/(60**2))
-
-        return d
+        if a >= b:
+            return 0
+        else:
+            c = b - a
+            d = (c / (60 ** 2))
+            return d
 
 
 class SearchBydateAttendanceLogSerializer(serializers.ModelSerializer):
@@ -599,7 +613,7 @@ class SearchBydateAttendanceLogSerializer(serializers.ModelSerializer):
 class EnterAttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
-        fields = ('emp_id', 'login', "logout")
+        fields = ("attendance_id", 'emp_id', 'login', "logout", 'login_image', 'logout_image', 'work_date')
 
 
 class ListAttendanceLogSerializer(serializers.ModelSerializer):
