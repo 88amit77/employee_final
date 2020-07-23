@@ -108,7 +108,7 @@ urlpatterns = [
     path("employee/employees_docs/", schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('employee/attendance_search/', views.SearchAttendanceLogAPIView.as_view()),
     url('employee/SearchByDateBetweenAttendanceLog', views.SearchByDateBetweenAttendanceLog.as_view()),
-    path('employee/process', include('api.process.urls')),
+    path('employee/process/', include('api.process.urls')),
 
 ]
 urlpatterns += [
