@@ -862,6 +862,28 @@ class LeavePolicyLeaveidViewSet(viewsets.ModelViewSet):
 	serializer_class = leavepolicyAssignedLeaveidSerializer
 
 ###for leave calculation
+class ViewEmpFilterCalculLeavePolicyLogsViewSet(viewsets.ModelViewSet):
+    search_fields = ['=emp_id__emp_id',
+                     ]
+    ordering_fields = ['emp_id__emp_id', 'emp_id__name', 'emp_id__department',"emp_leave_app_id",
+                       'start_date', 'end_date', 'reason', 'status']
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    queryset = EmpLeaveApplied.objects.all()
+    serializer_class = ListleaveLogSerializer
+    pagination_class = CustomLeaveLogsPagination
+
+class ViewMasterSearchCalculLeavePolicyLogsViewSet(viewsets.ModelViewSet):
+    search_fields = ['emp_id__emp_id','emp_id__name', 'emp_id__department',"emp_leave_app_id",
+                       'start_date', 'end_date','reason', 'status'
+                     ]
+    ordering_fields = ['emp_id__emp_id', 'emp_id__name', 'emp_id__department',"emp_leave_app_id",
+                       'start_date', 'end_date','reason', 'status']
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    queryset = EmpLeaveApplied.objects.all()
+    serializer_class = ListleaveLogSerializer
+    pagination_class = CustomLeaveLogsPagination
+
+
 class CalculLeavePolicyLogsViewSet(viewsets.ModelViewSet):
 	search_fields = ['=emp_id__emp_id',
 

@@ -10,7 +10,7 @@ class Employee(models.Model):
     gender = models.CharField(max_length=10)
     blood_group = models.CharField(max_length=10)
     marital_status = models.BooleanField(default=False)
-    marriage_anniversary = models.DateField( blank=True, null=True)
+    marriage_anniversary = models.DateField(blank=True, null=True)
     official_email = models.EmailField()
     personal_email = models.EmailField()
     official_number = models.CharField(max_length=10)
@@ -68,8 +68,7 @@ class Employee(models.Model):
 
 
 class Education(models.Model):
-    educations = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='educations_emp', null=True,
-                                   blank=True)
+    educations = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='educations_emp', null=True, blank=True)
     education_id = models.AutoField(primary_key=True)
     institute_name = models.CharField(max_length=50)
     course_type = models.CharField(max_length=30)
