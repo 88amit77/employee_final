@@ -12,10 +12,11 @@ INSTALLED_APPS = [
 	'django.contrib.contenttypes',
     'django.contrib.staticfiles',
     'rest_framework',
-    'drf_yasg',
     'api',
 	'api.process',
     'corsheaders',
+	'django_extensions',
+	'drf_yasg',
 	'storages',
 	'django_filters',
 ]
@@ -23,6 +24,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+	'compression_middleware.middleware.CompressionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -31,15 +33,27 @@ ROOT_URLCONF = 'api.urls'
 
 WSGI_APPLICATION = 'api.wsgi.application'
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'employees',
+#         'USER': 'postgres',
+#         'PASSWORD': 'buymore2',
+#         'HOST': 'buymore2.cegnfd8ehfoc.ap-south-1.rds.amazonaws.com',
+#         'PORT': '',
+#     }
+# }
+
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'employees',
-        'USER': 'postgres',
-        'PASSWORD': 'buymore2',
-        'HOST': 'buymore2.cegnfd8ehfoc.ap-south-1.rds.amazonaws.com',
-        'PORT': '',
-    }
+	'default': {
+		'ENGINE': 'django.db.backends.postgresql_psycopg2',
+		'NAME': 'bm_employee',
+		'USER': 'postgres',
+		'PASSWORD': 'postgres',
+		'HOST': 'localhost',
+		'PORT': '5432',
+	}
 }
 
 LANGUAGE_CODE = 'en-us'
@@ -78,7 +92,6 @@ TEMPLATES = [
         },
     },
 ]
-
 
 STATIC_URL = '/employee/static/'
 
