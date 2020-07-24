@@ -1,20 +1,14 @@
 from rest_framework import serializers
-from .models import (Employee, Documents, Education, WorkHistory, FamilyMembers, LeaveRules, EmpLeaveApplied, EmpLeaveId,
+from .models import (Employee, Education, WorkHistory, FamilyMembers, LeaveRules, EmpLeaveApplied, EmpLeaveId,
                      Attendance,AttendenceLeaveid, Attendence_rules,MonthlyEmpSalary, Salary)
 from rest_framework.validators import UniqueValidator
 from datetime import datetime
+from django.core.validators import FileExtensionValidator
 
 class PersonalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
         fields = '__all__'
-
-
-class DocumentsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Documents
-        fields = '__all__'
-
 
 class WorkHistorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -53,6 +47,7 @@ class EmployeeSerializer(serializers.Serializer):
 
     emp_id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=30)
+    user_id = serializers.CharField(max_length=30)
     dob = serializers.DateField()
     gender = serializers.CharField(max_length=10)
     blood_group = serializers.CharField(max_length=10)
@@ -96,19 +91,32 @@ class EmployeeSerializer(serializers.Serializer):
     bank_acc_number = serializers.CharField(max_length=30)
     ifsc_code = serializers.CharField(max_length=15)
     bank_name = serializers.CharField(max_length=30)
+
+    pan_number = serializers.CharField(max_length=20)
+    pan_card = serializers.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100, validators=[
+        FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm', 'pdf'])])
+    address_proof = serializers.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100,
+                                     validators=[FileExtensionValidator(
+                                         allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm',
+                                                             'pdf'])])
+    permanent_proof = serializers.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100,
+                                       validators=[FileExtensionValidator(
+                                           allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm',
+                                                               'pdf'])])
+    aadharcard_number = serializers.CharField(max_length=20)
+    aadharcard = serializers.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100, validators=[
+        FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm', 'pdf'])])
+
     work_historys_emp = WorkHistorySerializer(many=True)
     family_members_emp = FamilyMembersSerializer(many=True)
-    documents_emp = DocumentsSerializer(many=True)
     educations_emp = EducationSerializer(many=True)
 
     def create(self, validated_data):
-        documents_data = validated_data.pop('documents_emp')
+
         educations_data = validated_data.pop('educations_emp')
         work_historys_data = validated_data.pop('work_historys_emp')
         family_members_data = validated_data.pop('family_members_emp')
         employee = Employee.objects.create(**validated_data)
-        for document_data in documents_data:
-            Documents.objects.create(documents=employee, **document_data)
         for education_data in educations_data:
             Education.objects.create(educations=employee, **education_data)
         for work_history_data in work_historys_data:
@@ -118,9 +126,6 @@ class EmployeeSerializer(serializers.Serializer):
         return employee
 
     def update(self, instance, validated_data):
-        documents_data = validated_data.pop('documents_emp')
-        documents = (instance.documents).all()
-        documents = list(documents)
         educations_data = validated_data.pop('educations_emp')
         educations = (instance.educations).all()
         educations = list(educations)
@@ -131,6 +136,7 @@ class EmployeeSerializer(serializers.Serializer):
         family_members = (instance.family_members).all()
         family_members = list(family_members)
         instance.name = validated_data.get('name', instance.name)
+        instance.user_id = validated_data.get('user_id', instance.user_id)
         instance.dob = validated_data.get('dob', instance.dob)
         instance.gender = validated_data.get('gender', instance.gender)
         instance.blood_group = validated_data.get('blood_group', instance.blood_group)
@@ -176,17 +182,15 @@ class EmployeeSerializer(serializers.Serializer):
         instance.bank_acc_number = validated_data.get('bank_acc_number', instance.bank_acc_number)
         instance.ifsc_code = validated_data.get('ifsc_code', instance.ifsc_code)
         instance.bank_name = validated_data.get('bank_name', instance.bank_name)
+
+        instance.pan_number = validated_data.get('pan_number', instance.pan_number)
+        instance.pan_card = validated_data.get('pan_card', instance.pan_card)
+        instance.address_proof = validated_data.get('address_proof', instance.address_proof)
+        instance.permanent_proof = validated_data.get('permanent_proof', instance.permanent_proof)
+        instance.aadharcard_number = validated_data.get('aadharcard_number', instance.aadharcard_number)
+        instance.aadharcard = validated_data.get('aadharcard', instance.aadharcard)
         instance.save()
 
-        for document_data in documents_data:
-            document = documents.pop(0)
-            document.pan_number = document_data.get('pan_number', document.pan_number)
-            document.pan_card = document_data.get('pan_card', document.pan_card)
-            document.address_proof = document_data.get('address_proof', document.address_proof)
-            document.permanent_proof = document_data.get('permanent_proof', document.permanent_proof)
-            document.aadharcard_number = document_data.get('aadharcard_number', document.aadharcard_number)
-            document.aadharcard = document_data.get('aadharcard', document.aadharcard)
-            document.save()
 
         for work_history_data in work_historys_data:
             work_history = work_historys.pop(0)
@@ -265,6 +269,14 @@ class ListEmployeeSerializer(serializers.Serializer):
     ifsc_code = serializers.CharField(max_length=15)
     bank_name = serializers.CharField(max_length=30)
 
+    pan_number = serializers.CharField(max_length=20)
+    pan_card = serializers.FileField()
+    address_proof = serializers.FileField()
+    permanent_proof = serializers.FileField()
+    aadharcard_number = serializers.CharField(max_length=20)
+    aadharcard = serializers.FileField()
+
+
 
 class EmployeeColumnModelSerializer(serializers.ModelSerializer):
 
@@ -317,12 +329,6 @@ class LeaveRulesSerializer(serializers.ModelSerializer):
         model = LeaveRules
         fields = ('leave_id', 'leave_name', 'interval_months', 'add_value', 'yearly_carry_forward', 'document_required')
 
-
-
-# class Employee1Serializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Employee
-#         fields = ('emp_id', 'name', 'official_email', 'leave')
 class Employee1Serializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
@@ -603,7 +609,7 @@ class LastAttendaceLogSerializer(serializers.ModelSerializer):
             # d = (c / (60 ** 2))
             d = c.total_seconds() / 3600
             e = str(d)
-            return e[0:4]
+            return e[0:5]
 
 
 class SearchBydateAttendanceLogSerializer(serializers.ModelSerializer):

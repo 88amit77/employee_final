@@ -9,14 +9,14 @@ from rest_framework import status
 import requests
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
-from .models import (Employee, Education, Documents, FamilyMembers, WorkHistory, LeaveRules, EmpLeaveApplied, EmpLeaveId,
+from .models import (Employee, Education, FamilyMembers, WorkHistory, LeaveRules, EmpLeaveApplied, EmpLeaveId,
                      Attendance, AttendenceLeaveid, Attendence_rules, MonthlyEmpSalary, Salary)
 from .serializers import (
       PersonalSerializer,
       EmployeeSerializer,
       ListEmployeeSerializer,
       EducationSerializer,
-      DocumentsSerializer,
+
       FamilyMembersSerializer,
       WorkHistorySerializer,
       EmployeeColumnModelSerializer,
@@ -613,11 +613,6 @@ class EmployeeColumnViewSet(viewsets.ModelViewSet):
         else:
             return qs
 
-
-class DocumentsViewSet(viewsets.ModelViewSet):
-    queryset = Documents.objects.all()
-    serializer_class = DocumentsSerializer
-    pagination_class = CustomPagination
 
 
 class FamilyMembersViewSet(viewsets.ModelViewSet):

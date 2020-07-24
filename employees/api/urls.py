@@ -33,7 +33,7 @@ router.register('employee/personal_personal', views.PersonalViewSet, basename="p
 router.register('employee/work', views.WorkHistoryViewSet, basename="work")
 router.register('employee/education', views.EducationViewSet, basename="education")
 router.register('employee/family', views.FamilyMembersViewSet, basename="family")
-router.register('employee/doc', views.DocumentsViewSet, basename="doc")
+
 router.register('employee/employee_search', views.EmployeeSearchViewSet, basename="employee_search")
 router.register('employee/employee_ordering', views.EmployeeOrderingViewSet, basename="employee_ordering")
 
