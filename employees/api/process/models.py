@@ -171,3 +171,112 @@ class RegularTask(models.Model):
 	task_duedate = models.DateField()
 	# repeat_id = models.ForeignKey("RepeatTask", related_name='repeats', on_delete=models.CASCADE)
 	cron = models.CharField(max_length=50, default='')
+
+	def __str__(self):
+		return self.task_name
+	
+
+
+# Table Flow as ff
+
+# {
+#   flow_id int
+#   regular_task_id int
+#   percentage_complete float
+# }
+
+class Flow(models.Model):
+	flow_id = models.AutoField(primary_key=True)
+	regular_task = models.ForeignKey("RegularTask", related_name='taskflow', on_delete=models.CASCADE)
+	percentage_complete = models.FloatField()
+
+	def __str__(self):
+		return self.flow_id
+	
+
+# Table flow_main_checklist as fmc
+
+# {
+ 
+#   flow_main_id int
+#   flow_id int
+#   process_mainid int
+#   files_main Videojpeg
+#   is_checked boolean
+ 
+# }
+class FlowMainChecklist(models.Model):
+
+	flow_main_id = models.AutoField(primary_key=True)
+	flow = models.ForeignKey("Flow", related_name='flows', on_delete=models.CASCADE)
+	mprocess = models.ForeignKey("ProcessMainid", related_name='mainprocessflow', on_delete=models.CASCADE)
+	files_main = models.FileField(blank=True, null=True, upload_to='flow_main_chklist/videos/', max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'mp4', 'png', 'jpeg', 'jpg'])])
+	is_checked = models.BooleanField(default=False, blank=True)
+
+	def __str__(self):
+		return self.flow_main_id
+
+
+# Table flow_subpoint_checklist as fsc
+# {
+#   flow_subpoint_id int
+#   flow_main_id int
+#   flow_id int
+#   process_subpointid int
+#   files_main Videojpeg
+#   is_checked boolean
+ 
+# }
+
+class FlowSubpointChecklist(models.Model):
+
+	flow_subpoint_id = models.AutoField(primary_key=True)
+	flow_main = models.ForeignKey("FlowMainChecklist", related_name='mainflow', on_delete=models.CASCADE)
+	flowpt = models.ForeignKey("Flow", related_name='flowss', on_delete=models.CASCADE)
+	subpoint = models.ForeignKey("ProcessSubpoint", related_name='subs', on_delete=models.CASCADE)
+	files_main = models.FileField(blank=True, null=True, upload_to='flow_subpt_chklist/videos/', max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'mp4', 'png', 'jpeg', 'jpg'])])
+
+	def __str__(self):
+		return self.flow_subpoint_id
+
+
+
+# ref: ff.regular_task_id - RGT.Regular_Task_id
+# ref: fmc.flow_id - ff.flow_id
+# ref: fmc.process_mainid - PMI.Process_mainid
+# ref: fsc.flow_id - ff.flow_id
+# ref: fsc.flow_subpoint_id - PSI.Process_subpointid
+
+
+#  Table time as tt
+ 
+#  {
+#     flow_time_id int
+#     flow_id int
+#     user_id int
+#     main_point_id int
+#     subpoint_id int
+#     starttime datetime
+#     stoptime datetime
+#     total_time time
+ 
+ 
+#  }
+
+#  ref: tt.flow_id - ff.flow_id
+#  ref: tt.main_point_id - PMI.Process_mainid
+#  ref: tt.subpoint_id - PSI.Process_subpointid
+
+class Time(models.Model):
+
+	flow_time_id = models.AutoField(primary_key=True)
+	tflow = models.ForeignKey("Flow", related_name='timeflows', on_delete=models.CASCADE)
+	user_id = models.IntegerField()
+	mainpoints = models.ForeignKey("ProcessMainid", related_name='maintime', on_delete=models.CASCADE)
+	subpoints = models.ForeignKey("ProcessSubpoint", related_name='subtime', on_delete=models.CASCADE)
+	starttime = models.DurationField(blank=True)
+	stoptime = models.DurationField(blank=True)
+	total_time = models.DurationField(blank=True)
+
+	def __str__(self):
+		return self.flow_time_id

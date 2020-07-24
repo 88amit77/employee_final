@@ -5,11 +5,12 @@ from django.core.validators import FileExtensionValidator
 class Employee(models.Model):
     emp_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=30)
+    user_id = models.CharField(max_length=30, blank=True, null=True)
     dob = models.DateField()
     gender = models.CharField(max_length=10)
     blood_group = models.CharField(max_length=10)
     marital_status = models.BooleanField(default=False)
-    marriage_anniversary = models.DateField()
+    marriage_anniversary = models.DateField( blank=True, null=True)
     official_email = models.EmailField()
     personal_email = models.EmailField()
     official_number = models.CharField(max_length=10)
@@ -37,32 +38,33 @@ class Employee(models.Model):
     employee_type = models.CharField(max_length=15)
     employee_status = models.BooleanField(default=False)
     job_title = models.CharField(max_length=30)
-    termination_date = models.DateField()
+    termination_date = models.DateField(blank=True, null=True)
     work_location_add = models.CharField(max_length=20)
     designation = models.CharField(max_length=20)
     department = models.CharField(max_length=50)
-    resignation_date = models.DateField()
-    resignation_notes = models.CharField(max_length=50)
-    notice_date = models.DateField()
-    notice_period = models.IntegerField()
+    resignation_date = models.DateField(blank=True, null=True)
+    resignation_notes = models.CharField(max_length=50,blank=True, null=True)
+    notice_date = models.DateField(blank=True, null=True)
+    notice_period = models.IntegerField(blank=True, null=True)
     bank_acc_number = models.CharField(max_length=30)
     ifsc_code = models.CharField(max_length=15)
     bank_name = models.CharField(max_length=30)
 
+    pan_number = models.CharField(max_length=20)
+    pan_card = models.FileField(upload_to='Employees/Documents/', max_length=200, validators=[
+        FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm', 'pdf'])])
+    address_proof = models.FileField(upload_to='Employees/Documents/', max_length=200,
+                                     validators=[FileExtensionValidator(
+                                         allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm', 'pdf'])])
+    permanent_proof = models.FileField(upload_to='Employees/Documents/', max_length=200,
+                                       validators=[FileExtensionValidator(
+                                           allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm', 'pdf'])])
+    aadharcard_number = models.CharField(max_length=20)
+    aadharcard = models.FileField(upload_to='Employees/Documents/', max_length=200, validators=[
+        FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm', 'pdf'])])
+
     def __str__(self):
         return self.name
-
-
-class Documents(models.Model):
-    documents = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='documents_emp', null=True,
-                                  blank=True)
-    document_id = models.AutoField(primary_key=True, )
-    pan_number = models.CharField(max_length=20)
-    pan_card = models.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
-    address_proof = models.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
-    permanent_proof = models.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
-    aadharcard_number = models.CharField(max_length=20)
-    aadharcard = models.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100, validators=[FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm'])])
 
 
 class Education(models.Model):
@@ -115,7 +117,7 @@ class LeaveRules(models.Model):
 class EmpLeaveId(models.Model):
     emp_leave_id = models.AutoField(primary_key=True)
     emp_id = models.OneToOneField(Employee,on_delete=models.CASCADE, default=None, unique=False)
-    leave_id = models.ManyToManyField(LeaveRules)
+    leave_id = models.ManyToManyField(LeaveRules, blank=True, null=True)
 
 
 class EmpLeaveApplied(models.Model):

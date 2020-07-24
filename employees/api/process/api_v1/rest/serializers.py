@@ -143,3 +143,31 @@ class RegularTaskSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = RegularTask
 		fields = '__all__'
+
+##############################################
+######  Serializers for task api ##########
+##############################################
+
+class FlowSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = Flow
+		fields = '__all__'
+
+class FlowMainChecklistSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = FlowMainChecklist
+		fields = '__all__'
+
+class FlowSubpointChecklistSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = FlowSubpointChecklist
+		fields = '__all__'
+
+class TimeSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = Time
+		fields = '__all__'

@@ -2,18 +2,12 @@ from rest_framework import serializers
 from .models import (Employee, Documents, Education, WorkHistory, FamilyMembers, LeaveRules, EmpLeaveApplied, EmpLeaveId, Attendance,AttendenceLeaveid, Attendence_rules,MonthlyEmpSalary, Salary)
 from rest_framework.validators import UniqueValidator
 from datetime import datetime
+from django.core.validators import FileExtensionValidator
 
 class PersonalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
         fields = '__all__'
-
-
-class DocumentsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Documents
-        fields = '__all__'
-
 
 class WorkHistorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,10 +27,26 @@ class EducationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class EmployeeOrderingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = ('emp_id',
+                             'name',
+                             'permanent_address_line1',
+                             "designation",
+                             "gender",
+                             "official_email",
+                             "date_of_joining",
+                             'department',
+                             "official_number",
+                             'dob',
+                             "work_location_add",)
+
 class EmployeeSerializer(serializers.Serializer):
 
     emp_id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=30)
+    user_id = serializers.CharField(max_length=30)
     dob = serializers.DateField()
     gender = serializers.CharField(max_length=10)
     blood_group = serializers.CharField(max_length=10)
@@ -80,19 +90,32 @@ class EmployeeSerializer(serializers.Serializer):
     bank_acc_number = serializers.CharField(max_length=30)
     ifsc_code = serializers.CharField(max_length=15)
     bank_name = serializers.CharField(max_length=30)
+
+    pan_number = serializers.CharField(max_length=20)
+    pan_card = serializers.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100, validators=[
+        FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm', 'pdf'])])
+    address_proof = serializers.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100,
+                                     validators=[FileExtensionValidator(
+                                         allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm',
+                                                             'pdf'])])
+    permanent_proof = serializers.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100,
+                                       validators=[FileExtensionValidator(
+                                           allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm',
+                                                               'pdf'])])
+    aadharcard_number = serializers.CharField(max_length=20)
+    aadharcard = serializers.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100, validators=[
+        FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm', 'pdf'])])
+
     work_historys_emp = WorkHistorySerializer(many=True)
     family_members_emp = FamilyMembersSerializer(many=True)
-    documents_emp = DocumentsSerializer(many=True)
     educations_emp = EducationSerializer(many=True)
 
     def create(self, validated_data):
-        documents_data = validated_data.pop('documents_emp')
+
         educations_data = validated_data.pop('educations_emp')
         work_historys_data = validated_data.pop('work_historys_emp')
         family_members_data = validated_data.pop('family_members_emp')
         employee = Employee.objects.create(**validated_data)
-        for document_data in documents_data:
-            Documents.objects.create(documents=employee, **document_data)
         for education_data in educations_data:
             Education.objects.create(educations=employee, **education_data)
         for work_history_data in work_historys_data:
@@ -102,9 +125,6 @@ class EmployeeSerializer(serializers.Serializer):
         return employee
 
     def update(self, instance, validated_data):
-        documents_data = validated_data.pop('documents_emp')
-        documents = (instance.documents).all()
-        documents = list(documents)
         educations_data = validated_data.pop('educations_emp')
         educations = (instance.educations).all()
         educations = list(educations)
@@ -115,6 +135,7 @@ class EmployeeSerializer(serializers.Serializer):
         family_members = (instance.family_members).all()
         family_members = list(family_members)
         instance.name = validated_data.get('name', instance.name)
+        instance.user_id = validated_data.get('user_id', instance.user_id)
         instance.dob = validated_data.get('dob', instance.dob)
         instance.gender = validated_data.get('gender', instance.gender)
         instance.blood_group = validated_data.get('blood_group', instance.blood_group)
@@ -160,17 +181,15 @@ class EmployeeSerializer(serializers.Serializer):
         instance.bank_acc_number = validated_data.get('bank_acc_number', instance.bank_acc_number)
         instance.ifsc_code = validated_data.get('ifsc_code', instance.ifsc_code)
         instance.bank_name = validated_data.get('bank_name', instance.bank_name)
+
+        instance.pan_number = validated_data.get('pan_number', instance.pan_number)
+        instance.pan_card = validated_data.get('pan_card', instance.pan_card)
+        instance.address_proof = validated_data.get('address_proof', instance.address_proof)
+        instance.permanent_proof = validated_data.get('permanent_proof', instance.permanent_proof)
+        instance.aadharcard_number = validated_data.get('aadharcard_number', instance.aadharcard_number)
+        instance.aadharcard = validated_data.get('aadharcard', instance.aadharcard)
         instance.save()
 
-        for document_data in documents_data:
-            document = documents.pop(0)
-            document.pan_number = document_data.get('pan_number', document.pan_number)
-            document.pan_card = document_data.get('pan_card', document.pan_card)
-            document.address_proof = document_data.get('address_proof', document.address_proof)
-            document.permanent_proof = document_data.get('permanent_proof', document.permanent_proof)
-            document.aadharcard_number = document_data.get('aadharcard_number', document.aadharcard_number)
-            document.aadharcard = document_data.get('aadharcard', document.aadharcard)
-            document.save()
 
         for work_history_data in work_historys_data:
             work_history = work_historys.pop(0)
@@ -249,6 +268,14 @@ class ListEmployeeSerializer(serializers.Serializer):
     ifsc_code = serializers.CharField(max_length=15)
     bank_name = serializers.CharField(max_length=30)
 
+    pan_number = serializers.CharField(max_length=20)
+    pan_card = serializers.FileField()
+    address_proof = serializers.FileField()
+    permanent_proof = serializers.FileField()
+    aadharcard_number = serializers.CharField(max_length=20)
+    aadharcard = serializers.FileField()
+
+
 
 class EmployeeColumnModelSerializer(serializers.ModelSerializer):
 
@@ -301,23 +328,17 @@ class LeaveRulesSerializer(serializers.ModelSerializer):
         model = LeaveRules
         fields = ('leave_id', 'leave_name', 'interval_months', 'add_value', 'yearly_carry_forward', 'document_required')
 
-
-
-# class Employee1Serializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Employee
-#         fields = ('emp_id', 'name', 'official_email', 'leave')
 class Employee1Serializer(serializers.ModelSerializer):
     class Meta:
-        model = EmpLeaveId
-        fields = '__all__'
+        model = Employee
+        fields = ('emp_id', 'name', 'department', 'designation', 'date_of_joining','employee_type', 'work_location_add')
 
 class ListAssignedRuleSerializer(serializers.ModelSerializer):
-    empleaves = Employee1Serializer(many=True)
+    emp_id = Employee1Serializer(required=True)
 
     class Meta:
-        model = Employee
-        fields = ('emp_id', 'name', 'department', 'designation', 'date_of_joining','employee_type', 'empleaves', 'work_location_add')
+        model = EmpLeaveId
+        fields = ('emp_id','leave_id','emp_leave_id')
 
 
 class ListEmployee1Serializer(serializers.Serializer):
@@ -340,13 +361,64 @@ class EmpLeaveAppliedNewSerializer(serializers.ModelSerializer):
         model = EmpLeaveApplied
         fields = '__all__'
 
-# class Employee1Serializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = EmpLeaveId
-#         fields = '__all__'
+#####assigned rules
+class leavepolicyAssignedLeaveidSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    designation = serializers.CharField(source='emp_id.designation', read_only=True)
+    date_of_joining = serializers.CharField(source='emp_id.date_of_joining', read_only=True)
+    work_location_add = serializers.CharField(source='emp_id.work_location_add', read_only=True)
+    employee_type = serializers.CharField(source='emp_id.employee_type', read_only=True)
 
+    class Meta:
+        model = EmpLeaveId
+        fields = ("emp_leave_id", "emp_id", 'name','designation','date_of_joining', 'work_location_add','employee_type','leave_id')
+
+##assigned attendance rule leavePolicy assign page
+class ForEmployeeIdSearchForleavePolicySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = ('emp_id','name', 'designation', 'date_of_joining','employee_type','work_location_add')
 
 #for logs page
+
+class DynamicFieldsLeaveLogModelSerializer(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        # Don't pass the 'fields' arg up to the superclass
+        request = kwargs.get('context', {}).get('request')
+        str_fields = request.GET.get('fields', '') if request else None
+        fields = str_fields.split(',') if str_fields else None
+
+        # Instantiate the superclass normally
+        super(DynamicFieldsLeaveLogModelSerializer, self).__init__(*args, **kwargs)
+
+        if fields is not None:
+            # Drop any fields that are not specified in the `fields` argument.
+            allowed = set(fields)
+            existing = set(self.fields)
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
+
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+    days = serializers.SerializerMethodField(method_name='get_days')
+
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+    days = serializers.SerializerMethodField(method_name='get_days')
+
+    class Meta:
+        model = EmpLeaveApplied
+        fields = (
+            'emp_id', 'name', 'department', 'leave_id', 'start_date', 'end_date', 'days', 'reason', 'status')
+
+    def get_days(self, obj):
+        date_format = "%Y-%m-%d"
+        b = datetime.strptime(str(obj.end_date), date_format)
+        a = datetime.strptime(str(obj.start_date), date_format)
+        c = b - a
+        return c.days
+
 class EmpLogSerializer(serializers.ModelSerializer):
     days = serializers.SerializerMethodField(method_name='get_days')
 
@@ -409,6 +481,23 @@ class EmpLog2Serializer(serializers.ModelSerializer):
         c = b - a
         return c.days
 
+class ListleaveLogSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+    days = serializers.SerializerMethodField(method_name='get_days')
+
+
+    class Meta:
+        model = EmpLeaveApplied
+        fields = ("emp_leave_app_id",
+        'emp_id','name', 'department','leave_id', 'start_date', 'end_date', 'days', 'reason','status', 'action_by')
+
+    def get_days(self, obj):
+        date_format = "%Y-%m-%d"
+        b = datetime.strptime(str(obj.end_date), date_format)
+        a = datetime.strptime(str(obj.start_date), date_format)
+        c = b - a
+        return c.days
 class Emp1Serializer(serializers.Serializer):
     emp_id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=30)
@@ -419,24 +508,66 @@ class AttendaceSerializer(serializers.ModelSerializer):
         model = Attendance
         fields = '__all__'
 
+##assigned attendance rule
+class ForEmployeeIdSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = ('emp_id','name', 'department','employee_type')
+
 class AttendaceLeaveidSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+    employee_type = serializers.CharField(source='emp_id.employee_type', read_only=True)
 
     class Meta:
         model = AttendenceLeaveid
-        fields = '__all__'
+        fields = ("attendance_leave_id", "emp_id", 'name', 'department','employee_type','ar_id')
 
 class AttendaceRulesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Attendence_rules
         fields = '__all__'
-
-class ListAssignedAttendanceRuleSerializer(serializers.ModelSerializer):
-    attenadance_leaveids = AttendaceLeaveidSerializer(many=True)
-
+class EmployeeListAttendance(serializers.ModelSerializer):
     class Meta:
         model = Employee
-        fields = ('emp_id', 'name', 'department', 'employee_type', 'attenadance_leaveids')
+        fields = ('emp_id', 'name', 'department', 'employee_type')
+
+class ListAssignedAttendanceRuleSerializer(serializers.ModelSerializer):
+    emp_id = EmployeeListAttendance(required=True)
+
+    class Meta:
+        model = AttendenceLeaveid
+        fields = ('attendance_leave_id', 'ar_id','emp_id')
+
+##attendance column filter
+class DynamicFieldsAttendenceModelSerializer(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        # Don't pass the 'fields' arg up to the superclass
+        request = kwargs.get('context', {}).get('request')
+        str_fields = request.GET.get('fields', '') if request else None
+        fields = str_fields.split(',') if str_fields else None
+
+        # Instantiate the superclass normally
+        super(DynamicFieldsAttendenceModelSerializer, self).__init__(*args, **kwargs)
+
+        if fields is not None:
+            # Drop any fields that are not specified in the `fields` argument.
+            allowed = set(fields)
+            existing = set(self.fields)
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
+
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+    work_location_add = serializers.CharField(source='emp_id.work_location_add', read_only=True)
+
+    class Meta:
+        model = Attendance
+        fields = ('emp_id', 'name', 'department', 'work_location_add', 'attendance_id', 'login', 'logout', 'annomaly',
+                  'work_date')
+
 
 #for attendance search
 class SearchAttendanceLogSerializer(serializers.Serializer):
@@ -449,11 +580,38 @@ class SearchAttendanceLogSerializer(serializers.Serializer):
 
 #for SearchBydate attendance search
 
+
 class SearchByDateAttendaceSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+    work_location_add = serializers.CharField(source='emp_id.work_location_add', read_only=True)
 
     class Meta:
         model = Attendance
-        fields = ('attendance_id','login','logout','annomaly','work_date')
+        fields = ('emp_id','name','department','work_location_add','attendance_id','login','logout','annomaly','work_date')
+
+###for last attendance page emp wise data
+class LastAttendaceLogSerializer(serializers.ModelSerializer):
+    work_duration = serializers.SerializerMethodField(method_name='get_time')
+    class Meta:
+        model = Attendance
+        fields = ('emp_id','login','logout','work_date', 'work_duration')
+
+    def get_time(self, obj):
+
+        b = datetime.strptime(str(obj.logout), '%H:%M:%S')
+        a = datetime.strptime(str(obj.login), '%H:%M:%S')
+        if a >= b:
+            return 0
+        else:
+            c = b - a
+            # d = (c / (60 ** 2))
+            d = c.total_seconds() / 3600
+            e = str(d)
+            return e[0:5]
+            # return e
+
+
 class SearchBydateAttendanceLogSerializer(serializers.ModelSerializer):
     attendances = SearchByDateAttendaceSerializer(many=True)
     class Meta:
@@ -463,31 +621,9 @@ class SearchBydateAttendanceLogSerializer(serializers.ModelSerializer):
 class EnterAttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
-        fields = ('emp_id', 'login', "logout")
+        fields = ("attendance_id", 'emp_id', 'login', "logout", 'login_image', 'logout_image', 'work_date')
 
-# class EnterAttendanceSerializer(serializers.Serializer):
-#
-#     emp_id = serializers.IntegerField(read_only=True)
-#     attendances = AttendaceSerializer(many=True)
-#
-#     def create(self, validated_data):
-#
-#         attendances_data = validated_data.pop('attendances')
-#         employee = Employee.objects.create(**validated_data)
-#         for attendance_data in attendances_data:
-#             Attendance.objects.create(emp_id=employee, **attendance_data)
-#         return employee
-#     def update(self, instance, validated_data):
-#         attendances_data = validated_data.pop('attendances')
-#         emp_id = (instance.emp_id).all()
-#         emp_id = list(emp_id)
-#         instance.save()
-#         for attendancess_data in attendances_data:
-#             emp = emp_id.pop(0)
-#             emp.login = attendancess_data.get('login', emp.login)
-#             emp.logout = attendancess_data.get('logout', emp.logout)
-#             emp.save()
-#         return instance
+
 class ListAttendanceLogSerializer(serializers.ModelSerializer):
 
     attendances = AttendaceSerializer(many=True)
@@ -536,9 +672,17 @@ class DynamicFieldsMonthlyEmpSalaryModelSerializer(serializers.ModelSerializer):
             for field_name in existing - allowed:
                 self.fields.pop(field_name)
 
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+
     class Meta:
         model = MonthlyEmpSalary
-        fields = '__all__'
+        fields = ('emp_id', 'name', 'department',
+                  'month', 'lop', 'no_of_days', 'ctc', 'basic', 'hra', 'conveyance_allowances', 'medical_allowance',
+                  'cca_allowance', 'pf_employer', 'pf_employee', 'pt', 'esi_employer', 'esi_employee',
+                  'net_employee_payable',
+                  'due_date', 'special_allowances', 'over_time', 'deductions', 'reimbursements'
+                  )
 
 class CreateMonthlyEmpSalarySerializer(serializers.ModelSerializer):
 
@@ -551,19 +695,34 @@ class ListMonthlyEmpSalarySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ('monthlyempsalary', 'emp_id', 'name')
+        fields = ('monthlyempsalary', 'emp_id', 'name','department')
 
-class EmployeePayrollSerializer(serializers.ModelSerializer):
+
+class PayrollSearchSerializer(serializers.ModelSerializer):
+
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
+
     class Meta:
-        model = Employee
-        fields = ('emp_id', 'name')
+        model = MonthlyEmpSalary
+        fields = ('emp_id','name','department',
+                  'month','lop','no_of_days','ctc','basic','hra','conveyance_allowances','medical_allowance',
+                  'cca_allowance','pf_employer','pf_employee','pt','esi_employer','esi_employee','net_employee_payable',
+                  'due_date','special_allowances','over_time','deductions','reimbursements'
+                  )
 
-class SearchMonthlyEmpSalarySerializer(serializers.Serializer):
+class PayrollRunSerializer(serializers.ModelSerializer):
 
-    emp_id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(max_length=30)
-    monthlyempsalary = CreateMonthlyEmpSalarySerializer(many=True)
+    name = serializers.CharField(source='emp_id.name', read_only=True)
+    department = serializers.CharField(source='emp_id.department', read_only=True)
 
+    class Meta:
+        model = MonthlyEmpSalary
+        fields = ('emp_id','name','department',
+                  'month','lop','no_of_days','ctc','basic','hra','conveyance_allowances','medical_allowance',
+                  'cca_allowance','pf_employer','pf_employee','pt','esi_employer','esi_employee','net_employee_payable',
+                  'due_date','special_allowances','over_time','deductions','reimbursements'
+                  )
 
 #salary
 class CreateEmpSalarySerializer(serializers.ModelSerializer):

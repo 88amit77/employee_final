@@ -9,14 +9,14 @@ from rest_framework import status
 import requests
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
-from .models import (Employee, Education, Documents, FamilyMembers, WorkHistory, LeaveRules, EmpLeaveApplied, EmpLeaveId,
+from .models import (Employee, Education, FamilyMembers, WorkHistory, LeaveRules, EmpLeaveApplied, EmpLeaveId,
                      Attendance, AttendenceLeaveid, Attendence_rules, MonthlyEmpSalary, Salary)
 from .serializers import (
       PersonalSerializer,
       EmployeeSerializer,
       ListEmployeeSerializer,
       EducationSerializer,
-      DocumentsSerializer,
+
       FamilyMembersSerializer,
       WorkHistorySerializer,
       EmployeeColumnModelSerializer,
@@ -36,17 +36,24 @@ UpdateAttendanceLogSerializer,
 ListAttendanceLogSerializer,
 CreateMonthlyEmpSalarySerializer,
 ListMonthlyEmpSalarySerializer,
-EmployeePayrollSerializer,
 DynamicFieldsMonthlyEmpSalaryModelSerializer,
-SearchMonthlyEmpSalarySerializer,
 SearchAttendanceLogSerializer,
 ListAssignedAttendanceRuleSerializer,
 ListAssignedRuleSerializer,
 Emp1Serializer,
 EmpLog2Serializer,
 CreateEmpSalarySerializer,
-# ListEmpSalarySerializer,
-SearchBydateAttendanceLogSerializer,
+PayrollRunSerializer,
+PayrollSearchSerializer,
+SearchByDateAttendaceSerializer,
+ListleaveLogSerializer,
+DynamicFieldsLeaveLogModelSerializer,
+DynamicFieldsAttendenceModelSerializer,
+ForEmployeeIdSearchSerializer,
+LastAttendaceLogSerializer,
+ForEmployeeIdSearchForleavePolicySerializer,
+leavepolicyAssignedLeaveidSerializer,
+EmployeeOrderingSerializer,
 
 )
 
@@ -87,6 +94,16 @@ class CustomPagination(PageNumberPagination):
                            },
                 'sortable': [
                               'emp_id',
+                             'name',
+                             'permanent_address_line1',
+                             "designation",
+                             "gender",
+                             "official_email",
+                             "date_of_joining",
+                             'department',
+                             "official_number",
+                             'dob',
+                             "work_location_add",
                            ],
                 'date_filters': [
                    'date_of_joining', 'dob'
@@ -121,12 +138,27 @@ class CustomLeaveRulesPagination(PageNumberPagination):
                               "designation": 'Designation',
                               'date_of_joining': 'Date Of Joining',
                               "employee_type": 'Employee Type',
-                              'work_location_add': 'Work Location Add',
-                              'empleaves': 'Empleaves',
+                              'work_location_add': 'Work Location',
+                              'leave_id': 'Leave ID',
 
                            },
+                'searchable': [
+                             'emp_id',
+                              'name',
+                              "designation",
+                              'date_of_joining',
+                              "employee_type",
+                              'work_location_add',
+
+
+                ],
                 'sortable': [
-                              'emp_id',
+                     'emp_id',
+                              'name',
+                              "designation",
+                              'date_of_joining',
+                              "employee_type",
+                              'work_location_add',
                            ],
                'date_filters': [
                    'date_of_joining'
@@ -162,11 +194,30 @@ class CustomLeaveLogsPagination(PageNumberPagination):
                               "start_date": 'Start Date',
                               'end_date': 'End Date',
                               "days": 'Days',
+                              'reason':'Reason',
                               'status': 'Status',
 
                            },
+                'searchable': [
+                             'emp_id',
+                              'name',
+                              "department",
+                              "leave_id",
+                              "start_date",
+                              "end_date",
+                              'status',
+                    'reason',
+
+                ],
                 'sortable': [
-                              'emp_id',
+                    'emp_id',
+                    'name',
+                    "department",
+                    "leave_id",
+                    "start_date",
+                    "end_date",
+                    'status',
+                    'reason',
                            ],
                'date_filters': [
                    'start_date'
@@ -208,14 +259,77 @@ class CustomAttendanceLogPagination(PageNumberPagination):
 
 
                            },
+                'searchable': [
+                             'emp_id',
+                              'name',
+                              "department",
+                              "work_location_add",
+                              "annomaly",
+                              "status",
+                              'work_date',
+                              "login",
+                              "logout",
+                ],
                 'sortable': [
                               'emp_id',
+                              'name',
+                              "department",
+                              "work_location_add",
+                              "annomaly",
+                              "status",
+                              'work_date',
+                              "login",
+                              "logout",
                            ],
             },
             'results': data
         })
 
+class LastCustomAttendanceLogPagination(PageNumberPagination):
+    page = DEFAULT_PAGE
+    page_size = 20
+    page_size_query_param = 'page_size'
 
+    def get_paginated_response(self, data):
+        return Response({
+            'links': {
+                'next': self.get_next_link(),
+                'previous': self.get_previous_link()
+            },
+            'total': self.page.paginator.count,
+            'page': int(self.request.GET.get('page', DEFAULT_PAGE)),
+            'page_size': int(self.request.GET.get('page_size', self.page_size)),
+            'UI_data': {
+                'sticky_headers': [
+                               'emp_id',
+                               'name',
+                                         ],
+                'header': {
+                              'emp_id': 'Employee Id',
+                              'work_date': 'Work Date',
+                              "login": 'In Time',
+                              "logout": 'Out Time',
+                              "work_duration": "Work Duration",
+
+
+                           },
+                'searchable': [
+                             'emp_id',
+
+                              'work_date',
+                              "login",
+                              "logout",
+                ],
+                'sortable': [
+                              'emp_id',
+
+                              'work_date',
+                              "login",
+                              "logout",
+                           ],
+            },
+            'results': data
+        })
 class CustomAttendanceRulePagination(PageNumberPagination):
     page = DEFAULT_PAGE
     page_size = 20
@@ -240,9 +354,23 @@ class CustomAttendanceRulePagination(PageNumberPagination):
                               'name': 'Employee Name',
                               "department": 'Department',
                               "employee_type": 'Type',
-                               'attenadance_leaveids':'Attenadance Leave Data',
+                               'attenadance_leaveids':'Attenadance Leave ',
 
  },
+                'searchable': [
+                    'emp_id',
+                              'name',
+                              "department",
+                              "employee_type",
+                               # 'attenadance_leaveids',
+                ],
+                'sortable': [
+                    'emp_id',
+                              'name',
+                              "department",
+                              "employee_type",
+                               # 'attenadance_leaveids',
+                ],
 
 
             },
@@ -269,6 +397,7 @@ class CustomPayrollPagination(PageNumberPagination):
                                'name',
                                          ],
                 'header': {
+                            'emp_id':'Employee Id',
                             'name': 'Employee Name',
                             "department": 'Department',
                             "month": "Month",
@@ -350,8 +479,25 @@ class CustomPayrollPagination(PageNumberPagination):
             },
             'results': data
         })
+###for  ordering of employee views
+class EmployeeOrderingViewSet(viewsets.ModelViewSet):
 
+    ordering_fields = [ 'emp_id',
+                             'name',
+                             'permanent_address_line1',
+                             "designation",
+                             "gender",
+                             "official_email",
+                             "date_of_joining",
+                             'department',
+                             "official_number",
+                             'dob',
+                             "work_location_add",]
 
+    filter_backends = (filters.OrderingFilter,)
+    queryset = Employee.objects.all()
+    serializer_class = EmployeeOrderingSerializer
+    pagination_class = CustomPagination
 
 class PersonalViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
@@ -468,11 +614,6 @@ class EmployeeColumnViewSet(viewsets.ModelViewSet):
             return qs
 
 
-class DocumentsViewSet(viewsets.ModelViewSet):
-    queryset = Documents.objects.all()
-    serializer_class = DocumentsSerializer
-    pagination_class = CustomPagination
-
 
 class FamilyMembersViewSet(viewsets.ModelViewSet):
     queryset = FamilyMembers.objects.all()
@@ -571,7 +712,7 @@ class ListAssignRulesViewSet(viewsets.ViewSet):
 class ListAssignedRuleView(viewsets.ViewSet):
 
     def create(self, request):
-        queryset = Employee.objects.all()
+        queryset = EmpLeaveId.objects.all()
         serializer = ListAssignedRuleSerializer(queryset, many=True)
         if len(queryset) > 0:
             paginator = CustomLeaveRulesPagination()
@@ -664,37 +805,153 @@ class EmployeeLoggView(viewsets.ViewSet):
             result_page = paginator.paginate_queryset(queryset, request)
             return paginator.get_paginated_response(result_page)
 
+##leave_log column filter
+class LeaveLogColumnViewSet(viewsets.ModelViewSet):
+    # queryset = Employee.objects.all()
+    serializer_class = DynamicFieldsLeaveLogModelSerializer
+    pagination_class = CustomLeaveLogsPagination
 
+    def get_queryset(self, *args, **kwargs):
+        qs = EmpLeaveApplied.objects.all()
+        query = self.request.GET.get("fields")
+        if query:
+            return qs
+        else:
+            return qs
 class EmpNameView(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = Emp1Serializer
 
+class SearchLeavePolicyLogsViewSet(viewsets.ModelViewSet):
+    search_fields = ['emp_id__emp_id',
+                     'emp_id__name',
+                     "emp_id__department",
+                     'start_date',
+                       'end_date',
+
+                       'status',
+                     'reason',
+
+                     ]
+
+    ordering_fields = ['emp_id__emp_id',
+                       'emp_id__name',
+                       "emp_id__department",
+                       'start_date',
+                       'end_date',
+
+                       'status',
+                       'reason',
+
+                        ]
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    queryset = EmpLeaveApplied.objects.all().order_by('-start_date')
+    serializer_class = ListleaveLogSerializer
+    pagination_class = CustomLeaveLogsPagination
+
+class ForEmployeeIdSearchForleavePolicyViewSet(viewsets.ModelViewSet):
+    search_fields = ['emp_id','name', 'designation', 'date_of_joining','employee_type','work_location_add']
+    ordering_fields = ['emp_id','name', 'designation', 'date_of_joining','employee_type','work_location_add']
+
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    queryset = Employee.objects.all()
+    serializer_class = ForEmployeeIdSearchForleavePolicySerializer
+    pagination_class = CustomLeaveRulesPagination
+#for leave apply assign page
+class ApplyLeavePageViewSet(viewsets.ModelViewSet):
+
+    search_fields = ['emp_id__emp_id',
+                     ]
+
+    filter_backends = (filters.SearchFilter, )
+    queryset = EmpLeaveId.objects.all()
+    serializer_class = leavepolicyAssignedLeaveidSerializer
+#for leave policy assign page
+class LeavePolicyLeaveidViewSet(viewsets.ModelViewSet):
+
+    search_fields = ['emp_id__emp_id', 'emp_id__name', 'emp_id__designation','emp_id__date_of_joining','emp_id__work_location_add', 'emp_id__employee_type',
+                     ]
+    ordering_fields = ['emp_id__emp_id', 'emp_id__name', 'emp_id__designation','emp_id__date_of_joining','emp_id__work_location_add', 'emp_id__employee_type',
+                     ]
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    queryset = EmpLeaveId.objects.all()
+    serializer_class = leavepolicyAssignedLeaveidSerializer
+
+###for leave calculation
+class CalculLeavePolicyLogsViewSet(viewsets.ModelViewSet):
+    search_fields = ['=emp_id__emp_id',
+
+                    ]
+    filter_backends = (filters.SearchFilter, )
+    queryset = EmpLeaveApplied.objects.all()
+    serializer_class = ListleaveLogSerializer
+
+    def get_queryset(self):
+        filter = {}
+        """
+        Optionally restricts the returned data to a given date,
+        by filtering against a `start_date` query parameter in the URL(?start_date=01-01-2021).
+        """
+        queryset = EmpLeaveApplied.objects.all()
+        start_date = self.request.query_params.get('start_date', None)
+        end_date = self.request.query_params.get('end_date', None)
+        if start_date is not None:
+            filter['start_date__gte'] = parse(start_date)
+        if end_date is not None:
+            filter['end_date__lte'] = parse(end_date)
+
+        queryset = queryset.filter(**filter)
+        return queryset
+    # pagination_class = CustomLeaveLogsPagination
 #attendance
+
+class AttendanceColumnViewSet(viewsets.ModelViewSet):
+    # queryset = Employee.objects.all()
+    serializer_class = DynamicFieldsAttendenceModelSerializer
+    pagination_class = CustomAttendanceLogPagination
+
+    def get_queryset(self, *args, **kwargs):
+        qs = Attendance.objects.all()
+        query = self.request.GET.get("fields")
+        if query:
+            return qs
+        else:
+            return qs
 class AttendanceViewSet(viewsets.ModelViewSet):
     queryset = Attendance.objects.all()
     serializer_class = AttendaceSerializer
     pagination_class = CustomAttendanceLogPagination
 
 
+
 class AttendanceLeaveidViewSet(viewsets.ModelViewSet):
+    search_fields = ['emp_id__emp_id', 'emp_id__name', 'emp_id__department', 'emp_id__employee_type',
+                     'ar_id__attenadance_leaveids']
+    ordering_fields = ['emp_id__emp_id', 'emp_id__name', 'emp_id__department', 'emp_id__employee_type',
+                     'ar_id__attenadance_leaveids']
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     queryset = AttendenceLeaveid.objects.all()
     serializer_class = AttendaceLeaveidSerializer
-    pagination_class = CustomAttendanceLogPagination
+    # pagination_class = CustomAttendanceRulePagination
+
 class AttendenceRulesViewSet(viewsets.ModelViewSet):
     queryset = Attendence_rules.objects.all()
     serializer_class = AttendaceRulesSerializer
-    pagination_class = CustomAttendanceLogPagination
+    # pagination_class = CustomAttendanceLogPagination
 
 class EnterAttendanceViewSet(viewsets.ModelViewSet):
+    search_fields = ['=emp_id__emp_id','=work_date']
+
+    filter_backends = (filters.SearchFilter,)
     queryset = Attendance.objects.all()
     serializer_class = EnterAttendanceSerializer
-    pagination_class = CustomAttendanceLogPagination
+
 
 
 class ListAssignedAttendanceRuleView(viewsets.ViewSet):
 
     def create(self, request):
-        queryset = Employee.objects.all()
+        queryset = AttendenceLeaveid.objects.all()
         serializer = ListAssignedAttendanceRuleSerializer(queryset, many=True)
         if len(queryset) > 0:
             paginator = CustomAttendanceRulePagination()
@@ -707,51 +964,24 @@ class ListAssignedAttendanceRuleView(viewsets.ViewSet):
             return paginator.get_paginated_response(result_page)
 
 class SearchAttendanceLogAPIView(viewsets.generics.ListCreateAPIView):
-    search_fields = ['name', 'emp_id', 'department', 'work_location_add']
-    ordering_fields = ['emp_id']
+    search_fields = ['emp_id__emp_id','emp_id__name','emp_id__department','emp_id__work_location_add','attendance_id','login','logout','annomaly','work_date']
+    ordering_fields = ['emp_id__emp_id','emp_id__name','emp_id__department','emp_id__work_location_add','emp_id__attendance_id','login','logout','annomaly','work_date']
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
-    queryset = Employee.objects.all()
-    serializer_class = SearchAttendanceLogSerializer
+    queryset = Attendance.objects.all().order_by('-work_date')
+    serializer_class = SearchByDateAttendaceSerializer
     pagination_class = CustomAttendanceLogPagination
 
-###for search by date
-class SearchByDateAttendanceLogViewSet(viewsets.ModelViewSet):
-        search_fields = [
-            'attendances__work_date',
-        ]
-        filter_backends = (filters.SearchFilter,)
-        queryset = Employee.objects.all()
-        serializer_class = SearchBydateAttendanceLogSerializer
-        pagination_class = CustomAttendanceLogPagination
+
 
 ##test attendance search date between for attendance log
 
 from dateutil.parser import parse
 from rest_framework import generics
 
-# class SearchByDateBetweenAttendanceLog(generics.ListAPIView):
-#     serializer_class = SearchBydateAttendanceLogSerializer
-#     pagination_class = CustomAttendanceLogPagination
-#
-#     def get_queryset(self):
-#         filter = {}
-#         """
-#         Optionally restricts the returned data to a given date,
-#         by filtering against a `start_date` query parameter in the URL(?start_date=01-01-2021).
-#         """
-#         queryset = Employee.objects.all()
-#         start_date = self.request.query_params.get('start_date', None)
-#         end_date = self.request.query_params.get('end_date', None)
-#         if start_date is not None:
-#             filter['attendances__work_date__gte'] = parse(start_date)
-#         if end_date is not None:
-#            filter['attendances__work_date__lte'] = parse(end_date)
-#
-#         queryset = queryset.filter(**filter)
-#         return queryset
+
 
 class SearchByDateBetweenAttendanceLog(generics.ListAPIView):
-    serializer_class = AttendaceSerializer
+    serializer_class = SearchByDateAttendaceSerializer
     pagination_class = CustomAttendanceLogPagination
 
     def get_queryset(self):
@@ -770,6 +1000,14 @@ class SearchByDateBetweenAttendanceLog(generics.ListAPIView):
 
         queryset = queryset.filter(**filter)
         return queryset
+class ForEmployeeIdSearchViewSet(viewsets.ModelViewSet):
+    search_fields = ['emp_id','name', 'department','employee_type']
+    ordering_fields = ['emp_id','name', 'department','employee_type']
+
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    queryset = Employee.objects.all()
+    serializer_class = ForEmployeeIdSearchSerializer
+    pagination_class = CustomAttendanceRulePagination
 
 class UpdateAttendanceLogViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
@@ -789,7 +1027,14 @@ class ListAttendanceLogViewSet(viewsets.ViewSet):
             paginator = CustomAttendanceLogPagination()
             result_page = paginator.paginate_queryset(queryset, request)
             return paginator.get_paginated_response(result_page)
-
+####Employees wise attendance log last page
+class EmployeeWiseAttendanceLogViewSet(viewsets.ModelViewSet):
+    search_fields = ['emp_id__emp_id']
+    ordering_fields = ['emp_id__emp_id','login','logout','work_date']
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    queryset = Attendance.objects.all().order_by('-work_date')
+    serializer_class = LastAttendaceLogSerializer
+    pagination_class = LastCustomAttendanceLogPagination
 
 #payroll page
 class CreateMonthlyEmpSalaryViewSet(viewsets.ModelViewSet):
@@ -826,68 +1071,68 @@ class MonthlyEmpSalaryColumnViewSet(viewsets.ModelViewSet):
             return qs
 
 
+class PayrollSearchViewSet(viewsets.ModelViewSet):
+    search_fields = [         'emp_id__emp_id',
+                              'emp_id__name',
+                              "emp_id__department",
+                               "month",
+                               "lop",
+                                "no_of_days",
+                                "ctc",
+                                "basic",
+                                "hra",
+                                "conveyance_allowances",
+                                "medical_allowance",
+                                "cca_allowance",
+                                "pf_employer",
+                                "pf_employee",
+                                "pt",
+                                "esi_employer",
+                                "esi_employee",
+                                "net_employee_payable",
+                                "due_date",
+                                "special_allowances",
+                                "over_time",
+                                "deductions",
+                                "reimbursements",]
 
-class PayrollrunViewSet(viewsets.ModelViewSet):
+    ordering_fields = [        'emp_id__emp_id',
+                                'emp_id__name',
+                                "emp_id__department",
+                               "month",
+                               "lop",
+                                "no_of_days",
+                                "ctc",
+                                "basic",
+                                "hra",
+                                "conveyance_allowances",
+                                "medical_allowance",
+                                "cca_allowance",
+                                "pf_employer",
+                                "pf_employee",
+                                "pt",
+                                "esi_employer",
+                                "esi_employee",
+                                "net_employee_payable",
+                                "due_date",
+                                "special_allowances",
+                                "over_time",
+                                "deductions",
+                                "reimbursements",]
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
+    queryset = MonthlyEmpSalary.objects.all()
+    serializer_class = PayrollSearchSerializer
+    pagination_class = CustomPayrollPagination
+
+class PayrollRunViewSet(viewsets.ModelViewSet):
     search_fields = [
         '=month',
+        # 'emp_id__name',
     ]
     filter_backends = (filters.SearchFilter,)
     queryset = MonthlyEmpSalary.objects.all()
-    serializer_class = CreateMonthlyEmpSalarySerializer
+    serializer_class = PayrollRunSerializer
     pagination_class = CustomPayrollPagination
-
-class PayrollSearchViewSet(viewsets.ModelViewSet):
-    search_fields = [        'emp_id',
-                              'name',
-                             "department",
-                              "monthlyempsalary__month",
-                              "monthlyempsalary__lop",
-                                "monthlyempsalary__no_of_days",
-                                "monthlyempsalary__ctc",
-                                "monthlyempsalary__basic",
-                                "monthlyempsalary__hra",
-                                "monthlyempsalary__conveyance_allowances",
-                                "monthlyempsalary__medical_allowance",
-                                "monthlyempsalary__cca_allowance",
-                                "monthlyempsalary__pf_employer",
-                                "monthlyempsalary__pf_employee",
-                                "monthlyempsalary__pt",
-                                "monthlyempsalary__esi_employer",
-                                "monthlyempsalary__esi_employee",
-                                "monthlyempsalary__net_employee_payable",
-                                "monthlyempsalary__due_date",
-                                "monthlyempsalary__special_allowances",
-                                "monthlyempsalary__over_time",
-                                "monthlyempsalary__deductions",
-                                "monthlyempsalary__reimbursements",]
-    ordering_fields = ['emp_id',
-                              'name',
-                              'department',
-                              "monthlyempsalary__month",
-                              "monthlyempsalary__lop",
-                                "monthlyempsalary__no_of_days",
-                                "monthlyempsalary__ctc",
-                                "monthlyempsalary__basic",
-                                "monthlyempsalary__hra",
-                                "monthlyempsalary__conveyance_allowances",
-                                "monthlyempsalary__medical_allowance",
-                                "monthlyempsalary__cca_allowance",
-                                "monthlyempsalary__pf_employer",
-                                "monthlyempsalary__pf_employee",
-                                "monthlyempsalary__pt",
-                                "monthlyempsalary__esi_employer",
-                                "monthlyempsalary__esi_employee",
-                                "monthlyempsalary__net_employee_payable",
-                                "monthlyempsalary__due_date",
-                                "smonthlyempsalary__pecial_allowances",
-                                "monthlyempsalary__over_time",
-                                "monthlyempsalary__deductions",
-                                "monthlyempsalary__reimbursements",]
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter)
-    queryset = Employee.objects.all()
-    serializer_class = SearchMonthlyEmpSalarySerializer
-    pagination_class = CustomPayrollPagination
-
 #salary
 class CreateEmpSalaryViewSet(viewsets.ModelViewSet):
     queryset = Salary.objects.all()
