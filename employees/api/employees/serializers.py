@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import (Employee, Documents, Education, WorkHistory, FamilyMembers, LeaveRules, EmpLeaveApplied, EmpLeaveId, Attendance,AttendenceLeaveid, Attendence_rules,MonthlyEmpSalary, Salary)
+from .models import (Employee, Education, WorkHistory, FamilyMembers, LeaveRules, EmpLeaveApplied, EmpLeaveId,
+                     Attendance,AttendenceLeaveid, Attendence_rules,MonthlyEmpSalary, Salary)
 from rest_framework.validators import UniqueValidator
 from datetime import datetime
 from django.core.validators import FileExtensionValidator
