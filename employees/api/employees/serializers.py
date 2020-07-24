@@ -610,6 +610,7 @@ class LastAttendaceLogSerializer(serializers.ModelSerializer):
             d = c.total_seconds() / 3600
             e = str(d)
             return e[0:5]
+            # return e
 
 
 class SearchBydateAttendanceLogSerializer(serializers.ModelSerializer):
