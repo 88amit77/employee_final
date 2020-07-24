@@ -97,6 +97,7 @@ class EmployeeSerializer(serializers.Serializer):
     address_proof = serializers.FileField()
     permanent_proof = serializers.FileField()
     aadharcard = serializers.FileField()
+    aadharcard_number = serializers.CharField(max_length=20)
 
     # pan_card = serializers.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100,
     #                                    validators=[FileExtensionValidator(
@@ -110,7 +111,7 @@ class EmployeeSerializer(serializers.Serializer):
     #                                    validators=[FileExtensionValidator(
     #                                        allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm',
     #                                                            'pdf'])])
-    aadharcard_number = serializers.CharField(max_length=20)
+
     # aadharcard = serializers.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100,
     #                                    validators=[FileExtensionValidator(
     #                                        allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm',
@@ -618,8 +619,8 @@ class LastAttendaceLogSerializer(serializers.ModelSerializer):
             # d = (c / (60 ** 2))
             d = c.total_seconds() / 3600
             e = str(d)
-            # return e[0:5]
-            return e
+            return e[0:5]
+            # return e
 
 
 class SearchBydateAttendanceLogSerializer(serializers.ModelSerializer):
