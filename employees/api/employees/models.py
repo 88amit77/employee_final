@@ -4,7 +4,7 @@ from django.core.validators import FileExtensionValidator
 
 class Employee(models.Model):
     emp_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=40)
     user_id = models.CharField(max_length=30, blank=True, null=True)
     dob = models.DateField()
     gender = models.CharField(max_length=10)
@@ -40,8 +40,8 @@ class Employee(models.Model):
     job_title = models.CharField(max_length=30)
     termination_date = models.DateField(blank=True, null=True)
     work_location_add = models.CharField(max_length=20)
-    designation = models.CharField(max_length=20)
-    department = models.CharField(max_length=50)
+    designation = models.CharField(max_length=256)
+    department = models.CharField(max_length=256)
     resignation_date = models.DateField(blank=True, null=True)
     resignation_notes = models.CharField(max_length=50,blank=True, null=True)
     notice_date = models.DateField(blank=True, null=True)
