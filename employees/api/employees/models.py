@@ -39,11 +39,11 @@ class Employee(models.Model):
     employee_status = models.BooleanField(default=False)
     job_title = models.CharField(max_length=30)
     termination_date = models.DateField(blank=True, null=True)
-    work_location_add = models.CharField(max_length=20)
+    work_location_add = models.CharField(max_length=200)
     designation = models.CharField(max_length=255)
     department = models.CharField(max_length=255)
     resignation_date = models.DateField(blank=True, null=True)
-    resignation_notes = models.CharField(max_length=50,blank=True, null=True)
+    resignation_notes = models.CharField(max_length=200,blank=True, null=True)
     notice_date = models.DateField(blank=True, null=True)
     notice_period = models.IntegerField(blank=True, null=True)
     bank_acc_number = models.CharField(max_length=30)
@@ -71,7 +71,7 @@ class Education(models.Model):
     educations = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='educations_emp', null=True, blank=True)
     education_id = models.AutoField(primary_key=True)
     institute_name = models.CharField(max_length=50)
-    course_type = models.CharField(max_length=30)
+    course_type = models.CharField(max_length=256)
     stream = models.CharField(max_length=30)
     start_date = models.DateField()
     end_date = models.DateField()
@@ -84,7 +84,7 @@ class FamilyMembers(models.Model):
                                        blank=True)
     family_member_id = models.AutoField(primary_key=True)
     family_member_name = models.CharField(max_length=20)
-    relation = models.CharField(max_length=20)
+    relation = models.CharField(max_length=200)
     contact_number = models.CharField(max_length=10)
 
 
@@ -92,7 +92,7 @@ class WorkHistory(models.Model):
     work_historys = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='work_historys_emp', null=True,
                                       blank=True)
     work_history_id = models.AutoField(primary_key=True)
-    company_name = models.CharField(max_length=30)
+    company_name = models.CharField(max_length=50)
     period_from = models.DateField()
     period_to = models.DateField()
     designation = models.CharField(max_length=100)
@@ -130,8 +130,8 @@ class EmpLeaveApplied(models.Model):
     leave_id = models.ForeignKey(LeaveRules, on_delete=models.CASCADE, default=None, unique=False)
     start_date = models.DateField()
     end_date = models.DateField()
-    status = models.CharField(max_length=10, choices=ACTIVITY_TYPES, default="PENDING")
-    reason = models.CharField(max_length=50, null=True, blank=True)
+    status = models.CharField(max_length=50, choices=ACTIVITY_TYPES, default="PENDING")
+    reason = models.CharField(max_length=100, null=True, blank=True)
     action_by = models.ForeignKey(Employee, related_name='action_by', on_delete=models.CASCADE,null=True,
                                blank=True, default=None, unique=False)
 
