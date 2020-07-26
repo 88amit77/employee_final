@@ -8,6 +8,8 @@ from django.views.generic import View
 from rest_framework import filters, generics, status, viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+import json
+from rest_framework.parsers import JSONParser,MultiPartParser, FormParser
 
 from .models import (Employee, Education, FamilyMembers, WorkHistory, LeaveRules, EmpLeaveApplied, EmpLeaveId,
                      Attendance, AttendenceLeaveid, Attendence_rules, MonthlyEmpSalary, Salary)
@@ -504,6 +506,7 @@ class PersonalViewSet(viewsets.ModelViewSet):
 	serializer_class = PersonalSerializer
 
 class EmployeeViewSet(viewsets.ModelViewSet):
+	parser_classes = (MultiPartParser, FormParser)
 	queryset = Employee.objects.all()
 	serializer_class = EmployeeSerializer
 
