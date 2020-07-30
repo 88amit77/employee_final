@@ -225,5 +225,6 @@ class Salary(models.Model):
     pt = models.FloatField()
     esi_employer = models.FloatField()
     esi_employee = models.FloatField()
+    special_allowances = models.FloatField(default=0.0)
 
 
