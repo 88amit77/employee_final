@@ -6,9 +6,9 @@ class Employee(models.Model):
     emp_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=40)
     user_id = models.CharField(max_length=30, blank=True, null=True)
-    dob = models.DateField()
-    gender = models.CharField(max_length=10)
-    blood_group = models.CharField(max_length=10)
+    dob = models.DateField(blank=True, null=True)
+    gender = models.CharField(max_length=10, blank=True, null=True)
+    blood_group = models.CharField(max_length=10, blank=True, null=True)
     marital_status = models.BooleanField(default=False)
     marriage_anniversary = models.DateField(blank=True, null=True)
     official_email = models.EmailField()
@@ -20,47 +20,47 @@ class Employee(models.Model):
     instagram = models.CharField(max_length=50,blank=True, null=True)
     linkedin = models.CharField(max_length=50,blank=True, null=True)
     twitter = models.CharField(max_length=50,blank=True, null=True)
-    date_of_joining = models.DateField()
-    probation_period = models.IntegerField()
-    current_address_line1 = models.CharField(max_length=50)
-    current_address_line2 = models.CharField(max_length=50)
-    current_country = models.CharField(max_length=15)
-    current_state = models.CharField(max_length=10)
-    current_pincode = models.CharField(max_length=15)
-    current_house_type = models.CharField(max_length=50)
-    current_staying_since = models.DateField()
-    current_city = models.CharField(max_length=25)
-    permanent_address_line1 = models.CharField(max_length=50)
-    permanentt_address_line2 = models.CharField(max_length=50)
-    permanent_country = models.CharField(max_length=15)
-    permanent_state = models.CharField(max_length=15)
-    permanent_pincode = models.CharField(max_length=15)
-    employee_type = models.CharField(max_length=15)
+    date_of_joining = models.DateField(blank=True, null=True)
+    probation_period = models.IntegerField(blank=True, null=True)
+    current_address_line1 = models.CharField(max_length=50, blank=True, null=True)
+    current_address_line2 = models.CharField(max_length=50, blank=True, null=True)
+    current_country = models.CharField(max_length=15, blank=True, null=True)
+    current_state = models.CharField(max_length=10, blank=True, null=True)
+    current_pincode = models.CharField(max_length=15, blank=True, null=True)
+    current_house_type = models.CharField(max_length=50, blank=True, null=True)
+    current_staying_since = models.DateField(blank=True, null=True)
+    current_city = models.CharField(max_length=25, blank=True, null=True)
+    permanent_address_line1 = models.CharField(max_length=50, blank=True, null=True)
+    permanentt_address_line2 = models.CharField(max_length=50, blank=True, null=True)
+    permanent_country = models.CharField(max_length=15, blank=True, null=True)
+    permanent_state = models.CharField(max_length=15, blank=True, null=True)
+    permanent_pincode = models.CharField(max_length=15, blank=True, null=True)
+    employee_type = models.CharField(max_length=15, blank=True, null=True)
     employee_status = models.BooleanField(default=False)
-    job_title = models.CharField(max_length=30)
+    job_title = models.CharField(max_length=30, blank=True, null=True)
     termination_date = models.DateField(blank=True, null=True)
-    work_location_add = models.CharField(max_length=200)
-    designation = models.CharField(max_length=255)
-    department = models.CharField(max_length=255)
+    work_location_add = models.CharField(max_length=200, blank=True, null=True)
+    designation = models.CharField(max_length=255, blank=True, null=True)
+    department = models.CharField(max_length=255, blank=True, null=True)
     resignation_date = models.DateField(blank=True, null=True)
     resignation_notes = models.CharField(max_length=200,blank=True, null=True)
     notice_date = models.DateField(blank=True, null=True)
     notice_period = models.IntegerField(blank=True, null=True)
-    bank_acc_number = models.CharField(max_length=30)
-    ifsc_code = models.CharField(max_length=15)
-    bank_name = models.CharField(max_length=30)
+    bank_acc_number = models.CharField(max_length=30, blank=True, null=True)
+    ifsc_code = models.CharField(max_length=15, blank=True, null=True)
+    bank_name = models.CharField(max_length=30, blank=True, null=True)
 
-    pan_number = models.CharField(max_length=20)
-    pan_card = models.FileField(upload_to='Employees/Documents/', max_length=200, validators=[
+    pan_number = models.CharField(max_length=20, blank=True, null=True)
+    pan_card = models.FileField(upload_to='Employees/Documents/', max_length=200,blank=True, null=True ,validators=[
         FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm', 'pdf'])])
-    address_proof = models.FileField(upload_to='Employees/Documents/', max_length=200,
+    address_proof = models.FileField(upload_to='Employees/Documents/', max_length=200, blank=True, null=True,
                                      validators=[FileExtensionValidator(
                                          allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm', 'pdf'])])
-    permanent_proof = models.FileField(upload_to='Employees/Documents/', max_length=200,
+    permanent_proof = models.FileField(upload_to='Employees/Documents/', max_length=200, blank=True, null=True,
                                        validators=[FileExtensionValidator(
                                            allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm', 'pdf'])])
-    aadharcard_number = models.CharField(max_length=20)
-    aadharcard = models.FileField(upload_to='Employees/Documents/', max_length=200, validators=[
+    aadharcard_number = models.CharField(max_length=20, blank=True, null=True)
+    aadharcard = models.FileField(upload_to='Employees/Documents/', max_length=200, blank=True, null=True, validators=[
         FileExtensionValidator(allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm', 'pdf'])])
 
     def __str__(self):
@@ -70,12 +70,12 @@ class Employee(models.Model):
 class Education(models.Model):
     educations = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='educations_emp', null=True, blank=True)
     education_id = models.AutoField(primary_key=True)
-    institute_name = models.CharField(max_length=50)
-    course_type = models.CharField(max_length=256)
-    stream = models.CharField(max_length=30)
-    start_date = models.DateField()
-    end_date = models.DateField()
-    average_marks = models.FloatField()
+    institute_name = models.CharField(max_length=50, blank=True, null=True)
+    course_type = models.CharField(max_length=256, blank=True, null=True)
+    stream = models.CharField(max_length=30, blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    average_marks = models.FloatField(blank=True, null=True)
     verified = models.BooleanField(default=False)
 
 
@@ -83,20 +83,20 @@ class FamilyMembers(models.Model):
     family_members = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='family_members_emp', null=True,
                                        blank=True)
     family_member_id = models.AutoField(primary_key=True)
-    family_member_name = models.CharField(max_length=20)
-    relation = models.CharField(max_length=200)
-    contact_number = models.CharField(max_length=10)
+    family_member_name = models.CharField(max_length=20, blank=True, null=True)
+    relation = models.CharField(max_length=200, blank=True, null=True)
+    contact_number = models.CharField(max_length=10, blank=True, null=True)
 
 
 class WorkHistory(models.Model):
     work_historys = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='work_historys_emp', null=True,
                                       blank=True)
     work_history_id = models.AutoField(primary_key=True)
-    company_name = models.CharField(max_length=50)
-    period_from = models.DateField()
-    period_to = models.DateField()
-    designation = models.CharField(max_length=100)
-    reason_for_leaving = models.CharField(max_length=50)
+    company_name = models.CharField(max_length=50, blank=True, null=True)
+    period_from = models.DateField(blank=True, null=True)
+    period_to = models.DateField(blank=True, null=True)
+    designation = models.CharField(max_length=100, blank=True, null=True)
+    reason_for_leaving = models.CharField(max_length=50, blank=True, null=True)
     verified = models.BooleanField(default=False)
 
 
