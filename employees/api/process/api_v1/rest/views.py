@@ -61,7 +61,7 @@ def process_drps():
 	test16 = []
 	test17 = []
 	test18 = []
-	test19 = []
+
 
 
 	queries = Process.objects.all().values('process_name', 'process_department__dept_name', 'process_id').order_by('-process_id')
@@ -80,8 +80,6 @@ def process_drps():
 			test3.append({'process_name': j['process_name'], 'process_id': j['process_id']})
 		elif j['process_department__dept_name'] == 'BDA':
 			test4.append({'process_name': j['process_name'], 'process_id': j['process_id']})
-		elif j['process_department__dept_name'] == 'HR':
-			test19.append({'process_name': j['process_name'], 'process_id': j['process_id']})
 		elif j['process_department__dept_name'] == 'Data Analyst':
 			test5.append({'process_name': j['process_name'], 'process_id': j['process_id']})
 		elif j['process_department__dept_name'] == 'Software Developers':
@@ -108,7 +106,7 @@ def process_drps():
 			test16.append({'process_name': j['process_name'], 'process_id': j['process_id']})
 		elif j['process_department__dept_name'] == 'Human Resource':
 			test17.append({'process_name': j['process_name'], 'process_id': j['process_id']})
-		elif j['process_department__dept_name'] == 'Human Resources':
+		elif j['process_department__dept_name'] == 'Test':
 			test18.append({'process_name': j['process_name'], 'process_id': j['process_id']})
 		else:
 			pass
@@ -127,11 +125,11 @@ def process_drps():
 
 	# print(dir(queries))
 	# queries.__repr__
-	dropdowns = {'Human Resource': test17, 'Software Maintenance': test2, 'Business Development Managers': test3,
+	dropdowns = {'Software Maintenance': test2, 'Business Development Managers': test3,
 			 	'BDA': test4,'Data Analyst': test5, 'Software Developers': test6, 'Software Testers': test7,
 			   'UI team': test8,'Portal Operations': test9,'Warehouse Operations': test10,'Finance': test11,
 			   'Management': test12,'Warehouse Bangalore': test13,'Warehouse Mumbai': test14,'Warehouse Delhi': test15,
-			   'Warehouse Kolkatta': test16,'HR': test19,'Business Development Managers': test1,'Human Resources': test18,}
+			   'Warehouse Kolkatta': test16,'Business Development Managers': test1,'Test': test17,'Human Resource': test18}
 
 	return dropdowns
 
