@@ -47,6 +47,19 @@ def process_drps():
 	test2 = []
 	test3 = []
 	test4 = []
+	test5 = []
+	test6 = []
+	test7 = []
+	test8 = []
+	test9 = []
+	test10 =[]
+	test11 = []
+	test12 = []
+	test13 = []
+	test14 = []
+	test15 = []
+	test16 = []
+
 
 	queries = Process.objects.all().values('process_name', 'process_department__dept_name', 'process_id').order_by('-process_id')
 	# print(queries)
@@ -56,14 +69,39 @@ def process_drps():
 	# response = resultant.json()['results']
 
 	for j in queries:
-		if j['process_department__dept_name'] == 'HR':
+		if j['process_department__dept_name'] == 'Human Resource':
 			test1.append({'process_name': j['process_name'], 'process_id': j['process_id']})
-		elif j['process_department__dept_name'] == 'Software':
+		elif j['process_department__dept_name'] == 'Software Maintenance':
 			test2.append({'process_name': j['process_name'], 'process_id': j['process_id']})
-		elif j['process_department__dept_name'] == 'Managerial':
+		elif j['process_department__dept_name'] == 'Business Development Managers':
 			test3.append({'process_name': j['process_name'], 'process_id': j['process_id']})
-		elif j['process_department__dept_name'] == 'Warehouse':
+		elif j['process_department__dept_name'] == 'BDA':
 			test4.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+
+		elif j['process_department__dept_name'] == 'Data Analyst':
+			test5.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+		elif j['process_department__dept_name'] == 'Software Developers':
+			test6.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+		elif j['process_department__dept_name'] == 'Software Testers':
+			test7.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+		elif j['process_department__dept_name'] == 'UI team':
+			test8.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+		elif j['process_department__dept_name'] == 'Portal Operations':
+			test9.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+		elif j['process_department__dept_name'] == 'Warehouse Operations':
+			test10.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+		elif j['process_department__dept_name'] == 'Finance':
+			test11.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+		elif j['process_department__dept_name'] == 'Management':
+			test12.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+		elif j['process_department__dept_name'] == 'Warehouse Bangalore':
+			test13.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+		elif j['process_department__dept_name'] == 'Warehouse Mumbai':
+			test14.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+		elif j['process_department__dept_name'] == 'Warehouse Delhi':
+			test15.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+		elif j['process_department__dept_name'] == 'Warehouse Kolkatta':
+			test16.append({'process_name': j['process_name'], 'process_id': j['process_id']})
 		else:
 			pass
 	# parse data from API to populate dropdowns
@@ -81,8 +119,14 @@ def process_drps():
 
 	# print(dir(queries))
 	# queries.__repr__
-	dropdowns = {'HR': test1, 'Software': test2, 'Managerial': test3, 'Warehouse': test4}
+	dropdowns = {'Human Resource': test1, 'Software Maintenance': test2, 'Business Development Managers': test3,
+			 	'BDA': test4,'Data Analyst': test5, 'Software Developers': test6, 'Software Testers': test7,
+			   'UI team': test8,'Portal Operations': test9,'Warehouse Operations': test10,'Finance': test11,
+			   'Management': test12,'Warehouse Bangalore': test13,'Warehouse Mumbai': test14,'Warehouse Delhi': test15,
+			   'Warehouse Kolkatta': test16}
 	return dropdowns
+
+
 
 class ProcessViewset(CustomModelViewSet):
 	lookup_field = 'process_id'
