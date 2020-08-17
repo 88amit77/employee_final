@@ -99,20 +99,20 @@ class EmployeeSerializer(serializers.Serializer):
     # aadharcard = serializers.FileField(blank=True, null=True)
     aadharcard_number = serializers.CharField(max_length=20,allow_blank=True, allow_null=True)
 
-    pan_card = serializers.FileField(upload_to='Employees/Documents/',required=False, max_length=100,
+    pan_card = serializers.FileField(required=False, max_length=100,
                                        validators=[FileExtensionValidator(
                                            allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm',
                                                                'pdf'])])
-    address_proof = serializers.FileField(upload_to='Employees/Documents/',required=False, max_length=100,
+    address_proof = serializers.FileField(required=False, max_length=100,
                                        validators=[FileExtensionValidator(
                                            allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm',
                                                                'pdf'])])
-    permanent_proof = serializers.FileField(upload_to='Employees/Documents/',required=False, max_length=100,
+    permanent_proof = serializers.FileField(required=False, max_length=100,
                                        validators=[FileExtensionValidator(
                                            allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm',
                                                                'pdf'])])
 
-    aadharcard = serializers.FileField(upload_to='Employees/Documents/',required=False, max_length=100,
+    aadharcard = serializers.FileField(required=False, max_length=100,
                                        validators=[FileExtensionValidator(
                                            allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm',
                                                                'pdf'])])
