@@ -59,6 +59,7 @@ def process_drps():
 	test14 = []
 	test15 = []
 	test16 = []
+	test17 = []
 
 
 	queries = Process.objects.all().values('process_name', 'process_department__dept_name', 'process_id').order_by('-process_id')
@@ -69,7 +70,7 @@ def process_drps():
 	# response = resultant.json()['results']
 
 	for j in queries:
-		if j['process_department__dept_name'] == 'Human Resource':
+		if j['process_department__dept_name'] == 'Business Development Managers':
 			test1.append({'process_name': j['process_name'], 'process_id': j['process_id']})
 		elif j['process_department__dept_name'] == 'Software Maintenance':
 			test2.append({'process_name': j['process_name'], 'process_id': j['process_id']})
@@ -77,7 +78,6 @@ def process_drps():
 			test3.append({'process_name': j['process_name'], 'process_id': j['process_id']})
 		elif j['process_department__dept_name'] == 'BDA':
 			test4.append({'process_name': j['process_name'], 'process_id': j['process_id']})
-
 		elif j['process_department__dept_name'] == 'Data Analyst':
 			test5.append({'process_name': j['process_name'], 'process_id': j['process_id']})
 		elif j['process_department__dept_name'] == 'Software Developers':
@@ -102,6 +102,8 @@ def process_drps():
 			test15.append({'process_name': j['process_name'], 'process_id': j['process_id']})
 		elif j['process_department__dept_name'] == 'Warehouse Kolkatta':
 			test16.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+		elif j['process_department__dept_name'] == 'Human Resource':
+			test17.append({'process_name': j['process_name'], 'process_id': j['process_id']})
 		else:
 			pass
 	# parse data from API to populate dropdowns
@@ -119,11 +121,12 @@ def process_drps():
 
 	# print(dir(queries))
 	# queries.__repr__
-	dropdowns = {'Human Resource': test1, 'Software Maintenance': test2, 'Business Development Managers': test3,
+	dropdowns = {'Human Resource': test17, 'Software Maintenance': test2, 'Business Development Managers': test3,
 			 	'BDA': test4,'Data Analyst': test5, 'Software Developers': test6, 'Software Testers': test7,
 			   'UI team': test8,'Portal Operations': test9,'Warehouse Operations': test10,'Finance': test11,
 			   'Management': test12,'Warehouse Bangalore': test13,'Warehouse Mumbai': test14,'Warehouse Delhi': test15,
-			   'Warehouse Kolkatta': test16}
+			   'Warehouse Kolkatta': test16,'Business Development Managers': test1,}
+
 	return dropdowns
 
 
