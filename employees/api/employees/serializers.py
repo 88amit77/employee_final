@@ -47,75 +47,75 @@ class EmployeeSerializer(serializers.Serializer):
 
     emp_id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=30)
-    user_id = serializers.CharField(max_length=30)
-    dob = serializers.DateField()
-    gender = serializers.CharField(max_length=10)
-    blood_group = serializers.CharField(max_length=10)
+    user_id = serializers.CharField(max_length=30,allow_blank=True, allow_null=True)
+    dob = serializers.DateField(required=False)
+    gender = serializers.CharField(max_length=50,allow_blank=True, allow_null=True)
+    blood_group = serializers.CharField(max_length=10,allow_blank=True, allow_null=True)
     marital_status = serializers.BooleanField(default=False)
-    marriage_anniversary = serializers.DateField()
+    marriage_anniversary = serializers.DateField(required=False)
     official_email = serializers.EmailField(validators=[UniqueValidator(queryset=Employee.objects.all(),message='False')])
     personal_email = serializers.EmailField(validators=[UniqueValidator(queryset=Employee.objects.all(),message='False')])
     official_number = serializers.CharField(validators=[UniqueValidator(queryset=Employee.objects.all(),message='False')])
     personal_number = serializers.CharField(validators=[UniqueValidator(queryset=Employee.objects.all(),message='False')])
-    facebook = serializers.CharField(validators=[UniqueValidator(queryset=Employee.objects.all(),message='False')])
-    instagram = serializers.CharField(validators=[UniqueValidator(queryset=Employee.objects.all(),message='False')])
-    linkedin = serializers.CharField(validators=[UniqueValidator(queryset=Employee.objects.all(),message='False')])
-    twitter = serializers.CharField(validators=[UniqueValidator(queryset=Employee.objects.all(),message='False')])
+    facebook = serializers.CharField(validators=[UniqueValidator(queryset=Employee.objects.all(),message='False')],allow_blank=True, allow_null=True)
+    instagram = serializers.CharField(validators=[UniqueValidator(queryset=Employee.objects.all(),message='False')],allow_blank=True, allow_null=True)
+    linkedin = serializers.CharField(validators=[UniqueValidator(queryset=Employee.objects.all(),message='False')],allow_blank=True, allow_null=True)
+    twitter = serializers.CharField(validators=[UniqueValidator(queryset=Employee.objects.all(),message='False')],allow_blank=True, allow_null=True)
    # leave_approval_user_id = serializers.IntegerField()
-    date_of_joining = serializers.DateField()
-    probation_period = serializers.IntegerField()
-    current_address_line1 = serializers.CharField(max_length=50)
-    current_address_line2 = serializers.CharField(max_length=50)
-    current_country = serializers.CharField(max_length=15)
-    current_state = serializers.CharField(max_length=10)
-    current_pincode = serializers.CharField(max_length=15)
-    current_house_type = serializers.CharField(max_length=50)
-    current_staying_since = serializers.DateField()
-    current_city = serializers.CharField(max_length=20)
-    permanent_address_line1 = serializers.CharField(max_length=50)
-    permanentt_address_line2 = serializers.CharField(max_length=50)
-    permanent_country = serializers.CharField(max_length=15)
-    permanent_state = serializers.CharField(max_length=15)
-    permanent_pincode = serializers.CharField(max_length=15)
-    employee_type = serializers.CharField(max_length=15)
+    date_of_joining = serializers.DateField(required=False)
+    probation_period = serializers.IntegerField(required=False)
+    current_address_line1 = serializers.CharField(max_length=50,allow_blank=True, allow_null=True)
+    current_address_line2 = serializers.CharField(max_length=50,allow_blank=True, allow_null=True)
+    current_country = serializers.CharField(max_length=15,allow_blank=True, allow_null=True)
+    current_state = serializers.CharField(max_length=10,allow_blank=True, allow_null=True)
+    current_pincode = serializers.CharField(max_length=15,allow_blank=True, allow_null=True)
+    current_house_type = serializers.CharField(max_length=50,allow_blank=True, allow_null=True)
+    current_staying_since = serializers.DateField(required=False)
+    current_city = serializers.CharField(max_length=20,allow_blank=True, allow_null=True)
+    permanent_address_line1 = serializers.CharField(max_length=50,allow_blank=True, allow_null=True)
+    permanentt_address_line2 = serializers.CharField(max_length=50,allow_blank=True, allow_null=True)
+    permanent_country = serializers.CharField(max_length=15,allow_blank=True, allow_null=True)
+    permanent_state = serializers.CharField(max_length=15,allow_blank=True, allow_null=True)
+    permanent_pincode = serializers.CharField(max_length=15,allow_blank=True, allow_null=True)
+    employee_type = serializers.CharField(max_length=15,allow_blank=True, allow_null=True)
     employee_status = serializers.BooleanField(default=False)
-    job_title = serializers.CharField(max_length=30)
-    termination_date = serializers.DateField()
-    work_location_add = serializers.CharField(max_length=20)
-    designation = serializers.CharField(max_length=20)
-    department = serializers.CharField(max_length=50)
-    resignation_date = serializers.DateField()
-    resignation_notes = serializers.CharField(max_length=50)
-    notice_date = serializers.DateField()
-    notice_period = serializers.IntegerField()
-    bank_acc_number = serializers.CharField(max_length=30)
-    ifsc_code = serializers.CharField(max_length=15)
-    bank_name = serializers.CharField(max_length=30)
+    job_title = serializers.CharField(max_length=30,allow_blank=True, allow_null=True)
+    termination_date = serializers.DateField(required=False)
+    work_location_add = serializers.CharField(max_length=20,allow_blank=True, allow_null=True)
+    designation = serializers.CharField(max_length=20,allow_blank=True, allow_null=True)
+    department = serializers.CharField(max_length=50,allow_blank=True, allow_null=True)
+    resignation_date = serializers.DateField(required=False)
+    resignation_notes = serializers.CharField(max_length=50,allow_blank=True, allow_null=True)
+    notice_date = serializers.DateField(required=False)
+    notice_period = serializers.IntegerField(required=False)
+    bank_acc_number = serializers.CharField(max_length=30,allow_blank=True, allow_null=True)
+    ifsc_code = serializers.CharField(max_length=15,allow_blank=True, allow_null=True)
+    bank_name = serializers.CharField(max_length=30,allow_blank=True, allow_null=True)
 
-    pan_number = serializers.CharField(max_length=20)
-    pan_card = serializers.FileField()
-    address_proof = serializers.FileField()
-    permanent_proof = serializers.FileField()
-    aadharcard = serializers.FileField()
-    aadharcard_number = serializers.CharField(max_length=20)
+    pan_number = serializers.CharField(max_length=20,allow_blank=True, allow_null=True)
+    #pan_card = serializers.FileField(blank=True, null=True)
+    #address_proof = serializers.FileField(blank=True, null=True)
+    #permanent_proof = serializers.FileField(blank=True, null=True)
+    # aadharcard = serializers.FileField(blank=True, null=True)
+    aadharcard_number = serializers.CharField(max_length=20,allow_blank=True, allow_null=True)
 
-    # pan_card = serializers.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100,
-    #                                    validators=[FileExtensionValidator(
-    #                                        allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm',
-    #                                                            'pdf'])])
-    # address_proof = serializers.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100,
-    #                                    validators=[FileExtensionValidator(
-    #                                        allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm',
-    #                                                            'pdf'])])
-    # permanent_proof = serializers.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100,
-    #                                    validators=[FileExtensionValidator(
-    #                                        allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm',
-    #                                                            'pdf'])])
+    pan_card = serializers.FileField(upload_to='Employees/Documents/',required=False, max_length=100,
+                                       validators=[FileExtensionValidator(
+                                           allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm',
+                                                               'pdf'])])
+    address_proof = serializers.FileField(upload_to='Employees/Documents/',required=False, max_length=100,
+                                       validators=[FileExtensionValidator(
+                                           allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm',
+                                                               'pdf'])])
+    permanent_proof = serializers.FileField(upload_to='Employees/Documents/',required=False, max_length=100,
+                                       validators=[FileExtensionValidator(
+                                           allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm',
+                                                               'pdf'])])
 
-    # aadharcard = serializers.FileField(upload_to='Employees/Documents/', blank=True, null=True, max_length=100,
-    #                                    validators=[FileExtensionValidator(
-    #                                        allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm',
-    #                                                            'pdf'])])
+    aadharcard = serializers.FileField(upload_to='Employees/Documents/',required=False, max_length=100,
+                                       validators=[FileExtensionValidator(
+                                           allowed_extensions=['gif', 'log', 'mp4', 'png', 'jpeg', 'jpg', 'webm',
+                                                               'pdf'])])
 
     work_historys_emp = WorkHistorySerializer(many=True)
     family_members_emp = FamilyMembersSerializer(many=True)
