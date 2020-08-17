@@ -60,6 +60,7 @@ def process_drps():
 	test15 = []
 	test16 = []
 	test17 = []
+	test18 = []
 
 
 	queries = Process.objects.all().values('process_name', 'process_department__dept_name', 'process_id').order_by('-process_id')
@@ -104,6 +105,8 @@ def process_drps():
 			test16.append({'process_name': j['process_name'], 'process_id': j['process_id']})
 		elif j['process_department__dept_name'] == 'Human Resource':
 			test17.append({'process_name': j['process_name'], 'process_id': j['process_id']})
+		elif j['process_department__dept_name'] == 'Human Resources':
+			test18.append({'process_name': j['process_name'], 'process_id': j['process_id']})
 		else:
 			pass
 	# parse data from API to populate dropdowns
@@ -125,7 +128,7 @@ def process_drps():
 			 	'BDA': test4,'Data Analyst': test5, 'Software Developers': test6, 'Software Testers': test7,
 			   'UI team': test8,'Portal Operations': test9,'Warehouse Operations': test10,'Finance': test11,
 			   'Management': test12,'Warehouse Bangalore': test13,'Warehouse Mumbai': test14,'Warehouse Delhi': test15,
-			   'Warehouse Kolkatta': test16,'Business Development Managers': test1,}
+			   'Warehouse Kolkatta': test16,'Business Development Managers': test1,'Human Resources': test18,}
 
 	return dropdowns
 
