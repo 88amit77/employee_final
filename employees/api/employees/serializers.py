@@ -414,9 +414,9 @@ class DynamicFieldsLeaveLogModelSerializer(serializers.ModelSerializer):
     department = serializers.CharField(source='emp_id.department', read_only=True)
     days = serializers.SerializerMethodField(method_name='get_days')
 
-    name = serializers.CharField(source='emp_id.name', read_only=True)
-    department = serializers.CharField(source='emp_id.department', read_only=True)
-    days = serializers.SerializerMethodField(method_name='get_days')
+    # name = serializers.CharField(source='emp_id.name', read_only=True)
+    # department = serializers.CharField(source='emp_id.department', read_only=True)
+    # days = serializers.SerializerMethodField(method_name='get_days')
 
     class Meta:
         model = EmpLeaveApplied
